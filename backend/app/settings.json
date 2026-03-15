@@ -1,0 +1,154 @@
+{
+  "mode": "1",
+  "banner": "Наш основной Telegram контакт был заморожен, работаем в штатном режиме по контакту <a href=\"https://t.me/StuartChange\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"font-bold underline hover:no-underline\" >t.me/StuartChange</a>",
+  "percent": "2",
+  "giveMin": "800",
+  "giveMax": "600000",
+  "getMin": "700",
+  "getMax": "1000000",
+  "info": {
+    "Telegram_oper": "StuartChange",
+    "Telegram_chanel": "Stuart1234567",
+    "Session_id": "97469307432",
+    "Tox": "87503269702"
+  },
+  "bot": {
+    "API_TOKEN": "8231371926:AAG0lIEFcfxB6GsnXllgzi2hdTVjyfZ3wDQ",
+    "CHAT_ID": "-1002609251206",
+    "MESS_CHAT": "-1003705693992",
+    "domain": "https://github.com"
+  },
+  "deposit_wallets": {
+    "1": {
+      "address": "BTC_ADDRESS",
+      "name": "BTC"
+    },
+    "2": {
+      "address": "ETH_ADDRESS",
+      "name": "Ethereum"
+    },
+    "3": {
+      "address": "USDT_TRC20_ADDRESS",
+      "name": "Tether TRC20"
+    },
+    "4": {
+      "address": "USDT_ERC20_ADDRESS",
+      "name": "Tether ERC20"
+    },
+    "5": {
+      "address": "USDT_BEP20_ADDRESS2222222222",
+      "name": "Tether BEP20"
+    },
+    "6": {
+      "address": "USDT_SOL_ADDRESS",
+      "name": "Tether SOL"
+    },
+    "7": {
+      "address": "DAI_ADDRESS",
+      "name": "DAI ERC20"
+    },
+    "8": {
+      "address": "USDC_ADDRESS",
+      "name": "USDC ERC20"
+    },
+    "9": {
+      "address": "SOL_ADDRESS",
+      "name": "Solana"
+    },
+    "10": {
+      "address": "LTC_ADDRESS",
+      "name": "Litecoin"
+    },
+    "11": {
+      "address": "TRX_ADDRESS",
+      "name": "TRON"
+    },
+    "12": {
+      "address": "DOGE_ADDRESS",
+      "name": "Dogecoin"
+    },
+    "2101": {
+      "address": "ТУТ НИЧЕГО НЕ ТРОГАТЬ",
+      "name": "Карта"
+    },
+    "2102": {
+      "address": "ТУТ НИЧЕГО НЕ ТРОГАТЬ1",
+      "name": "Иностранные"
+    }
+  },
+  "fiat_in": {
+    "1": {
+      "card_id": "",
+      "bank_name": "",
+      "FIO": "",
+      "rate": "88",
+      "from": "1000",
+      "to": "1999"
+    },
+    "2": {
+      "card_id": "2220207654238754",
+      "bank_name": "Сбер",
+      "FIO": "Альберт Эпштейн",
+      "rate": "78",
+      "from": "2000",
+      "to": "4999"
+    },
+    "3": {
+      "card_id": "223020765423875422222",
+      "bank_name": "Сбер",
+      "FIO": "Альберт Эпштейн",
+      "rate": "88",
+      "from": "5000",
+      "to": "10000"
+    },
+    "4": {
+      "card_id": "2240207654238754",
+      "bank_name": "Сбер",
+      "FIO": "Альберт Эпштейн",
+      "rate": "88",
+      "from": "10000",
+      "to": "20000"
+    },
+    "5": {
+      "card_id": "",
+      "bank_name": "",
+      "FIO": "",
+      "rate": "88",
+      "from": "20000",
+      "to": "50000"
+    }
+  },
+  "fiat_out": {
+    "1": {
+      "symbol": "THB",
+      "name": "Бат",
+      "course_rub": "1",
+      "course_usdt": "2"
+    },
+    "2": {},
+    "3": {
+      "rate": "7134"
+    },
+    "4": {
+      "rate": "1384"
+    },
+    "5": {
+      "rate": "1354"
+    },
+    "6": {
+      "rate": "1634"
+    },
+    "7": {
+      "rate": "1344"
+    },
+    "8": {
+      "rate": "1334"
+    },
+    "9": {
+      "rate": "1324"
+    },
+    "10": {
+      "rate": "1341"
+    }
+  }
+}
