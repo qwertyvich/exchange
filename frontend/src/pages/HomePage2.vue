@@ -27,10 +27,10 @@
       <div class="flex flex-col md:gap-6 gap-3 text-white">
         <h1 class="md:text-7xl text-[32px] font-medium leading-[110%] text-center">
           Скоростной <br />
-          обмен криптовалют
+          обмен валют
         </h1>
         <span class="md:text-xl text-base font-light leading-[140%] text-center max-w-110 self-center">
-          Безопасный и удобный способ обмена криптовалюты за считанные минуты, без AML и KYC проверки
+          Обмен RUB или USDT на валюту страны с выдачей наличных
         </span>
       </div>
 
@@ -56,13 +56,13 @@
                 <input
                   id="give-input"
                   inputmode="decimal"
-                  :placeholder="`0 (${giveCurrency.symbol})`"
+                  :placeholder="`0 ${giveCurrency?.symbol || ''}`"
                   class="md:text-[32px] text-2xl font-medium leading-[120%] outline-none max-w-full w-full max-md:text-left text-white bg-transparent"
                   type="number"
                   min="0"
                   step="any"
                   v-model="giveAmountStr"
-                  @input="lastEdited = 'give'"
+                  @input="onGiveInput"
                 />
 
                 <p class="md:text-base text-sm font-medium leading-[150%] text-text-secondary">
@@ -70,9 +70,13 @@
                     {{ giveRangeText }}
                   </template>
                   <template v-else>
-                    <span class="cursor-pointer" @click="setGiveAmount(limitsInGive.giveMin)">{{ limitsInGive.giveMin }}</span>
+                    <span class="cursor-pointer" @click="setGiveAmount(limitsInGive.giveMin)">
+                      {{ limitsInGive.giveMin }}
+                    </span>
                     -
-                    <span class="cursor-pointer" @click="setGiveAmount(limitsInGive.giveMax)">{{ limitsInGive.giveMax }}</span>
+                    <span class="cursor-pointer" @click="setGiveAmount(limitsInGive.giveMax)">
+                      {{ limitsInGive.giveMax }}
+                    </span>
                   </template>
                 </p>
               </div>
@@ -84,16 +88,16 @@
                 aria-label="Выбрать валюту (вносите)"
               >
                 <div
-                  class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16"
+                  class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16 overflow-hidden"
                 >
                   <img
-                    :alt="giveCurrency.name"
+                    :alt="giveCurrency?.name || ''"
                     loading="lazy"
                     width="36"
                     height="36"
                     decoding="async"
-                    class="md:size-9 size-8 object-contain"
-                    :src="giveCurrency.icon"
+                    class="md:size-9 size-8 object-contain rounded-[10px]"
+                    :src="giveCurrency?.icon || ''"
                     style="color: transparent"
                   />
                 </div>
@@ -114,61 +118,52 @@
                 <input
                   id="get-input"
                   inputmode="decimal"
-                  :placeholder="`0 (${getCurrency.symbol})`"
+                  :placeholder="`0 ${getCurrency?.symbol || ''}`"
                   class="md:text-[32px] text-2xl font-medium leading-[120%] outline-none max-w-full w-full max-md:text-left text-right text-white bg-transparent"
                   type="number"
                   min="0"
                   step="any"
-                  :readonly="isGiveCardTransfer"
-                  :disabled="isGiveCardTransfer"
                   v-model="getAmountStr"
                   @input="onGetInput"
                 />
 
-                <p class="md:text-base text-sm font-medium leading-[150%] text-text-secondary">
-                  <span
-                    :class="isGiveCardTransfer ? 'opacity-50 cursor-default' : 'cursor-pointer'"
-                    @click="!isGiveCardTransfer && setGetAmount(limitsInGet.getMin)"
-                  >{{ limitsInGet.getMin }}</span>
-                  -
-                  <span
-                    :class="isGiveCardTransfer ? 'opacity-50 cursor-default' : 'cursor-pointer'"
-                    @click="!isGiveCardTransfer && setGetAmount(limitsInGet.getMax)"
-                  >{{ limitsInGet.getMax }}</span>
+                <p class="md:text-base text-sm font-medium leading-[150%] text-text-secondary text-right max-md:text-left">
+                  {{ getRateText }}
                 </p>
               </div>
 
               <button
-                ref="getBtnRef"
-                type="button"
-                @click="toggleDropdown('get')"
-                aria-label="Выбрать валюту (получаете)"
-              >
-                <div
-                  class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16"
-                >
-                  <img
-                    :alt="getCurrency.name"
-                    loading="lazy"
-                    width="36"
-                    height="36"
-                    decoding="async"
-                    class="md:size-9 size-8 object-contain"
-                    :src="getCurrency.icon"
-                    style="color: transparent"
-                  />
-                </div>
-              </button>
+  ref="getBtnRef"
+  type="button"
+  @click="toggleDropdown('get')"
+  aria-label="Выбрать валюту (получаете)"
+>
+  <div
+    class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16"
+  >
+    <div class="md:size-9 size-8 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
+      <img
+        :alt="getCurrency?.name || ''"
+        loading="lazy"
+        width="36"
+        height="36"
+        decoding="async"
+        class="w-full h-full object-cover rounded-full"
+        :src="getCurrency?.icon || ''"
+        style="color: transparent; clip-path: inset(0 round 100px);"
+      />
+    </div>
+  </div>
+</button>
             </label>
           </div>
 
           <!-- SWAP -->
           <button
             type="button"
-            class="absolute md:size-14 size-9 bg-bg-secondary md:rounded-[16px] rounded-[12px] flex justify-center items-center cursor-pointer border border-border-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-md:rotate-90"
-            @click="swapCurrencies"
+            class="absolute md:size-14 size-9 bg-bg-secondary md:rounded-[16px] rounded-[12px] flex justify-center items-center border border-border-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-md:rotate-90"
             aria-label="Поменять местами"
-            :disabled="isGiveCardTransfer"
+            disabled
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -180,8 +175,7 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-arrow-right-left md:size-8 size-5 text-white"
-              :class="isGiveCardTransfer ? 'opacity-40' : ''"
+              class="lucide lucide-arrow-right-left md:size-8 size-5 text-white opacity-40"
               aria-hidden="true"
             >
               <path d="m16 3 4 4-4 4"></path>
@@ -197,7 +191,6 @@
             <div class="flex flex-col gap-1" data-slot="form-control" aria-invalid="false">
               <div class="relative w-full">
                 <input
-                  data-slot="input"
                   id="telegram"
                   placeholder=" "
                   class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active placeholder:text-text-tertiary aria-invalid:border-danger flex w-full md:rounded-[28px] rounded-[22px] border md:px-8 md:pt-10 md:pb-4 px-6 pt-7 pb-3 transition-all duration-150 outline-none disabled:cursor-not-allowed disabled:opacity-60 field-sizing-fixed text-white"
@@ -220,7 +213,6 @@
             <div class="flex flex-col gap-1" data-slot="form-control" aria-invalid="false">
               <div class="relative w-full">
                 <input
-                  data-slot="input"
                   id="wallet"
                   placeholder=" "
                   class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active placeholder:text-text-tertiary aria-invalid:border-danger flex w-full md:rounded-[28px] rounded-[22px] border md:px-8 md:pt-10 md:pb-4 px-6 pt-7 pb-3 transition-all duration-150 outline-none disabled:cursor-not-allowed disabled:opacity-60 field-sizing-fixed text-white"
@@ -243,14 +235,8 @@
         <div class="grid items-center md:grid-cols-2 grid-cols-1 md:gap-6 gap-4 max-md:mt-2">
           <div class="md:pl-8 max-md:text-center">
             <span class="md:text-base text-sm font-light leading-[150%] text-text-tertiary">
-              Cрок зачисления — 5-60 минут, в зависимости от загруженности блокчейна
+              Cрок выдачи — после подтверждения оператором
             </span>
-            <div class="md:text-sm text-xs font-medium mt-2 text-text-secondary max-md:text-center">
-              <template v-if="!isGiveCardTransfer">
-                Комиссия сервиса: <span class="text-white">{{ feePercent }}%</span> •
-              </template>
-              Курс обновляется каждые <span class="text-white">30 сек</span>
-            </div>
           </div>
 
           <button
@@ -283,7 +269,7 @@
               >
                 <button
                   v-for="c in dropdownOptions"
-                  :key="openDropdown + '-' + c.backendId"
+                  :key="openDropdown + '-' + c.backendId + '-' + c.symbol + '-' + c.id"
                   type="button"
                   class="w-full px-6 py-0 flex items-stretch transition duration-150 hover:bg-white/10 border-b border-white/5 last:border-b-0"
                   :style="{ height: 'var(--row)' }"
@@ -301,7 +287,14 @@
                     </div>
 
                     <div class="flex flex-col items-center justify-center gap-1 shrink-0">
-                      <img :alt="c.name" class="w-12 h-12 object-contain drop-shadow" :src="c.icon" />
+                      <div class="md:size-9 size-8 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
+  <img
+    :alt="c.name"
+    class="w-full h-full object-cover drop-shadow rounded-full"
+    :src="c.icon"
+    style="clip-path: inset(0 round 100px);"
+  />
+</div>
                       <span class="text-white text-sm font-medium">{{ c.symbol }}</span>
                     </div>
                   </div>
@@ -311,7 +304,14 @@
                     class="w-full h-full flex items-center justify-between"
                   >
                     <div class="flex flex-col items-center justify-center gap-1 shrink-0">
-                      <img :alt="c.name" class="w-12 h-12 object-contain drop-shadow" :src="c.icon" />
+                      <div class="md:size-9 size-8 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
+  <img
+    :alt="c.name"
+    class="w-full h-full object-cover drop-shadow rounded-full"
+    :src="c.icon"
+    style="clip-path: inset(0 round 100px);"
+  />
+</div>
                       <span class="text-white text-sm font-medium">{{ c.symbol }}</span>
                     </div>
 
@@ -332,7 +332,14 @@
                     </div>
 
                     <div class="flex flex-col items-center justify-center gap-1 shrink-0">
-                      <img :alt="c.name" class="w-12 h-12 object-contain drop-shadow" :src="c.icon" />
+                      <div class="md:size-9 size-8 rounded-full overflow-hidden flex items-center justify-center bg-transparent">
+  <img
+    :alt="c.name"
+    class="w-full h-full object-cover drop-shadow rounded-full"
+    :src="c.icon"
+    style="clip-path: inset(0 round 100px);"
+  />
+</div>
                       <span class="text-white text-sm font-medium">{{ c.symbol }}</span>
                     </div>
                   </div>
@@ -358,12 +365,10 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue";
 
-const feePercent = ref(4);
-
 const limitsFromSettings = ref({
-  giveMin: 500,
+  giveMin: 800,
   giveMax: 600000,
-  getMin: 400,
+  getMin: 700,
   getMax: 1000000,
 });
 
@@ -371,31 +376,6 @@ const isMobile = ref(false);
 const updateIsMobile = () => {
   isMobile.value = window.innerWidth < 768;
 };
-
-const currencies = ref([
-  { id: "bitcoin", backendId: 1, symbol: "BTC", name: "Bitcoin", icon: "/img/bit.svg?v=032" },
-  { id: "ethereum", backendId: 2, symbol: "ETH", name: "Ethereum", icon: "/img/ether.svg?v=032" },
-
-  { id: "tether", backendId: 3, symbol: "USDT", name: "Tether TRC20", icon: "/img/tether_trc20.svg?v=032" },
-  { id: "tether", backendId: 4, symbol: "USDT", name: "Tether ERC20", icon: "/img/tether_erc20.svg?v=032" },
-  { id: "tether", backendId: 5, symbol: "USDT", name: "Tether BEP20", icon: "/img/tether_bnb.svg?v=032" },
-  { id: "tether", backendId: 6, symbol: "USDT", name: "Tether SOL", icon: "/img/tether_solana.svg?v=032" },
-
-  { id: "dai", backendId: 7, symbol: "DAI", name: "DAI ERC20", icon: "/img/dai.svg?v=032" },
-  { id: "usd-coin", backendId: 8, symbol: "USDC", name: "USDC ERC20", icon: "/img/usdc.svg?v=032" },
-  { id: "solana", backendId: 9, symbol: "SOL", name: "Solana", icon: "/img/solana-sol-logo.png?v=032" },
-  { id: "litecoin", backendId: 10, symbol: "LTC", name: "Litecoin", icon: "/img/lite.svg?v=032" },
-  { id: "tron", backendId: 11, symbol: "TRX", name: "TRON", icon: "/img/tron.svg?v=032" },
-  { id: "dogecoin", backendId: 12, symbol: "DOGE", name: "Dogecoin", icon: "/img/doge.svg?v=032" },
-]);
-
-const RUB_METHODS = [
-  { id: "rub-sbp", backendId: 2001, symbol: "RUB", name: "СБП", icon: "/img/sbp.svg?v=032", type: "fiat", fiat: "rub", rubKind: "sbp" },
-  { id: "rub-qr", backendId: 2011, symbol: "RUB", name: "Сбер QR наличные", icon: "/img/qr_sber.svg?v=032", type: "fiat", fiat: "rub", rubKind: "qr" },
-  { id: "rub-sber", backendId: 2002, symbol: "RUB", name: "Сбер", icon: "/img/sber.svg?v=032.svg", type: "fiat", fiat: "rub", rubKind: "card" },
-  { id: "rub-alfa", backendId: 2003, symbol: "RUB", name: "Альфа-банк", icon: "/img/alpha.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card" },
-  { id: "rub-cash", backendId: 2010, symbol: "RUB", name: "Наличные", icon: "/img/rub_nal.svg?v=032", type: "fiat", fiat: "rub", rubKind: "cash" },
-];
 
 const RUB_INPUT_METHODS = ref([
   {
@@ -410,13 +390,33 @@ const RUB_INPUT_METHODS = ref([
   },
 ]);
 
+const USDT_INPUTS = ref([
+  { id: "tether", backendId: 3, symbol: "USDT", name: "Tether TRC20", icon: "/img/tether_trc20.svg?v=032" },
+  { id: "tether", backendId: 4, symbol: "USDT", name: "Tether ERC20", icon: "/img/tether_erc20.svg?v=032" },
+  { id: "tether", backendId: 5, symbol: "USDT", name: "Tether BEP20", icon: "/img/tether_bnb.svg?v=032" },
+  { id: "tether", backendId: 6, symbol: "USDT", name: "Tether SOL", icon: "/img/tether_solana.svg?v=032" },
+]);
+
+const EMPTY_GET_CURRENCY = {
+  id: "cash-out-empty",
+  backendId: 2102,
+  symbol: "",
+  name: "",
+  icon: "",
+  type: "fiat",
+  fiat: "cash_out",
+  rubKind: "cash",
+  course_rub: 0,
+  course_usdt: 0,
+};
+
 const publicSettings = ref({
-  mode: "1",
+  mode: "2",
   banner: "",
-  percent: 4,
-  giveMin: 500,
+  percent: 2,
+  giveMin: 800,
   giveMax: 600000,
-  getMin: 400,
+  getMin: 700,
   getMax: 1000000,
   deposit_wallets: {},
   fiat_in: {},
@@ -426,15 +426,37 @@ const publicSettings = ref({
 const bannerText = computed(() => String(publicSettings.value?.banner || "").trim());
 const hasBanner = computed(() => !!bannerText.value);
 
-const giveOptions = computed(() => [...RUB_INPUT_METHODS.value, ...currencies.value]);
-const getOptions = computed(() => [...currencies.value, ...RUB_METHODS]);
+const fiatOutOptions = computed(() => {
+  const raw = publicSettings.value?.deposit_wallets || {};
+
+  return Object.entries(raw)
+    .filter(([key, row]) => Number(key) >= 2102 && row && typeof row === "object")
+    .map(([key, row]) => {
+      const symbol = String(row?.symbol || "").trim().toUpperCase();
+      const name = String(row?.name || symbol || `Валюта ${key}`).trim();
+
+      return {
+        id: `cash-out-${key}`,
+        backendId: Number(key),
+        symbol,
+        name,
+        icon: symbol ? `/img/${symbol}.svg?v=032.svg` : "/img/placeholder.svg",
+        type: "fiat",
+        fiat: "cash_out",
+        rubKind: "cash",
+        course_rub: Number(row?.course_rub),
+        course_usdt: Number(row?.course_usdt),
+      };
+    })
+    .filter((x) => x.symbol.length > 0);
+});
+
+const giveOptions = computed(() => [...RUB_INPUT_METHODS.value, ...USDT_INPUTS.value]);
+const getOptions = computed(() => fiatOutOptions.value);
 const dropdownOptions = computed(() => (openDropdown.value === "give" ? giveOptions.value : getOptions.value));
 
-const pricesUsd = ref({});
-const pricesRub = ref({});
-
 const giveCurrency = ref(RUB_INPUT_METHODS.value[0]);
-const getCurrency = ref(currencies.value[0]);
+const getCurrency = ref({ ...EMPTY_GET_CURRENCY });
 
 const giveAmountStr = ref("");
 const getAmountStr = ref("");
@@ -467,14 +489,7 @@ const formatNum = (v, decimals = 8) => {
 const normalizeSpaces = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 
 const isGiveFiat = computed(() => giveCurrency.value?.type === "fiat");
-const isGetFiat = computed(() => getCurrency.value?.type === "fiat");
-const isGetRUB = computed(() => isGetFiat.value && getCurrency.value?.fiat === "rub");
 const isGiveCardTransfer = computed(() => Number(giveCurrency.value?.backendId) === 2101);
-
-const effectiveFeeMul = computed(() => {
-  if (isGiveCardTransfer.value) return 1;
-  return (100 - Number(feePercent.value || 0)) / 100;
-});
 
 const limitsUsd = computed(() => ({
   giveMin: Number(limitsFromSettings.value.giveMin || 0),
@@ -482,11 +497,6 @@ const limitsUsd = computed(() => ({
   getMin: Number(limitsFromSettings.value.getMin || 0),
   getMax: Number(limitsFromSettings.value.getMax || 0),
 }));
-
-const reserves = ref({
-  bitcoin: 12,
-  ethereum: 350,
-});
 
 const fiatInRows = computed(() => {
   const raw = publicSettings.value?.fiat_in || {};
@@ -504,9 +514,10 @@ const fiatInRows = computed(() => {
     .sort((a, b) => a.from - b.from);
 });
 
-const fiatInMin = computed(() => fiatInRows.value.length ? fiatInRows.value[0].from : 0);
-const fiatInMax = computed(() => fiatInRows.value.length ? fiatInRows.value[fiatInRows.value.length - 1].to : 0);
-const firstFiatRate = computed(() => fiatInRows.value.length ? fiatInRows.value[0].rate : 0);
+const fiatInMin = computed(() => (fiatInRows.value.length ? fiatInRows.value[0].from : 0));
+const fiatInMax = computed(() =>
+  fiatInRows.value.length ? fiatInRows.value[fiatInRows.value.length - 1].to : 0
+);
 
 const currentFiatInRow = computed(() => {
   if (!isGiveCardTransfer.value) return null;
@@ -515,40 +526,28 @@ const currentFiatInRow = computed(() => {
   return fiatInRows.value.find((x) => amount >= x.from && amount <= x.to) || null;
 });
 
-const givePriceUsd = computed(() => {
-  if (isGiveFiat.value) return 0;
-  return pricesUsd.value[giveCurrency.value.id] ?? 0;
+const activeCourse = computed(() => {
+  if (!getCurrency.value?.symbol) return 0;
+  return isGiveCardTransfer.value
+    ? Number(getCurrency.value.course_rub) || 0
+    : Number(getCurrency.value.course_usdt) || 0;
 });
 
-const getCryptoPriceUsd = computed(() => {
-  if (isGetFiat.value) return 0;
-  return pricesUsd.value[getCurrency.value.id] ?? 0;
+const moscowDateText = computed(() => {
+  const formatter = new Intl.DateTimeFormat("ru-RU", {
+    timeZone: "Europe/Moscow",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+  return formatter.format(new Date());
 });
 
-const isPairAllowed = (give, get) => {
-  const giveFiat = give?.type === "fiat";
-  const getFiat = get?.type === "fiat";
-
-  if (giveFiat && getFiat) return false;
-  if (giveFiat && Number(give?.backendId) !== 2101) return false;
-
-  const giveId = Number(give?.backendId);
-  const getId = Number(get?.backendId);
-
-  if (!giveFiat && !getFiat) {
-    if (giveId === getId) return false;
-  }
-
-  return true;
-};
-
-const findFirstAllowedGet = (give) => {
-  return getOptions.value.find((x) => isPairAllowed(give, x)) || currencies.value[0];
-};
-
-const findFirstAllowedGive = (get) => {
-  return giveOptions.value.find((x) => isPairAllowed(x, get)) || RUB_INPUT_METHODS.value[0];
-};
+const getRateText = computed(() => {
+  if (!getCurrency.value?.symbol) return "Выберите валюту";
+  if (!activeCourse.value) return "Курс не задан";
+  return `курс ${formatNum(activeCourse.value, 6)} ${getCurrency.value.symbol} на ${moscowDateText.value}`;
+});
 
 const limitsInGive = computed(() => {
   if (isGiveCardTransfer.value) {
@@ -558,72 +557,10 @@ const limitsInGive = computed(() => {
     };
   }
 
-  const p = givePriceUsd.value;
-  if (!p) return { giveMin: "0", giveMax: "0" };
-
-  const min = limitsUsd.value.giveMin / p;
-  const maxByUsd = limitsUsd.value.giveMax / p;
-
-  const reserveGive = reserves.value[giveCurrency.value.id];
-  const max = typeof reserveGive === "number" ? Math.min(maxByUsd, reserveGive * 1e9) : maxByUsd;
-
   return {
-    giveMin: formatNum(min),
-    giveMax: formatNum(max),
+    giveMin: formatNum(limitsUsd.value.giveMin, 2),
+    giveMax: formatNum(limitsUsd.value.giveMax, 2),
   };
-});
-
-const limitsInGet = computed(() => {
-  if (isGiveCardTransfer.value && !isGetFiat.value) {
-    const getUsd = getCryptoPriceUsd.value;
-    const rate = currentFiatInRow.value?.rate || firstFiatRate.value;
-
-    if (!getUsd || !rate) return { getMin: "0", getMax: "0" };
-
-    const minRub = currentFiatInRow.value?.from ?? fiatInMin.value;
-    const maxRub = currentFiatInRow.value?.to ?? fiatInMax.value;
-
-    const minUsd = minRub / rate;
-    const maxUsd = maxRub / rate;
-
-    return {
-      getMin: formatNum(minUsd / getUsd),
-      getMax: formatNum(maxUsd / getUsd),
-    };
-  }
-
-  if (!isGiveFiat.value && isGetRUB.value) {
-    const giveUsd = givePriceUsd.value;
-    const giveRub = pricesRub.value[giveCurrency.value.id] ?? 0;
-    if (!giveUsd || !giveRub) return { getMin: "0", getMax: "0" };
-
-    const usdToRub = giveRub / giveUsd;
-    const minRub = limitsUsd.value.getMin * usdToRub * effectiveFeeMul.value;
-    const maxRub = limitsUsd.value.getMax * usdToRub * effectiveFeeMul.value;
-
-    return {
-      getMin: formatNum(minRub, 2),
-      getMax: formatNum(maxRub, 2),
-    };
-  }
-
-  if (!isGiveFiat.value && !isGetFiat.value) {
-    const p = getCryptoPriceUsd.value;
-    if (!p) return { getMin: "0", getMax: "0" };
-
-    const minByUsd = limitsUsd.value.getMin / p;
-    const maxByUsd = limitsUsd.value.getMax / p;
-
-    const reserveGet = reserves.value[getCurrency.value.id];
-    const max = typeof reserveGet === "number" ? Math.min(maxByUsd, reserveGet) : maxByUsd;
-
-    return {
-      getMin: formatNum(minByUsd * effectiveFeeMul.value),
-      getMax: formatNum(max * effectiveFeeMul.value),
-    };
-  }
-
-  return { getMin: "0", getMax: "0" };
 });
 
 const giveRangeText = computed(() => {
@@ -647,92 +584,38 @@ const giveRangeText = computed(() => {
 
 const recalcGetFromGive = () => {
   const give = toNumber(giveAmountStr.value);
-  if (!give) {
+
+  if (!give || !getCurrency.value?.symbol) {
     getAmountStr.value = "";
     return;
   }
 
-  if (isGiveCardTransfer.value && !isGetFiat.value) {
-    const row = currentFiatInRow.value;
-    const getUsd = getCryptoPriceUsd.value;
-
-    if (!row || !getUsd) {
-      getAmountStr.value = "";
-      return;
-    }
-
-    const usd = give / row.rate;
-    const rawGet = usd / getUsd;
-    getAmountStr.value = formatNum(rawGet);
+  const course = activeCourse.value;
+  if (!course) {
+    getAmountStr.value = "";
     return;
   }
 
-  if (!isGiveFiat.value && isGetRUB.value) {
-    const giveRub = pricesRub.value[giveCurrency.value.id] ?? 0;
-    if (!giveRub) {
-      getAmountStr.value = "";
-      return;
-    }
-
-    const rubGross = give * giveRub;
-    const rubNet = rubGross * effectiveFeeMul.value;
-    getAmountStr.value = formatNum(rubNet, 2);
-    return;
-  }
-
-  if (!isGiveFiat.value && !isGetFiat.value) {
-    const giveUsd = givePriceUsd.value;
-    const getUsd = getCryptoPriceUsd.value;
-    if (!giveUsd || !getUsd) {
-      getAmountStr.value = "";
-      return;
-    }
-
-    const usd = give * giveUsd;
-    const rawGet = usd / getUsd;
-    const getNet = rawGet * effectiveFeeMul.value;
-    getAmountStr.value = formatNum(getNet);
-    return;
-  }
-
-  getAmountStr.value = "";
+  const result = give * course;
+  getAmountStr.value = formatNum(result, 6);
 };
 
 const recalcGiveFromGet = () => {
-  if (isGiveCardTransfer.value) return;
-
   const get = toNumber(getAmountStr.value);
-  if (!get) {
+
+  if (!get || !getCurrency.value?.symbol) {
     giveAmountStr.value = "";
     return;
   }
 
-  if (!isGiveFiat.value && isGetRUB.value) {
-    const giveRub = pricesRub.value[giveCurrency.value.id] ?? 0;
-    if (!giveRub) {
-      giveAmountStr.value = "";
-      return;
-    }
-
-    const rubGross = get / effectiveFeeMul.value;
-    const give = rubGross / giveRub;
-    giveAmountStr.value = formatNum(give);
+  const course = activeCourse.value;
+  if (!course) {
+    giveAmountStr.value = "";
     return;
   }
 
-  if (!isGiveFiat.value && !isGetFiat.value) {
-    const giveUsd = givePriceUsd.value;
-    const getUsd = getCryptoPriceUsd.value;
-    if (!giveUsd || !getUsd) {
-      giveAmountStr.value = "";
-      return;
-    }
-
-    const rawGet = get / effectiveFeeMul.value;
-    const usd = rawGet * getUsd;
-    const give = usd / giveUsd;
-    giveAmountStr.value = formatNum(give);
-  }
+  const result = get / course;
+  giveAmountStr.value = formatNum(result, 6);
 };
 
 const giveAmountN = computed(() => toNumber(giveAmountStr.value));
@@ -740,31 +623,12 @@ const getAmountN = computed(() => toNumber(getAmountStr.value));
 
 const giveMinN = computed(() => toNumber(limitsInGive.value.giveMin));
 const giveMaxN = computed(() => toNumber(limitsInGive.value.giveMax));
-const getMinN = computed(() => toNumber(limitsInGet.value.getMin));
-const getMaxN = computed(() => toNumber(limitsInGet.value.getMax));
 
-const hasRates = computed(() => {
-  if (isGiveCardTransfer.value && !isGetFiat.value) {
-    return !!getCryptoPriceUsd.value && fiatInRows.value.length > 0;
-  }
-
-  if (!isGiveFiat.value && isGetRUB.value) {
-    return !!givePriceUsd.value && !!pricesRub.value[giveCurrency.value.id];
-  }
-
-  if (!isGiveFiat.value && !isGetFiat.value) {
-    return !!givePriceUsd.value && !!getCryptoPriceUsd.value;
-  }
-
-  return false;
-});
+const hasRates = computed(() => !!getCurrency.value?.symbol && !!activeCourse.value);
 
 const amountError = computed(() => {
-  if (isGiveFiat.value && isGetFiat.value) {
-    return "Обмен фиат на фиат недоступен";
-  }
-
-  if (!hasRates.value) return "Курс обновляется…";
+  if (!getCurrency.value?.symbol) return "Выберите валюту получения";
+  if (!activeCourse.value) return "Курс для выбранной валюты не задан";
   if (!giveAmountStr.value && !getAmountStr.value) return "";
 
   if (lastEdited.value === "give") {
@@ -781,19 +645,22 @@ const amountError = computed(() => {
     if (isGiveCardTransfer.value && !currentFiatInRow.value) {
       return "Сумма не попадает ни в один доступный интервал";
     }
-
-    if (!isGetFiat.value && getAmountN.value && getAmountN.value > getMaxN.value) {
-      return `Максимум к получению: ${limitsInGet.value.getMax} ${getCurrency.value.symbol}`;
-    }
   } else {
     if (!getAmountN.value) return "";
 
-    if (getAmountN.value < getMinN.value) {
-      return `Минимум к получению: ${limitsInGet.value.getMin} ${getCurrency.value.symbol}`;
+    // проверяем пересчитанную левую сумму
+    if (!giveAmountN.value) return "";
+
+    if (giveAmountN.value < giveMinN.value) {
+      return `Минимум для внесения: ${limitsInGive.value.giveMin} ${giveCurrency.value.symbol}`;
     }
 
-    if (getAmountN.value > getMaxN.value) {
-      return `Максимум к получению: ${limitsInGet.value.getMax} ${getCurrency.value.symbol}`;
+    if (giveAmountN.value > giveMaxN.value) {
+      return `Максимум для внесения: ${limitsInGive.value.giveMax} ${giveCurrency.value.symbol}`;
+    }
+
+    if (isGiveCardTransfer.value && !currentFiatInRow.value) {
+      return "Сумма не попадает ни в один доступный интервал";
     }
   }
 
@@ -812,111 +679,19 @@ const validateTelegramUsername = (s) => {
   return /^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(cleaned) ? "" : "Некорректный формат Telegram";
 };
 
-const validateCardNumber = (s) => {
-  const v = String(s ?? "").replace(/\s+/g, "");
-  if (!v) return "";
-  return /^\d{13,19}$/.test(v) ? "" : "Некорректный формат карты";
-};
-
-const validateCryptoAddress = (addr, currency) => {
-  const v = normalizeSpaces(addr);
-  if (!v) return "";
-
-  const cid = currency?.id;
-  const bid = currency?.backendId;
-
-  if (
-  cid === "ethereum" ||
-  cid === "dai" ||
-  cid === "usd-coin" ||
-  bid === 4 || // USDT ERC20
-  bid === 5    // USDT BEP20
-) {
-  return /^0x[a-fA-F0-9]{40}$/.test(v) ? "" : "Некорректный формат кошелька";
-}
-
-  if (cid === "bitcoin") {
-    const legacy = /^[13][1-9A-HJ-NP-Za-km-z]{25,34}$/.test(v);
-    const bech32 = /^bc1[0-9a-z]{25,90}$/.test(v);
-    return legacy || bech32 ? "" : "Некорректный формат кошелька";
-  }
-
-  if (cid === "tron" || bid === 3) {
-    return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v) ? "" : "Некорректный формат кошелька";
-  }
-
- if (cid === "solana" || bid === 6) {
-  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(v) ? "" : "Некорректный формат кошелька";
-}
-
-  if (cid === "litecoin") {
-    const legacy = /^[LM3][1-9A-HJ-NP-Za-km-z]{25,34}$/.test(v);
-    const bech32 = /^ltc1[0-9a-z]{25,90}$/.test(v);
-    return legacy || bech32 ? "" : "Некорректный формат кошелька";
-  }
-
-  if (cid === "dogecoin") {
-    return /^D[1-9A-HJ-NP-Za-km-z]{25,34}$/.test(v) ? "" : "Некорректный формат кошелька";
-  }
-
-  return "";
-};
-
 const telegramError = computed(() => validateTelegramUsername(telegram.value));
-
-const walletError = computed(() => {
-  const v = normalizeSpaces(wallet.value);
-  if (!v) return "";
-
-  if (isGetRUB.value) {
-    const kind = getCurrency.value?.rubKind;
-    if (kind === "card") return validateCardNumber(v);
-    return "";
-  }
-
-  return validateCryptoAddress(v, getCurrency.value);
-});
-
-const directionError = computed(() => {
-  if (isGiveFiat.value && isGetFiat.value) {
-    return "Обмен не возможен";
-  }
-  return "";
-});
-
-const topError = computed(() => submitError.value || directionError.value || amountError.value || "");
+const walletError = computed(() => "");
+const topError = computed(() => submitError.value || amountError.value || "");
 
 const canExchange = computed(() => {
   const hasRequired = !!telegram.value.trim() && !!wallet.value.trim();
   const hasAmount = giveAmountN.value > 0 && getAmountN.value > 0;
   const noFieldErrors = !telegramError.value && !walletError.value;
 
-  return (
-    hasRates.value &&
-    hasRequired &&
-    hasAmount &&
-    !directionError.value &&
-    !amountError.value &&
-    noFieldErrors
-  );
+  return hasRates.value && hasRequired && hasAmount && !amountError.value && noFieldErrors;
 });
 
-const getWalletLabel = computed(() => {
-  if (!isGetRUB.value) return `${getCurrency.value.name} адрес`;
-
-  switch (getCurrency.value.rubKind) {
-    case "sbp":
-      return "Номер телефона и банк";
-    case "card":
-      return "Номер карты";
-    case "cash":
-      return "Укажите Ваш город";
-    case "qr":
-      return "Укажите город снятия";
-    default:
-      return "Реквизиты";
-  }
-});
+const getWalletLabel = computed(() => "Город снятия / IBAN");
 
 const selectCurrency = (side, c) => {
   if (side === "give") {
@@ -926,33 +701,6 @@ const selectCurrency = (side, c) => {
   }
 
   openDropdown.value = null;
-
-  if (lastEdited.value === "give") {
-    recalcGetFromGive();
-  } else if (!isGiveCardTransfer.value) {
-    recalcGiveFromGet();
-  }
-};
-
-
-
-const swapCurrencies = () => {
-  if (isGiveCardTransfer.value) return;
-
-  const nextGive = getCurrency.value;
-  const nextGet = giveCurrency.value;
-
-  if (!isPairAllowed(nextGive, nextGet)) return;
-
-  const tmpGive = giveCurrency.value;
-  const tmpGet = getCurrency.value;
-
-  giveCurrency.value = tmpGet;
-  getCurrency.value = tmpGive;
-
-  const tmpA = giveAmountStr.value;
-  giveAmountStr.value = getAmountStr.value;
-  getAmountStr.value = tmpA;
 
   if (lastEdited.value === "give") recalcGetFromGive();
   else recalcGiveFromGet();
@@ -993,16 +741,14 @@ const onReposition = () => {
 const setGiveAmount = (vStr) => {
   lastEdited.value = "give";
   giveAmountStr.value = String(vStr);
+  recalcGetFromGive();
 };
 
-const setGetAmount = (vStr) => {
-  if (isGiveCardTransfer.value) return;
-  lastEdited.value = "get";
-  getAmountStr.value = String(vStr);
+const onGiveInput = () => {
+  lastEdited.value = "give";
 };
 
 const onGetInput = () => {
-  if (isGiveCardTransfer.value) return;
   lastEdited.value = "get";
 };
 
@@ -1013,10 +759,6 @@ async function loadPublicSettings() {
 
     const data = await res.json();
     publicSettings.value = data || {};
-
-    if (typeof data?.percent !== "undefined") {
-      feePercent.value = Number(data.percent) || 4;
-    }
 
     const next = {
       giveMin: Number(data?.giveMin),
@@ -1032,107 +774,21 @@ async function loadPublicSettings() {
 
     const method2101 = data?.fiat_in_methods?.["2101"];
     if (method2101) {
-      RUB_INPUT_METHODS.value = [{
-        id: "rub-card-in",
-        backendId: 2101,
-        symbol: String(method2101.symbol || "RUB"),
-        name: String(method2101.name || "Перевод на карту"),
-        icon: String(method2101.icon || "/img/sbp.svg?v=032"),
-        type: "fiat",
-        fiat: "rub",
-        rubKind: "card_transfer",
-      }];
+      RUB_INPUT_METHODS.value = [
+        {
+          id: "rub-card-in",
+          backendId: 2101,
+          symbol: String(method2101.symbol || "RUB"),
+          name: String(method2101.name || "Перевод на карту"),
+          icon: String(method2101.icon || "/img/sbp.svg?v=032"),
+          type: "fiat",
+          fiat: "rub",
+          rubKind: "card_transfer",
+        },
+      ];
     }
   } catch {}
 }
-
-let timer = null;
-let backoffMs = 30000;
-
-const CACHE_KEY = "pricesUsdCache:v5-mode1";
-const CACHE_TTL_MS = 5 * 60 * 1000;
-
-const loadCache = () => {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed?.ts || !parsed?.data) return null;
-    if (Date.now() - parsed.ts > CACHE_TTL_MS) return null;
-    return parsed.data;
-  } catch {
-    return null;
-  }
-};
-
-const saveCache = (data) => {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-  } catch {}
-};
-
-const scheduleNextFetch = () => {
-  if (timer) clearTimeout(timer);
-  timer = setTimeout(fetchPrices, backoffMs);
-};
-
-const fetchPrices = async () => {
-  try {
-    const ids = currencies.value.map((c) => c.id).join(",");
-    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(ids)}&vs_currencies=usd,rub`;
-
-    const res = await fetch(url);
-
-    if (res.status === 429) {
-      const cached = loadCache();
-      if (cached?.usd) pricesUsd.value = cached.usd;
-      if (cached?.rub) pricesRub.value = cached.rub;
-
-      backoffMs = Math.min(backoffMs * 2, 10 * 60 * 1000);
-      scheduleNextFetch();
-      return;
-    }
-
-    if (!res.ok) {
-      const cached = loadCache();
-      if (cached?.usd) pricesUsd.value = cached.usd;
-      if (cached?.rub) pricesRub.value = cached.rub;
-
-      backoffMs = Math.min(backoffMs * 2, 5 * 60 * 1000);
-      scheduleNextFetch();
-      return;
-    }
-
-    const data = await res.json();
-
-    const nextUsd = {};
-    const nextRub = {};
-
-    for (const c of currencies.value) {
-      const usd = data?.[c.id]?.usd;
-      const rub = data?.[c.id]?.rub;
-      if (typeof usd === "number") nextUsd[c.id] = usd;
-      if (typeof rub === "number") nextRub[c.id] = rub;
-    }
-
-    pricesUsd.value = nextUsd;
-    pricesRub.value = nextRub;
-    saveCache({ usd: nextUsd, rub: nextRub });
-
-    backoffMs = 30000;
-    scheduleNextFetch();
-
-    if (lastEdited.value === "give") recalcGetFromGive();
-    else if (!isGiveCardTransfer.value) recalcGiveFromGet();
-  } catch {
-    const cached = loadCache();
-    if (cached?.usd) pricesUsd.value = cached.usd;
-    if (cached?.rub) pricesRub.value = cached.rub;
-
-    backoffMs = Math.min(backoffMs * 2, 5 * 60 * 1000);
-    scheduleNextFetch();
-  }
-};
 
 const onSubmit = async () => {
   if (!canExchange.value) return;
@@ -1150,19 +806,15 @@ const onSubmit = async () => {
     },
     get: {
       currency_backend_id: getCurrency.value.backendId,
-      coingecko_id: isGetFiat.value ? null : getCurrency.value.id,
+      coingecko_id: null,
       symbol: getCurrency.value.symbol,
       amount: getAmountN.value,
     },
-    fee_percent: isGiveCardTransfer.value ? 0 : Number(feePercent.value || 0),
+    fee_percent: 0,
 
-    get_is_fiat: !!getCurrency.value.type && getCurrency.value.type === "fiat",
-    fiat_code: (isGiveFiat.value || isGetFiat.value) ? "rub" : null,
-    rub_kind: isGetFiat.value
-      ? (getCurrency.value.rubKind ?? null)
-      : isGiveFiat.value
-        ? (giveCurrency.value.rubKind ?? null)
-        : null,
+    get_is_fiat: true,
+    fiat_code: isGiveCardTransfer.value ? "rub" : "usdt",
+    rub_kind: "cash",
 
     client: {
       telegram: telegram.value.trim(),
@@ -1170,11 +822,9 @@ const onSubmit = async () => {
     },
 
     rates_snapshot: {
-      give_usd: isGiveFiat.value ? null : (pricesUsd.value[giveCurrency.value.id] ?? null),
-      give_rub: isGiveFiat.value
-        ? (currentFiatInRow.value?.rate ?? null)
-        : (pricesRub.value[giveCurrency.value.id] ?? null),
-      get_usd: !isGetFiat.value ? (pricesUsd.value[getCurrency.value.id] ?? null) : null,
+      give_usd: isGiveFiat.value ? null : 1,
+      give_rub: isGiveFiat.value ? activeCourse.value || null : null,
+      get_usd: null,
     },
 
     created_at: new Date().toISOString(),
@@ -1220,16 +870,14 @@ const onSubmit = async () => {
 };
 
 watch(
-  [giveAmountStr, () => giveCurrency.value.backendId, () => getCurrency.value.backendId],
+  [giveAmountStr, () => giveCurrency.value?.backendId, () => getCurrency.value?.backendId],
   () => {
     if (lastEdited.value === "give") recalcGetFromGive();
   }
 );
 
 watch(getAmountStr, () => {
-  if (lastEdited.value === "get" && !isGiveCardTransfer.value) {
-    recalcGiveFromGet();
-  }
+  if (lastEdited.value === "get") recalcGiveFromGet();
 });
 
 watch(openDropdown, async (v) => {
@@ -1244,19 +892,14 @@ onMounted(async () => {
 
   await loadPublicSettings();
 
-  giveCurrency.value = RUB_INPUT_METHODS.value[0];
-  getCurrency.value = findFirstAllowedGet(giveCurrency.value);
-
-  await fetchPrices();
-  scheduleNextFetch();
+  giveCurrency.value = RUB_INPUT_METHODS.value[0] || giveOptions.value[0];
+  getCurrency.value = getOptions.value[0] || { ...EMPTY_GET_CURRENCY };
 
   window.addEventListener("resize", onReposition);
   window.addEventListener("scroll", onReposition, true);
 });
 
 onBeforeUnmount(() => {
-  if (timer) clearTimeout(timer);
-
   window.removeEventListener("resize", updateIsMobile);
   window.removeEventListener("resize", onReposition);
   window.removeEventListener("scroll", onReposition, true);
