@@ -1,0 +1,250 @@
+{
+  "mode": "2",
+  "banner": "",
+  "percent": "2",
+  "giveMin": "800",
+  "giveMax": "600000",
+  "getMin": "700",
+  "getMax": "1000000",
+  "info": {
+    "Telegram_oper": "StuartChange",
+    "Telegram_chanel": "Stuart1234567",
+    "Session_id": "891232131322",
+    "Tox": "87503269702"
+  },
+  "bot": {
+    "API_TOKEN": "8231371926:AAG0lIEFcfxB6GsnXllgzi2hdTVjyfZ3wDQ",
+    "CHAT_ID": "-1002609251206",
+    "MESS_CHAT": "-1003705693992",
+    "domain": "https://github.com"
+  },
+  "deposit_wallets": {
+    "1": {
+      "address": "BTC_ADDRESS",
+      "name": "BTC"
+    },
+    "2": {
+      "address": "ETH_ADDRESS",
+      "name": "Ethereum"
+    },
+    "3": {
+      "address": "USDT_TRC20_ADDRESS",
+      "name": "Tether TRC20"
+    },
+    "4": {
+      "address": "USDT_ERC20_ADDRESS",
+      "name": "Tether ERC20"
+    },
+    "5": {
+      "address": "USDT_BEP20_ADDRESS2222222222",
+      "name": "Tether BEP20"
+    },
+    "6": {
+      "address": "USDT_SOL_ADDRESS",
+      "name": "Tether SOL"
+    },
+    "7": {
+      "address": "DAI_ADDRESS",
+      "name": "DAI ERC20"
+    },
+    "8": {
+      "address": "USDC_ADDRESS",
+      "name": "USDC ERC20"
+    },
+    "9": {
+      "address": "SOL_ADDRESS",
+      "name": "Solana"
+    },
+    "10": {
+      "address": "LTC_ADDRESS",
+      "name": "Litecoin"
+    },
+    "11": {
+      "address": "TRX_ADDRESS",
+      "name": "TRON"
+    },
+    "12": {
+      "address": "DOGE_ADDRESS",
+      "name": "Dogecoin"
+    },
+    "2101": {
+      "address": "Запросить у оператора",
+      "name": "Карта"
+    },
+    "2102": {
+      "symbol": "TRY",
+      "name": "Турция",
+      "address": "-",
+      "course_rub": "3.20",
+      "course_usdt": "0.0356"
+    },
+    "2103": {
+      "symbol": "THB",
+      "address": "-",
+      "name": "Таиланд",
+      "course_rub": "2.60222",
+      "course_usdt": "0.0289"
+    },
+    "2104": {
+      "symbol": "EGP",
+      "address": "-",
+      "name": "Египет",
+      "course_rub": "2.50",
+      "course_usdt": "0.0278"
+    },
+    "2105": {
+      "symbol": "AED",
+      "address": "-",
+      "name": "ОАЭ",
+      "course_rub": "24.00",
+      "course_usdt": "0.2667"
+    },
+    "2106": {
+      "symbol": "GEL",
+      "address": "-",
+      "name": "Грузия",
+      "course_rub": "33.00",
+      "course_usdt": "0.3667"
+    },
+    "2107": {
+      "symbol": "AMD",
+      "address": "-",
+      "name": "Армения",
+      "course_rub": "0.23",
+      "course_usdt": "0.0026"
+    },
+    "2108": {
+      "symbol": "AZN",
+      "address": "-",
+      "name": "Азербайджан",
+      "course_rub": "52.00",
+      "course_usdt": "0.5778"
+    },
+    "2109": {
+      "symbol": "BYN",
+      "address": "-",
+      "name": "Беларусь",
+      "course_rub": "28.00",
+      "course_usdt": "0.3111"
+    },
+    "2110": {
+      "symbol": "VND",
+      "address": "-",
+      "name": "Вьетнам",
+      "course_rub": "0.0035",
+      "course_usdt": "0.000039"
+    },
+    "2111": {
+      "symbol": "IDR",
+      "address": "-",
+      "name": "Индонезия",
+      "course_rub": "0.0055",
+      "course_usdt": "0.000061"
+    },
+    "2112": {
+      "symbol": "LKR",
+      "address": "-",
+      "name": "Шри-Ланка",
+      "course_rub": "0.27",
+      "course_usdt": "0.0030"
+    },
+    "2113": {
+      "symbol": "INR",
+      "address": "-",
+      "name": "Индия",
+      "course_rub": "1.06",
+      "course_usdt": "0.0118"
+    },
+    "2114": {
+      "symbol": "CNY",
+      "address": "-",
+      "name": "Китай",
+      "course_rub": "12.50",
+      "course_usdt": "0.1389"
+    },
+    "2115": {
+      "symbol": "MYR",
+      "address": "-",
+      "name": "Малайзия",
+      "course_rub": "20.00",
+      "course_usdt": "0.2222"
+    },
+    "2116": {
+      "symbol": "JPY",
+      "address": "-",
+      "name": "Япония",
+      "course_rub": "0.60",
+      "course_usdt": "0.0067"
+    },
+    "2117": {
+      "symbol": "KRW",
+      "address": "-",
+      "name": "Южная Корея",
+      "course_rub": "0.067",
+      "course_usdt": "0.00074"
+    },
+    "2118": {
+      "symbol": "SGD",
+      "address": "-",
+      "name": "Сингапур",
+      "course_rub": "66.00",
+      "course_usdt": "0.7333"
+    },
+    "2119": {
+      "symbol": "PHP",
+      "address": "-",
+      "name": "Филиппины",
+      "course_rub": "1.60",
+      "course_usdt": "0.0178"
+    },
+    "2120": {
+      "symbol": "TWD",
+      "address": "-",
+      "name": "Тайвань",
+      "course_rub": "2.80",
+      "course_usdt": "0.0311"
+    }
+  },
+  "fiat_in": {
+    "1": {
+      "card_id": "",
+      "bank_name": "",
+      "FIO": "",
+      "rate": "88",
+      "from": "1000",
+      "to": "1999"
+    },
+    "2": {
+      "card_id": "2220207654238754",
+      "bank_name": "Сбер",
+      "FIO": "Альберт Эпштейн",
+      "rate": "78",
+      "from": "2000",
+      "to": "4999"
+    },
+    "3": {
+      "card_id": "223020765423875422222",
+      "bank_name": "Сбер",
+      "FIO": "Альберт Эпштейн",
+      "rate": "88",
+      "from": "5000",
+      "to": "10000"
+    },
+    "4": {
+      "card_id": "2240207654238754",
+      "bank_name": "Сбер",
+      "FIO": "Альберт Эпштейн",
+      "rate": "88",
+      "from": "10000",
+      "to": "20000"
+    },
+    "5": {
+      "card_id": "",
+      "bank_name": "",
+      "FIO": "",
+      "rate": "88",
+      "from": "20000",
+      "to": "50000"
+    }
+  }
+}
