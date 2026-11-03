@@ -1,43 +1,50 @@
-version: '3.8'
-
+# Static frontend + API + PostgreSQL. Put a TLS reverse proxy in front on a public server.
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    restart: always
-
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: exchange
+      POSTGRES_USER: exchange
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exchange -d exchange"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    restart: unless-stopped
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.prod
-    restart: always
-    volumes:
-      - backend_data:/app/data
-
-  nginx:
-    image: nginx:alpine
-    restart: always
+    env_file: .env
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://exchange:${POSTGRES_PASSWORD}@postgres:5432/exchange
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      # ИЗМЕНИЛИ ПУТИ ЗДЕСЬ:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - receipt_data:/app/data
     depends_on:
-      - frontend
-      - backend
-
-  certbot:
-    image: certbot/certbot
-    volumes:
-      # И ИЗМЕНИЛИ ПУТИ ЗДЕСЬ:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    restart: unless-stopped
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "127.0.0.1:5173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
 volumes:
-  backend_data:
-  # Удалили certbot_conf и certbot_www отсюда
+  postgres_data:
+  receipt_data:

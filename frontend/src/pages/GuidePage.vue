@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col items-center md:gap-12 gap-9 md:py-24 py-8 max-w-225 w-full self-center grow basis-full container text-white">
-    <h2 class="md:text-5xl text-[28px] font-medium leading-[120%]">Инструкция</h2>
+    <h2 class="md:text-5xl text-[28px] font-medium leading-[120%]">{{ tr("Инструкция") }}</h2>
 
     <div class="w-full flex flex-col md:gap-6 gap-4">
       <div class="flex flex-col gap-2">
         <h3 class="md:text-3xl text-2xl font-medium leading-[120%]">
-          Как получить наличные по QR-коду?
+          {{ tr("Как получить наличные по QR-коду?") }}
         </h3>
       </div>
 
@@ -17,7 +17,7 @@
         >
           <div class="relative p-4">
             <div class="step-badge">
-              Шаг {{ idx + 1 }}
+              {{ tr("Шаг") }} {{ idx + 1 }}
             </div>
 
             <div class="step-image-wrap">
@@ -32,10 +32,10 @@
 
           <div class="flex flex-col gap-3 px-5 pb-6 pt-1 grow">
             <h4 class="md:text-2xl text-xl font-medium leading-[130%]">
-              {{ step.title }}
+              {{ tr(step.title) }}
             </h4>
             <p class="md:text-lg text-base font-light leading-[155%] text-white whitespace-pre-line">
-              {{ step.text }}
+              {{ tr(step.text) }}
             </p>
           </div>
         </div>
@@ -45,7 +45,7 @@
     <div class="flex flex-col md:gap-4 gap-3 w-full">
       <div class="flex flex-col gap-2">
         <h3 class="md:text-3xl text-2xl font-medium leading-[120%]">
-          Какие банкоматы подходят для получения?
+          {{ tr("Какие банкоматы подходят для получения?") }}
         </h3>
       </div>
 
@@ -74,7 +74,7 @@
 
               <div class="flex flex-col min-w-0">
                 <h4 class="md:text-2xl text-xl font-medium leading-[130%]">
-                  {{ item.q }}
+                  {{ tr(item.q) }}
                 </h4>
                 <span class="md:text-base text-sm font-light leading-[150%] text-text-secondary">
                   {{ item.symbol }}
@@ -110,7 +110,7 @@
         >
           <div class="md:px-8 px-6 pb-6 md:pb-8 pt-0">
             <p class="country-answer md:text-xl text-base font-light leading-[155%] text-white whitespace-pre-line">
-              {{ item.a }}
+              {{ tr(item.a) }}
             </p>
           </div>
         </div>
@@ -120,20 +120,20 @@
     <div class="w-full flex flex-col md:gap-6 gap-4">
       <div class="flex flex-col gap-2">
         <h3 class="md:text-3xl text-2xl font-medium leading-[120%]">
-          Денежные средства на банковский счет
+          {{ tr("Денежные средства на банковский счет") }}
         </h3>
         <p class="md:text-xl text-base font-light leading-[150%] text-text-secondary">
-          При обмене укажите IBAN и ФИО
+          {{ tr("При обмене укажите IBAN и ФИО") }}
         </p>
       </div>
 
       <div class="flex flex-col gap-2">
         <div class="flex flex-col gap-2 basis-full md:p-8 p-6 bg-bg-secondary border border-border-secondary md:rounded-[28px] rounded-[22px]">
           <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">
-            Важно
+            {{ tr("Важно") }}
           </span>
           <p class="md:text-xl text-base font-medium leading-[140%] break-all">
-            Указывайте IBAN полностью и ФИО получателя как в банковских реквизитах.
+            {{ tr("Указывайте IBAN полностью и ФИО получателя как в банковских реквизитах.") }}
           </p>
         </div>
 
@@ -148,7 +148,7 @@
         type="button"
       >
         <p class="md:text-xl text-base font-medium leading-[140%]">
-          Связаться с поддержкой
+          {{ tr("Связаться с поддержкой") }}
         </p>
       </button>
     </RouterLink>
@@ -156,7 +156,9 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onBeforeUnmount, ref } from "vue";
+import { tr, localeTag, locale } from '../lib/i18n';
+import { getPublicSettings } from "../lib/siteState";
+import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from "vue";
 import { RouterLink } from "vue-router";
 
 const publicSettings = ref({
@@ -167,53 +169,53 @@ const qrSteps = [
   {
     id: "step-1",
     img: "/img/inst-1.png",
-    title: "Найдите банкомат и оплатите заявку",
-    text: "Найдите подходящий банкомат и оплатите заявку на обмен по реквизитам ",
+    title: tr("Найдите банкомат и оплатите заявку"),
+    text: tr("Найдите подходящий банкомат и оплатите заявку на обмен по реквизитам"),
   },
   {
     id: "step-2",
     img: "/img/inst-2.png",
-    title: "Сканируйте QR",
-    text: "Отсканируйте QR-код банкомата и отправьте его менеджеру, либо введите данные и PIN-код, которые сообщил менеджер.",
+    title: tr("Сканируйте QR"),
+    text: tr("Отсканируйте QR-код банкомата и отправьте его менеджеру, либо введите данные и PIN-код, которые сообщил менеджер."),
   },
   {
     id: "step-3",
     img: "/img/inst-3.png",
-    title: "Получите и пересчитайте деньги",
-    text: "После выдачи наличных обязательно пересчитайте сумму сразу у банкомата.",
+    title: tr("Получите и пересчитайте деньги"),
+    text: tr("После выдачи наличных обязательно пересчитайте сумму сразу у банкомата."),
   },
   {
     id: "step-4",
     img: "/img/inst-4.png",
-    title: "Оставьте отзыв о сервисе",
-    text: "Если всё прошло успешно, оставьте отзыв о работе сервиса в соответсвующем разделе",
+    title: tr("Оставьте отзыв о сервисе"),
+    text: tr("Если всё прошло успешно, оставьте отзыв о работе сервиса в соответсвующем разделе"),
   },
 ];
 
 const ATM_HINTS = {
-  THB: "Подойдут ATM следующих банков: Kasikorn Bank, Bangkok Bank, Krungsri, SCB Bank.",
-  TRY: "Подойдут ATM следующих банков: Garanti BBVA, Ziraat Bankası, Yapı Kredi, Türkiye İş Bankası.",
-  EGP: "Подойдут ATM следующих банков: CIB, Banque Misr, National Bank of Egypt.",
-  AED: "Подойдут ATM следующих банков: Emirates NBD, First Abu Dhabi Bank (FAB), ADCB, Dubai Islamic Bank.",
-  VND: "Подойдут ATM следующих банков: Vietcombank, BIDV, VietinBank.",
-  IDR: "Подойдут ATM следующих банков: BCA, CIMB Niaga, BRI, Mandiri.",
-  MVR: "Подойдут ATM следующих банков: Bank of Maldives (BML), State Bank of India (SBI), Maldives Islamic Bank (MIB). Лучше использовать банкоматы в аэропорту, при отделениях банков и в туристических зонах.",
-  LKR: "Подойдут ATM следующих банков: Commercial Bank, Sampath Bank, People’s Bank.",
-  GEL: "Подойдут ATM следующих банков: TBC Bank, Bank of Georgia, Liberty Bank.",
-  AZN: "Подойдут ATM следующих банков: eManat ATM, Unibank ATM, Yelo Bank.",
-  CNY: "Подойдут ATM следующих банков: ICBC, Bank of China, China Construction Bank, Agricultural Bank of China.",
-  MYR: "Подойдут ATM следующих банков: Maybank, CIMB, RHB Bank, Public Bank.",
-  INR: "Подойдут ATM следующих банков: HDFC Bank, ICICI Bank, Axis Bank, State Bank of India.",
-  JPY: "Подойдут ATM следующих банков: Seven Bank, Japan Post Bank, а также ATM при крупных банковских точках и аэропортах.",
-  KRW: "Подойдут ATM следующих банков: Shinhan Bank, Woori Bank, Hana Bank, KB Kookmin Bank. Лучше искать ATM с пометкой Global ATM.",
-  PHP: "Подойдут ATM следующих банков: BDO, BPI, Metrobank.",
-  TWD: "Подойдут ATM следующих банков: Cathay United Bank, E.SUN Bank, Taipei Fubon Bank.",
-  HKD: "Подойдут ATM следующих банков: HSBC, Hang Seng Bank, Bank of China (Hong Kong).",
-  SGD: "Подойдут ATM следующих банков: DBS/POSB, OCBC, UOB."
+  THB: tr("Подойдут ATM следующих банков: Kasikorn Bank, Bangkok Bank, Krungsri, SCB Bank."),
+  TRY: tr("Подойдут ATM следующих банков: Garanti BBVA, Ziraat Bankası, Yapı Kredi, Türkiye İş Bankası."),
+  EGP: tr("Подойдут ATM следующих банков: CIB, Banque Misr, National Bank of Egypt."),
+  AED: tr("Подойдут ATM следующих банков: Emirates NBD, First Abu Dhabi Bank (FAB), ADCB, Dubai Islamic Bank."),
+  VND: tr("Подойдут ATM следующих банков: Vietcombank, BIDV, VietinBank."),
+  IDR: tr("Подойдут ATM следующих банков: BCA, CIMB Niaga, BRI, Mandiri."),
+  MVR: tr("Подойдут ATM следующих банков: Bank of Maldives (BML), State Bank of India (SBI), Maldives Islamic Bank (MIB). Лучше использовать банкоматы в аэропорту, при отделениях банков и в туристических зонах."),
+  LKR: tr("Подойдут ATM следующих банков: Commercial Bank, Sampath Bank, People’s Bank."),
+  GEL: tr("Подойдут ATM следующих банков: TBC Bank, Bank of Georgia, Liberty Bank."),
+  AZN: tr("Подойдут ATM следующих банков: eManat ATM, Unibank ATM, Yelo Bank."),
+  CNY: tr("Подойдут ATM следующих банков: ICBC, Bank of China, China Construction Bank, Agricultural Bank of China."),
+  MYR: tr("Подойдут ATM следующих банков: Maybank, CIMB, RHB Bank, Public Bank."),
+  INR: tr("Подойдут ATM следующих банков: HDFC Bank, ICICI Bank, Axis Bank, State Bank of India."),
+  JPY: tr("Подойдут ATM следующих банков: Seven Bank, Japan Post Bank, а также ATM при крупных банковских точках и аэропортах."),
+  KRW: tr("Подойдут ATM следующих банков: Shinhan Bank, Woori Bank, Hana Bank, KB Kookmin Bank. Лучше искать ATM с пометкой Global ATM."),
+  PHP: tr("Подойдут ATM следующих банков: BDO, BPI, Metrobank."),
+  TWD: tr("Подойдут ATM следующих банков: Cathay United Bank, E.SUN Bank, Taipei Fubon Bank."),
+  HKD: tr("Подойдут ATM следующих банков: HSBC, Hang Seng Bank, Bank of China (Hong Kong)."),
+  SGD: tr("Подойдут ATM следующих банков: DBS/POSB, OCBC, UOB.")
 };
 
 const fallbackCountryText =
-  "Подходят крупные сетевые банкоматы в торговых центрах, отделениях банков и других безопасных местах.";
+  tr("Подходят крупные сетевые банкоматы в торговых центрах, отделениях банков и других безопасных местах.");
 
 const countryFaqItems = computed(() => {
   const wallets = publicSettings.value?.deposit_wallets || {};
@@ -229,7 +231,7 @@ const countryFaqItems = computed(() => {
         q: name,
         a: ATM_HINTS[symbol] || fallbackCountryText,
         symbol,
-        icon: `/img/${symbol}.svg?v=032.svg`,
+        icon: `/img/${symbol}.svg?v=032`,
       };
     });
 });
@@ -268,16 +270,15 @@ function panelStyle(idx) {
   return { maxHeight: isOpen ? `${h}px` : "0px" };
 }
 
+watch(locale, () => nextTick(measureAll));
+
 function onResize() {
   measureAll();
 }
 
 async function loadPublicSettings() {
   try {
-    const res = await fetch("/api/settings/public", { method: "GET" });
-    if (!res.ok) return;
-
-    const data = await res.json();
+    const data = await getPublicSettings();
     publicSettings.value = data || {};
     nextTick(() => measureAll());
   } catch {}

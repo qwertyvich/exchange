@@ -1,0 +1,114 @@
+/* Shared motion for teleported panels: their positioning never participates in the animation. */
+:root {
+  --glass-open-ease: cubic-bezier(.16, 1, .3, 1);
+  --glass-close-ease: cubic-bezier(.4, 0, 1, 1);
+}
+
+.glassNavigationPanel {
+  transform-origin: top center;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.glassNavigationPanel::-webkit-scrollbar { display: none; }
+.glassNavigationSurface {
+  position: relative;
+  background: linear-gradient(145deg, rgba(53, 65, 89, .84), rgba(24, 34, 53, .88));
+  border-color: rgba(255, 255, 255, .13);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 18px 55px rgba(3, 9, 23, .22);
+  -webkit-backdrop-filter: blur(24px) saturate(1.35);
+  backdrop-filter: blur(24px) saturate(1.35);
+}
+.glassNavigationSurface:first-child { z-index: 2; }
+
+.glass-menu-enter-active { transition: opacity 480ms var(--glass-open-ease); }
+.glass-menu-leave-active { transition: opacity 320ms var(--glass-close-ease); }
+.glass-menu-enter-active .glassNavigationPanel {
+  transition: transform 480ms var(--glass-open-ease), opacity 300ms ease, filter 380ms ease;
+  will-change: transform, opacity;
+}
+.glass-menu-leave-active .glassNavigationPanel {
+  transition: transform 320ms var(--glass-close-ease), opacity 240ms ease, filter 280ms ease;
+  will-change: transform, opacity;
+}
+.glass-menu-enter-from, .glass-menu-leave-to { opacity: 0; }
+.glass-menu-enter-from .glassNavigationPanel,
+.glass-menu-leave-to .glassNavigationPanel {
+  transform: translate3d(0, calc(-100% - 24px), 0) scale(.97);
+  opacity: 0;
+  filter: blur(6px);
+}
+
+.currencyPopover {
+  position: fixed;
+  pointer-events: auto;
+}
+[data-currency-menu] {
+  position: relative;
+  width: 100%;
+  pointer-events: auto;
+  transform-origin: top center;
+  will-change: transform;
+  border-color: rgba(223, 234, 255, .28);
+  background: linear-gradient(145deg, rgba(61, 80, 116, .48), rgba(17, 29, 52, .68));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .34),
+    inset 1px 0 0 rgba(255, 255, 255, .1),
+    inset 0 -1px 0 rgba(190, 212, 255, .12),
+    0 20px 55px rgba(3, 9, 23, .3);
+  -webkit-backdrop-filter: blur(26px) saturate(1.7);
+  backdrop-filter: blur(26px) saturate(1.7);
+}
+[data-currency-menu]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(125deg, rgba(255, 255, 255, .14), transparent 42%, rgba(151, 190, 255, .06));
+  pointer-events: none;
+}
+[data-currency-scroll] { position: relative; z-index: 1; }
+[data-currency-scroll] > button:hover { background-color: rgba(255, 255, 255, .12); }
+[data-currency-scroll] > button:focus-visible { outline: 2px solid rgba(202, 220, 255, .8); outline-offset: -3px; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  [data-currency-menu] { background: rgba(17, 29, 52, .96); }
+}
+/* An opacity-animated ancestor creates a new backdrop root and delays the glass blur.
+   Keep the anchor opaque and animate only the glass surface itself. */
+.glass-dropdown-enter-active [data-currency-menu] {
+  transition: transform 360ms var(--glass-open-ease), opacity 180ms ease;
+}
+.glass-dropdown-leave-active [data-currency-menu] {
+  transition: transform 240ms var(--glass-close-ease), opacity 200ms ease;
+}
+.glass-dropdown-enter-from [data-currency-menu],
+.glass-dropdown-leave-to [data-currency-menu] {
+  transform: translate3d(0, -8px, 0) scale(.97, .92);
+  opacity: 0;
+}
+.glass-dropdown-enter-to [data-currency-menu],
+.glass-dropdown-leave-from [data-currency-menu] {
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+}
+
+/* A closing panel must not consume the next click on the page. */
+.glass-menu-leave-active, .glass-menu-leave-active *,
+.glass-dropdown-leave-active, .glass-dropdown-leave-active * { pointer-events: none !important; }
+
+#app { transition: filter 260ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-menu-enter-active, .glass-menu-leave-active,
+  .glass-dropdown-enter-active, .glass-dropdown-leave-active,
+  .glass-menu-enter-active .glassNavigationPanel, .glass-menu-leave-active .glassNavigationPanel,
+  .glass-dropdown-enter-active [data-currency-menu], .glass-dropdown-leave-active [data-currency-menu],
+  #app { transition-duration: 1ms !important; }
+  .glass-menu-enter-from .glassNavigationPanel, .glass-menu-leave-to .glassNavigationPanel,
+  .glass-dropdown-enter-from [data-currency-menu], .glass-dropdown-leave-to [data-currency-menu] {
+    transform: none;
+    filter: none;
+  }
+}

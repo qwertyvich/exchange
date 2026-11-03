@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col min-h-screen">
+  <div data-exchange-mode="2" class="relative flex flex-col min-h-screen">
     <div
       v-if="hasBanner"
       class="flex-shrink-0 w-full pt-16 max-sm:pt-8 flex items-center justify-center"
@@ -11,17 +11,7 @@
       ></span>
     </div>
 
-    <img
-      alt="bg"
-      loading="lazy"
-      width="1920"
-      height="1080"
-      decoding="async"
-      class="!inset-0 !absolute !w-full !h-full"
-      src="/_next/static/media/bg.png"
-    />
-
-    <div
+<div
       class="flex flex-col md:justify-between gap-6 md:py-18 py-8 max-w-225 w-full self-center grow basis-full relative z-10 container"
     >
     <div class="hero-marquee-wrap">
@@ -58,11 +48,11 @@
 </div>
       <div class="flex flex-col md:gap-6 gap-3 text-white">
         <h1 class="md:text-7xl text-[32px] font-medium leading-[110%] text-center"><br>
-          Скоростной обмен <br />
-          иностранных валют
+          {{ tr("Скоростной обмен") }} <br />
+          {{ tr("иностранных валют") }}
         </h1>
         <span class="md:text-xl text-base font-light leading-[140%] text-center max-w-110 self-center">
-          Обмен рублей или USDT на валюту страны с выдачей наличных или переводом на банковский счёт
+          {{ tr("Обмен рублей или USDT на валюту страны с выдачей наличных или переводом на банковский счёт") }}
         </span>
       </div>
 
@@ -71,7 +61,7 @@
         @submit.prevent="onSubmit"
       >
         <div v-if="topError" class="md:text-base text-sm font-medium leading-[150%] text-danger text-center">
-          {{ topError }}
+          {{ tr(topError) }}
         </div>
 
         <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-2 relative">
@@ -83,7 +73,7 @@
               class="flex items-center gap-4 md:px-8 px-7 md:py-4 py-3 bg-bg-primary hover:bg-bg-hover border border-border-secondary rounded-[28px] transition duration-150 w-full has-[input:focus]:border-border-active max-md:flex-row"
             >
               <div class="flex flex-col gap-1 grow max-md:items-start relative">
-                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">Вносите</span>
+                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">{{ tr("Вносите") }}</span>
 
                 <input
                   id="give-input"
@@ -99,7 +89,7 @@
 
                 <p class="md:text-base text-sm font-medium leading-[150%] text-text-secondary">
                   <template v-if="isGiveCardTransfer">
-                    {{ giveRangeText }}
+                    {{ tr(giveRangeText) }}
                   </template>
                   <template v-else>
                     <span class="cursor-pointer" @click="setGiveAmount(limitsInGive.giveMin)">
@@ -117,7 +107,7 @@
                 ref="giveBtnRef"
                 type="button"
                 @click="toggleDropdown('give')"
-                aria-label="Выбрать валюту (вносите)"
+                :aria-label="tr(&quot;Выбрать валюту (вносите)&quot;)"
               >
                 <div
                   class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16 overflow-hidden"
@@ -145,7 +135,7 @@
               class="flex items-center gap-4 md:px-8 px-7 md:py-4 py-3 bg-bg-primary hover:bg-bg-hover border border-border-secondary rounded-[28px] transition duration-150 w-full has-[input:focus]:border-border-active max-md:flex-row flex-row-reverse"
             >
               <div class="flex flex-col gap-1 grow max-md:items-start relative items-end">
-                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">Получаете</span>
+                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">{{ tr("Получаете") }}</span>
 
                 <input
                   id="get-input"
@@ -160,7 +150,7 @@
                 />
 
                 <p class="md:text-base text-sm font-medium leading-[150%] text-text-secondary text-right max-md:text-left">
-                  {{ getRateText }}
+                  {{ tr(getRateText) }}
                 </p>
               </div>
 
@@ -168,7 +158,7 @@
   ref="getBtnRef"
   type="button"
   @click="toggleDropdown('get')"
-  aria-label="Выбрать валюту (получаете)"
+  :aria-label="tr(&quot;Выбрать валюту (получаете)&quot;)"
 >
   <div
     class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16"
@@ -194,7 +184,7 @@
           <button
             type="button"
             class="absolute md:size-14 size-9 bg-bg-secondary md:rounded-[16px] rounded-[12px] flex justify-center items-center border border-border-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-md:rotate-90"
-            aria-label="Поменять местами"
+            :aria-label="tr(&quot;Поменять местами&quot;)"
             disabled
           >
             <svg
@@ -236,7 +226,7 @@
                 >Telegram</label>
               </div>
               <p v-if="telegramError" class="md:text-base text-sm font-medium leading-[150%] text-danger">
-                {{ telegramError }}
+                {{ tr(telegramError) }}
               </p>
             </div>
           </div>
@@ -255,10 +245,10 @@
                 <label
                   for="wallet"
                   class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-                >{{ getWalletLabel }}*</label>
+                >{{ tr(getWalletLabel) }}*</label>
               </div>
               <p v-if="walletError" class="md:text-base text-sm font-medium leading-[150%] text-danger">
-                {{ walletError }}
+                {{ tr(walletError) }}
               </p>
             </div>
           </div>
@@ -267,7 +257,7 @@
         <div class="grid items-center md:grid-cols-2 grid-cols-1 md:gap-6 gap-4 max-md:mt-2">
           <div class="md:pl-8 max-md:text-center">
             <span class="md:text-base text-sm font-light leading-[150%] text-text-tertiary">
-              Cрок выдачи — 5-60 минут, в зависимости от загруженности менеджера
+              {{ tr("Cрок выдачи — 5-60 минут, в зависимости от загруженности менеджера") }}
             </span>
           </div>
 
@@ -278,41 +268,47 @@
             :disabled="!canExchange || isSubmitting"
           >
             <p class="md:text-xl text-base font-medium leading-[140%]">
-              {{ isSubmitting ? "Загрузка..." : "Обменять" }}
+              {{ isSubmitting ? tr("Загрузка...") : tr("Обменять") }}
             </p>
           </button>
         </div>
 
         <Teleport to="body">
+          <Transition name="glass-dropdown" :duration="currencyMenuDuration">
           <div
             v-if="openDropdown"
-            class="fixed inset-0"
-            :style="{ zIndex: 2147483647 }"
-            @click="closeDropdown"
+            class="currencyPopover"
+            data-currency-popover
+            :style="{ ...dropdownStyle, zIndex: 2147483647 }"
+            @click.stop
           >
             <div
-              class="fixed md:rounded-[28px] rounded-[22px] border border-border-secondary overflow-hidden shadow-2xl backdrop-blur-md bg-[#0B1220] pointer-events-auto"
-              :style="{ ...dropdownStyle, '--row': '76px' }"
+              class="currencyMenuSurface md:rounded-[28px] rounded-[22px] border border-border-secondary overflow-hidden shadow-2xl backdrop-blur-md bg-[#0B1220]"
+              :style="{ '--row': '76px' }"
+              data-currency-menu
+              style="pointer-events: auto"
               @click.stop
             >
               <div
                 class="overflow-y-auto overflow-x-hidden hide-scrollbar"
-                :style="{ height: 'calc(var(--row) * 3)' }"
+                data-currency-scroll
+                @wheel.stop
+                :style="{ maxHeight: 'var(--currency-list-height, 228px)', overflowY: 'auto', pointerEvents: 'auto', overscrollBehaviorY: 'contain', touchAction: 'pan-y' }"
               >
                 <button
                   v-for="c in dropdownOptions"
-                  :key="openDropdown + '-' + c.backendId + '-' + c.symbol + '-' + c.id"
+                  :key="dropdownSide + '-' + c.backendId + '-' + c.symbol + '-' + c.id"
                   type="button"
                   class="w-full px-6 py-0 flex items-stretch transition duration-150 hover:bg-white/10 border-b border-white/5 last:border-b-0"
                   :style="{ height: 'var(--row)' }"
-                  @click="selectCurrency(openDropdown, c)"
+                  @click="selectCurrency(dropdownSide, c)"
                 >
                   <div
-                    v-if="!isMobile && openDropdown === 'give'"
+                    v-if="!isMobile && dropdownSide === 'give'"
                     class="w-full h-full flex items-center justify-between"
                   >
                     <div class="flex flex-col text-left leading-tight">
-                      <span class="text-white text-xl font-medium">{{ c.name }}</span>
+                      <span class="text-white text-xl font-medium">{{ tr(c.name) }}</span>
                       <span class="text-white text-base font-light">
                         {{ c.symbol }}
                       </span>
@@ -332,7 +328,7 @@
                   </div>
 
                   <div
-                    v-else-if="!isMobile && openDropdown === 'get'"
+                    v-else-if="!isMobile && dropdownSide === 'get'"
                     class="w-full h-full flex items-center justify-between"
                   >
                     <div class="flex flex-col items-center justify-center gap-1 shrink-0">
@@ -348,7 +344,7 @@
                     </div>
 
                     <div class="flex flex-col text-right leading-tight">
-                      <span class="text-white text-xl font-medium">{{ c.name }}</span>
+                      <span class="text-white text-xl font-medium">{{ tr(c.name) }}</span>
                       <span class="text-white text-base font-light">
                         {{ c.symbol }}
                       </span>
@@ -357,7 +353,7 @@
 
                   <div v-else class="w-full h-full flex items-center justify-between">
                     <div class="flex flex-col text-left leading-tight">
-                      <span class="text-white text-lg font-medium">{{ c.name }}</span>
+                      <span class="text-white text-lg font-medium">{{ tr(c.name) }}</span>
                       <span class="text-white text-base font-light">
                         {{ c.symbol }}
                       </span>
@@ -379,6 +375,7 @@
               </div>
             </div>
           </div>
+          </Transition>
         </Teleport>
       </form>
     </div>
@@ -395,6 +392,11 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
+import { marketRates, refreshRates, siteSettings } from "../lib/siteState";
+import { useExchange, lockQuote } from "../lib/exchange";
+import { useCurrencyDropdown, currencyDropdownPlacement, currencyMenuDuration } from "../lib/currencyDropdown";
+import { getPublicSettings } from "../lib/siteState";
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue";
 
 const limitsFromSettings = ref({
@@ -414,7 +416,7 @@ const RUB_INPUT_METHODS = ref([
     id: "rub-card-in",
     backendId: 2101,
     symbol: "RUB",
-    name: "Перевод на карту",
+    name: tr("Перевод на карту"),
     icon: "/img/sbp.svg?v=032",
     type: "fiat",
     fiat: "rub",
@@ -442,7 +444,7 @@ const EMPTY_GET_CURRENCY = {
   course_usdt: 0,
 };
 
-const publicSettings = ref({
+const publicSettings = ref(siteSettings.value || {
   mode: "2",
   banner: "",
   percent: 2,
@@ -465,14 +467,14 @@ const fiatOutOptions = computed(() => {
     .filter(([key, row]) => Number(key) >= 2102 && row && typeof row === "object")
     .map(([key, row]) => {
       const symbol = String(row?.symbol || "").trim().toUpperCase();
-      const name = String(row?.name || symbol || `Валюта ${key}`).trim();
+      const name = String(row?.name || symbol || tr("Валюта {p0}", { p0: (key) })).trim();
 
       return {
         id: `cash-out-${key}`,
         backendId: Number(key),
         symbol,
         name,
-        icon: symbol ? `/img/${symbol}.svg?v=032.svg` : "/img/placeholder.svg",
+        icon: symbol ? `/img/${symbol}.svg?v=032` : "/img/placeholder.svg",
         type: "fiat",
         fiat: "cash_out",
         rubKind: "cash",
@@ -485,10 +487,10 @@ const fiatOutOptions = computed(() => {
 
 const giveOptions = computed(() => [...RUB_INPUT_METHODS.value, ...USDT_INPUTS.value]);
 const getOptions = computed(() => fiatOutOptions.value);
-const dropdownOptions = computed(() => (openDropdown.value === "give" ? giveOptions.value : getOptions.value));
+const dropdownOptions = computed(() => (dropdownSide.value === "give" ? giveOptions.value : getOptions.value));
 
 const giveCurrency = ref(RUB_INPUT_METHODS.value[0]);
-const getCurrency = ref({ ...EMPTY_GET_CURRENCY });
+const getCurrency = ref(getOptions.value[0] || { ...EMPTY_GET_CURRENCY });
 
 const giveAmountStr = ref("");
 const getAmountStr = ref("");
@@ -500,11 +502,13 @@ const submitError = ref("");
 const lastEdited = ref("give");
 
 const openDropdown = ref(null);
+const dropdownSide = ref("give");
 const giveBtnRef = ref(null);
 const getBtnRef = ref(null);
 const giveFieldRef = ref(null);
 const getFieldRef = ref(null);
 const dropdownStyle = ref({ top: "0px", left: "0px", width: "280px" });
+const { direction, exchangeRate, rateText, limitsInGive, limitsInGet, hasRates, recalcGetFromGive, recalcGiveFromGet } = useExchange(giveCurrency, getCurrency, giveAmountStr, getAmountStr, lastEdited);
 
 const toNumber = (v) => {
   const n = Number(String(v).replace(",", "."));
@@ -558,15 +562,10 @@ const currentFiatInRow = computed(() => {
   return fiatInRows.value.find((x) => amount >= x.from && amount <= x.to) || null;
 });
 
-const activeCourse = computed(() => {
-  if (!getCurrency.value?.symbol) return 0;
-  return isGiveCardTransfer.value
-    ? Number(getCurrency.value.course_rub) || 0
-    : Number(getCurrency.value.course_usdt) || 0;
-});
+const activeCourse = computed(() => exchangeRate.value ? 1 / exchangeRate.value : 0);
 
 const moscowDateText = computed(() => {
-  const formatter = new Intl.DateTimeFormat("ru-RU", {
+  const formatter = new Intl.DateTimeFormat(localeTag.value, {
     timeZone: "Europe/Moscow",
     day: "2-digit",
     month: "2-digit",
@@ -575,127 +574,25 @@ const moscowDateText = computed(() => {
   return formatter.format(new Date());
 });
 
-const getRateText = computed(() => {
-  if (!getCurrency.value?.symbol) return "Выберите валюту";
-  if (!activeCourse.value) return "Курс не задан";
-  return `курс ${formatNum(activeCourse.value, 6)} ${getCurrency.value.symbol} на ${moscowDateText.value}`;
-});
+const getRateText = rateText;
 
-const limitsInGive = computed(() => {
-  if (isGiveCardTransfer.value) {
-    return {
-      giveMin: formatNum(fiatInMin.value, 2),
-      giveMax: formatNum(fiatInMax.value, 2),
-    };
-  }
-
-  return {
-    giveMin: formatNum(limitsUsd.value.giveMin, 2),
-    giveMax: formatNum(limitsUsd.value.giveMax, 2),
-  };
-});
-
-const giveRangeText = computed(() => {
-  if (!isGiveCardTransfer.value) {
-    return `${limitsInGive.value.giveMin} - ${limitsInGive.value.giveMax}`;
-  }
-
-  const amount = toNumber(giveAmountStr.value);
-
-  if (!amount) {
-    return `${formatNum(fiatInMin.value, 2)} - ${formatNum(fiatInMax.value, 2)} RUB`;
-  }
-
-  const row = currentFiatInRow.value;
-  if (!row) {
-    return `${formatNum(fiatInMin.value, 2)} - ${formatNum(fiatInMax.value, 2)} RUB`;
-  }
-
-  return `${formatNum(row.rate, 2)} RUB за 1 USD`;
-});
-
-const recalcGetFromGive = () => {
-  const give = toNumber(giveAmountStr.value);
-
-  if (!give || !getCurrency.value?.symbol) {
-    getAmountStr.value = "";
-    return;
-  }
-
-  const course = activeCourse.value;
-  if (!course) {
-    getAmountStr.value = "";
-    return;
-  }
-
-  const result = give / course;
-  getAmountStr.value = formatNum(result, 6);
-};
-
-const recalcGiveFromGet = () => {
-  const get = toNumber(getAmountStr.value);
-
-  if (!get || !getCurrency.value?.symbol) {
-    giveAmountStr.value = "";
-    return;
-  }
-
-  const course = activeCourse.value;
-  if (!course) {
-    giveAmountStr.value = "";
-    return;
-  }
-
-  const result = get * course;
-  giveAmountStr.value = formatNum(result, 6);
-};
-
+const giveRangeText = computed(() => `${limitsInGive.value.giveMin} - ${limitsInGive.value.giveMax} ${giveCurrency.value.symbol}`);
 const giveAmountN = computed(() => toNumber(giveAmountStr.value));
 const getAmountN = computed(() => toNumber(getAmountStr.value));
 
 const giveMinN = computed(() => toNumber(limitsInGive.value.giveMin));
 const giveMaxN = computed(() => toNumber(limitsInGive.value.giveMax));
 
-const hasRates = computed(() => !!getCurrency.value?.symbol && !!activeCourse.value);
 
 const amountError = computed(() => {
-  if (!getCurrency.value?.symbol) return "Выберите валюту получения";
-  if (!activeCourse.value) return "Курс для выбранной валюты не задан";
+  if (!hasRates.value) return tr("Курс временно недоступен. Попробуйте позже.");
   if (!giveAmountStr.value && !getAmountStr.value) return "";
-
-  if (lastEdited.value === "give") {
-    if (!giveAmountN.value) return "";
-
-    if (giveAmountN.value < giveMinN.value) {
-      return `Минимум для внесения: ${limitsInGive.value.giveMin} ${giveCurrency.value.symbol}`;
-    }
-
-    if (giveAmountN.value > giveMaxN.value) {
-      return `Максимум для внесения: ${limitsInGive.value.giveMax} ${giveCurrency.value.symbol}`;
-    }
-
-    if (isGiveCardTransfer.value && !currentFiatInRow.value) {
-      return "Сумма не попадает ни в один доступный интервал";
-    }
-  } else {
-    if (!getAmountN.value) return "";
-
-    // проверяем пересчитанную левую сумму
-    if (!giveAmountN.value) return "";
-
-    if (giveAmountN.value < giveMinN.value) {
-      return `Минимум для внесения: ${limitsInGive.value.giveMin} ${giveCurrency.value.symbol}`;
-    }
-
-    if (giveAmountN.value > giveMaxN.value) {
-      return `Максимум для внесения: ${limitsInGive.value.giveMax} ${giveCurrency.value.symbol}`;
-    }
-
-    if (isGiveCardTransfer.value && !currentFiatInRow.value) {
-      return "Сумма не попадает ни в один доступный интервал";
-    }
-  }
-
+  const n = Number(giveAmountStr.value);
+  if (direction.value?.funding_ranges?.length && n > 0 && !direction.value.funding_ranges.some(t => n >= t.from && n <= t.to)) return tr("Сумма не попадает в доступный диапазон приёма рублей");
+  if (n < Number(limitsInGive.value.giveMin)) return tr("Минимум для внесения: {p0} {p1}", { p0: (limitsInGive.value.giveMin), p1: (giveCurrency.value.symbol) });
+  if (n > Number(limitsInGive.value.giveMax)) return tr("Максимум для внесения: {p0} {p1}", { p0: (limitsInGive.value.giveMax), p1: (giveCurrency.value.symbol) });
+  if (direction.value?.tiers?.length && !direction.value.tiers.some(t => n >= t.from && n <= t.to)) return tr("Сумма не попадает в доступный диапазон");
+  if (Number(getAmountStr.value) < Number(limitsInGet.value.getMin) || Number(getAmountStr.value) > Number(limitsInGet.value.getMax)) return tr("Сумма получения вне лимитов направления");
   return "";
 });
 
@@ -708,7 +605,7 @@ const validateTelegramUsername = (s) => {
     .replace(/^t\.me\//i, "")
     .replace(/^@/, "");
 
-  return /^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(cleaned) ? "" : "Некорректный формат Telegram";
+  return /^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(cleaned) ? "" : tr("Некорректный формат Telegram");
 };
 
 const telegramError = computed(() => validateTelegramUsername(telegram.value));
@@ -723,7 +620,7 @@ const canExchange = computed(() => {
   return hasRates.value && hasRequired && hasAmount && !amountError.value && noFieldErrors;
 });
 
-const getWalletLabel = computed(() => "Город снятия / IBAN");
+const getWalletLabel = computed(() => tr("Город снятия / IBAN"));
 
 const selectCurrency = (side, c) => {
   if (side === "give") {
@@ -742,28 +639,21 @@ const closeDropdown = () => {
   openDropdown.value = null;
 };
 
+useCurrencyDropdown(openDropdown, closeDropdown, giveFieldRef, getFieldRef);
+
 const positionDropdown = () => {
-  const el = openDropdown.value === "give" ? giveFieldRef.value : getFieldRef.value;
-  if (!el) return;
-
-  const rect = el.getBoundingClientRect();
-  const width = rect.width;
-  const top = rect.bottom + 8;
-  let left = rect.left;
-
-  const padding = 12;
-  if (left < padding) left = padding;
-  if (left + width > window.innerWidth - padding) left = window.innerWidth - width - padding;
-
-  dropdownStyle.value = { top: `${top}px`, left: `${left}px`, width: `${width}px` };
+  const el = dropdownSide.value === "give" ? giveFieldRef.value : getFieldRef.value;
+  if (el) dropdownStyle.value = currencyDropdownPlacement(el);
 };
 
-const toggleDropdown = async (side) => {
-  openDropdown.value = openDropdown.value === side ? null : side;
-  if (openDropdown.value) {
-    await nextTick();
-    positionDropdown();
+const toggleDropdown = (side) => {
+  if (openDropdown.value === side) {
+    closeDropdown();
+    return;
   }
+  dropdownSide.value = side;
+  positionDropdown();
+  openDropdown.value = side;
 };
 
 const onReposition = () => {
@@ -786,10 +676,7 @@ const onGetInput = () => {
 
 async function loadPublicSettings() {
   try {
-    const res = await fetch("/api/settings/public", { method: "GET" });
-    if (!res.ok) return;
-
-    const data = await res.json();
+    const data = await getPublicSettings();
     publicSettings.value = data || {};
 
     const next = {
@@ -811,7 +698,7 @@ async function loadPublicSettings() {
           id: "rub-card-in",
           backendId: 2101,
           symbol: String(method2101.symbol || "RUB"),
-          name: String(method2101.name || "Перевод на карту"),
+          name: String(method2101.name || tr("Перевод на карту")),
           icon: String(method2101.icon || "/img/sbp.svg?v=032"),
           type: "fiat",
           fiat: "rub",
@@ -853,16 +740,13 @@ const onSubmit = async () => {
       payout_details: wallet.value.trim(),
     },
 
-    rates_snapshot: {
-      give_usd: isGiveFiat.value ? null : 1,
-      give_rub: isGiveFiat.value ? activeCourse.value || null : null,
-      get_usd: null,
-    },
+    rates_snapshot: {},
 
     created_at: new Date().toISOString(),
   };
 
   try {
+    await lockQuote(payload);
     const token = localStorage.getItem("token") || "";
 
     const res = await fetch("/api/tickets", {
@@ -878,9 +762,9 @@ const onSubmit = async () => {
     if (!res.ok) {
       try {
         const j = await res.json();
-        submitError.value = j?.detail || "Не удалось создать обмен. Попробуйте ещё раз.";
+        submitError.value = j?.detail || tr("Не удалось создать обмен. Попробуйте ещё раз.");
       } catch {
-        submitError.value = "Не удалось создать обмен. Попробуйте ещё раз.";
+        submitError.value = tr("Не удалось создать обмен. Попробуйте ещё раз.");
       }
       return;
     }
@@ -889,13 +773,13 @@ const onSubmit = async () => {
     const ticketId = data?.ticket_id;
 
     if (!ticketId) {
-      submitError.value = "Сервер не вернул ticket_id. Попробуйте ещё раз.";
+      submitError.value = tr("Сервер не вернул ticket_id. Попробуйте ещё раз.");
       return;
     }
 
     window.location.href = `/tickets/${ticketId}`;
-  } catch {
-    submitError.value = "Ошибка сети. Попробуйте ещё раз.";
+  } catch (e) {
+    submitError.value = e?.message || tr("Ошибка сети. Попробуйте ещё раз.");
   } finally {
     isSubmitting.value = false;
   }

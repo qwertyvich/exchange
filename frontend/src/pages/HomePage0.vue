@@ -1,6 +1,6 @@
 <!-- homepage.vue -->
 <template>
-  <div class="flex flex-col grow basis-full relative">
+  <div data-exchange-mode="0" class="flex flex-col grow basis-full relative">
     <div
       v-if="hasBanner"
       class="flex-shrink-0 w-full pt-16 max-sm:pt-8 flex items-center justify-center"
@@ -12,26 +12,16 @@
       ></span>
     </div>
 
-    <img
-      alt="bg"
-      loading="lazy"
-      width="1920"
-      height="1080"
-      decoding="async"
-      class="!inset-0 !absolute !w-full !h-full"
-      src="/_next/static/media/bg.png"
-    />
-
-    <div
+<div
       class="flex flex-col md:justify-between gap-6 md:py-18 py-8 max-w-225 w-full self-center grow basis-full relative z-10 container"
     >
       <div class="flex flex-col md:gap-6 gap-3 text-white">
         <h1 class="md:text-7xl text-[32px] font-medium leading-[110%] text-center">
-          Скоростной <br />
-          обмен криптовалют
+          {{ tr("Скоростной") }} <br />
+          {{ tr("обмен криптовалют") }}
         </h1>
         <span class="md:text-xl text-base font-light leading-[140%] text-center max-w-110 self-center">
-          Безопасный и удобный способ обмена криптовалюты за считанные минуты, без AML и KYC проверки
+          {{ tr("Безопасный и удобный способ обмена криптовалюты за считанные минуты, без AML и KYC проверки") }}
         </span>
       </div>
 
@@ -41,7 +31,7 @@
       >
         <!-- error над стрелками -->
         <div v-if="topError" class="md:text-base text-sm font-medium leading-[150%] text-danger text-center">
-          {{ topError }}
+          {{ tr(topError) }}
         </div>
 
         <div class="grid md:grid-cols-2 grid-cols-1 md:gap-6 gap-2 relative">
@@ -53,7 +43,7 @@
               class="flex items-center gap-4 md:px-8 px-7 md:py-4 py-3 bg-bg-primary hover:bg-bg-hover border border-border-secondary rounded-[28px] transition duration-150 w-full has-[input:focus]:border-border-active max-md:flex-row"
             >
               <div class="flex flex-col gap-1 grow max-md:items-start relative">
-                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">Вносите</span>
+                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">{{ tr("Вносите") }}</span>
 
                 <input
                   id="give-input"
@@ -78,7 +68,7 @@
                 ref="giveBtnRef"
                 type="button"
                 @click="toggleDropdown('give')"
-                aria-label="Выбрать валюту (вносите)"
+                :aria-label="tr(&quot;Выбрать валюту (вносите)&quot;)"
               >
                 <div
                   class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16"
@@ -106,7 +96,7 @@
               class="flex items-center gap-4 md:px-8 px-7 md:py-4 py-3 bg-bg-primary hover:bg-bg-hover border border-border-secondary rounded-[28px] transition duration-150 w-full has-[input:focus]:border-border-active max-md:flex-row flex-row-reverse"
             >
               <div class="flex flex-col gap-1 grow max-md:items-start relative items-end">
-                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">Получаете</span>
+                <span class="md:text-base text-xs font-light leading-[150%] text-text-tertiary">{{ tr("Получаете") }}</span>
 
                 <input
                   id="get-input"
@@ -131,7 +121,7 @@
                 ref="getBtnRef"
                 type="button"
                 @click="toggleDropdown('get')"
-                aria-label="Выбрать валюту (получаете)"
+                :aria-label="tr(&quot;Выбрать валюту (получаете)&quot;)"
               >
                 <div
                   class="flex justify-center items-center bg-bg-secondary border border-border-primary md:rounded-[28px] rounded-[22px] md:size-19 size-16"
@@ -156,7 +146,7 @@
             type="button"
             class="absolute md:size-14 size-9 bg-bg-secondary md:rounded-[16px] rounded-[12px] flex justify-center items-center cursor-pointer border border-border-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-md:rotate-90"
             @click="swapCurrencies"
-            aria-label="Поменять местами"
+            :aria-label="tr(&quot;Поменять местами&quot;)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +189,7 @@
                 >Telegram</label>
               </div>
               <p v-if="telegramError" class="md:text-base text-sm font-medium leading-[150%] text-danger">
-                {{ telegramError }}
+                {{ tr(telegramError) }}
               </p>
             </div>
           </div>
@@ -220,10 +210,10 @@
                 <label
                   for="wallet"
                   class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-                >{{ getWalletLabel }}*</label>
+                >{{ tr(getWalletLabel) }}*</label>
               </div>
               <p v-if="walletError" class="md:text-base text-sm font-medium leading-[150%] text-danger">
-                {{ walletError }}
+                {{ tr(walletError) }}
               </p>
             </div>
           </div>
@@ -232,11 +222,11 @@
         <div class="grid items-center md:grid-cols-2 grid-cols-1 md:gap-6 gap-4 max-md:mt-2">
           <div class="md:pl-8 max-md:text-center">
             <span class="md:text-base text-sm font-light leading-[150%] text-text-tertiary">
-              Cрок зачисления — 5-60 минут, в зависимости от загруженности блокчейна
+              {{ tr("Cрок зачисления — 5-60 минут, в зависимости от загруженности блокчейна") }}
             </span>
             <div class="md:text-sm text-xs font-medium mt-2 text-text-secondary max-md:text-center">
-              Комиссия сервиса: <span class="text-white">{{ feePercent }}%</span> •
-              Курс обновляется каждые <span class="text-white">30 сек</span>
+              {{ tr("Комиссия сервиса:") }} <span class="text-white">{{ feePercent }}%</span> •
+              {{ tr(rateText) }}
             </div>
           </div>
 
@@ -247,7 +237,7 @@
           :disabled="!canExchange || isSubmitting"
         >
           <p class="md:text-xl text-base font-medium leading-[140%]">
-            {{ isSubmitting ? "Загрузка..." : "Обменять" }}
+            {{ isSubmitting ? tr("Загрузка...") : tr("Обменять") }}
           </p>
         </button>
         </div>
@@ -266,36 +256,42 @@
 
         <!-- ✅ TELEPORT DROPDOWN -->
         <Teleport to="body">
+          <Transition name="glass-dropdown" :duration="currencyMenuDuration">
           <div
             v-if="openDropdown"
-            class="fixed inset-0"
-            :style="{ zIndex: 2147483647 }"
-            @click="closeDropdown"
+            class="currencyPopover"
+            data-currency-popover
+            :style="{ ...dropdownStyle, zIndex: 2147483647 }"
+            @click.stop
           >
             <div
-              class="fixed md:rounded-[28px] rounded-[22px] border border-border-secondary overflow-hidden shadow-2xl backdrop-blur-md bg-[#0B1220] pointer-events-auto"
-              :style="{ ...dropdownStyle, '--row': '76px' }"
+              class="currencyMenuSurface md:rounded-[28px] rounded-[22px] border border-border-secondary overflow-hidden shadow-2xl backdrop-blur-md bg-[#0B1220]"
+              :style="{ '--row': '76px' }"
+              data-currency-menu
+              style="pointer-events: auto"
               @click.stop
             >
               <div
   class="overflow-y-auto overflow-x-hidden hide-scrollbar"
-  :style="{ height: 'calc(var(--row) * 3)' }"
+                data-currency-scroll
+                @wheel.stop
+  :style="{ maxHeight: 'var(--currency-list-height, 228px)', overflowY: 'auto', pointerEvents: 'auto', overscrollBehaviorY: 'contain', touchAction: 'pan-y' }"
 >
                 <button
                   v-for="c in dropdownOptions"
-                  :key="openDropdown + '-' + c.backendId"
+                  :key="dropdownSide + '-' + c.backendId"
                   type="button"
                   class="w-full px-6 py-0 flex items-stretch transition duration-150 hover:bg-white/10 border-b border-white/5 last:border-b-0"
                   :style="{ height: 'var(--row)' }"
-                  @click="selectCurrency(openDropdown, c)"
+                  @click="selectCurrency(dropdownSide, c)"
                 >
                   <!-- DESKTOP: GIVE -->
                   <div
-                    v-if="!isMobile && openDropdown === 'give'"
+                    v-if="!isMobile && dropdownSide === 'give'"
                     class="w-full h-full flex items-center justify-between"
                   >
                     <div class="flex flex-col text-left leading-tight">
-                      <span class="text-white text-xl font-medium">{{ c.name }}</span>
+                      <span class="text-white text-xl font-medium">{{ tr(c.name) }}</span>
                       <span style="color:#fff !important;" class="text-white/70 text-base font-light">
                         {{ c.symbol }}
                       </span>
@@ -309,7 +305,7 @@
 
                   <!-- DESKTOP: GET -->
                   <div
-                    v-else-if="!isMobile && openDropdown === 'get'"
+                    v-else-if="!isMobile && dropdownSide === 'get'"
                     class="w-full h-full flex items-center justify-between"
                   >
                     <div class="flex flex-col items-center justify-center gap-1 shrink-0">
@@ -318,7 +314,7 @@
                     </div>
 
                     <div class="flex flex-col text-right leading-tight">
-                      <span class="text-white text-xl font-medium">{{ c.name }}</span>
+                      <span class="text-white text-xl font-medium">{{ tr(c.name) }}</span>
                       <span style="color:#fff !important;" class="text-white/70 text-base font-light">
                         {{ c.symbol }}
                       </span>
@@ -328,7 +324,7 @@
                   <!-- MOBILE -->
                   <div v-else class="w-full h-full flex items-center justify-between">
                     <div class="flex flex-col text-left leading-tight">
-                      <span class="text-white text-lg font-medium">{{ c.name }}</span>
+                      <span class="text-white text-lg font-medium">{{ tr(c.name) }}</span>
                       <span style="color:#fff !important;" class="text-white/70 text-base font-light">
                         {{ c.symbol }}
                       </span>
@@ -343,6 +339,7 @@
               </div>
             </div>
           </div>
+          </Transition>
         </Teleport>
       </form>
     </div>
@@ -359,6 +356,11 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
+import { marketRates, refreshRates, siteSettings } from "../lib/siteState";
+import { useExchange, lockQuote } from "../lib/exchange";
+import { useCurrencyDropdown, currencyDropdownPlacement, currencyMenuDuration } from "../lib/currencyDropdown";
+import { getPublicSettings } from "../lib/siteState";
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue";
 
 /**
@@ -405,17 +407,17 @@ const currencies = ref([
  * Важно: id = "rub" это vs_currency, не coin id.
  */
 const RUB_METHODS = [
-  { id: "rub-sbp",   backendId: 2001, symbol: "RUB", name: "СБП",        icon: "/img/sbp.svg?v=032",  type: "fiat", fiat: "rub", rubKind: "sbp" },
-  { id: "rub-qr",    backendId: 2011, symbol: "RUB", name: "Сбер QR наличные",         icon: "/img/qr_sber.svg?v=032",   type: "fiat", fiat: "rub", rubKind: "qr" },
-  { id: "rub-sber",  backendId: 2002, symbol: "RUB", name: "Сбер",       icon: "/img/sber.svg?v=032.svg", type: "fiat", fiat: "rub", rubKind: "card" },
-  { id: "rub-alfa",  backendId: 2003, symbol: "RUB", name: "Альфа-банк", icon: "/img/alpha.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card" },
-  { id: "rub-cash",  backendId: 2010, symbol: "RUB", name: "Наличные",   icon: "/img/rub_nal.svg?v=032", type: "fiat", fiat: "rub", rubKind: "cash" },
+  { id: "rub-sbp",   backendId: 2001, symbol: "RUB", name: tr("СБП"),        icon: "/img/sbp.svg?v=032",  type: "fiat", fiat: "rub", rubKind: "sbp" },
+  { id: "rub-qr",    backendId: 2011, symbol: "RUB", name: tr("Сбер QR наличные"),         icon: "/img/qr_sber.svg?v=032",   type: "fiat", fiat: "rub", rubKind: "qr" },
+  { id: "rub-sber",  backendId: 2002, symbol: "RUB", name: tr("Сбер"),       icon: "/img/sber.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card" },
+  { id: "rub-alfa",  backendId: 2003, symbol: "RUB", name: tr("Альфа-банк"), icon: "/img/alpha.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card" },
+  { id: "rub-cash",  backendId: 2010, symbol: "RUB", name: tr("Наличные"),   icon: "/img/rub_nal.svg?v=032", type: "fiat", fiat: "rub", rubKind: "cash" },
   
 ];
 
 const giveOptions = computed(() => currencies.value); // слева только крипта
 const getOptions = computed(() => [...currencies.value, ...RUB_METHODS]); // справа крипта + RUB
-const dropdownOptions = computed(() => (openDropdown.value === "give" ? giveOptions.value : getOptions.value));
+const dropdownOptions = computed(() => (dropdownSide.value === "give" ? giveOptions.value : getOptions.value));
 
 /**
  * Резервы (пример)
@@ -438,8 +440,7 @@ const limitsUsd = computed(() => ({
 /**
  * Курсы
  */
-const pricesUsd = ref({});
-const pricesRub = ref({});
+
 
 /**
  * Выбранные валюты
@@ -466,12 +467,14 @@ const lastEdited = ref("give"); // 'give' | 'get'
  * Dropdown state + refs for positioning
  */
 const openDropdown = ref(null); // 'give' | 'get' | null
+const dropdownSide = ref("give");
 const giveBtnRef = ref(null);
 const getBtnRef = ref(null);
 const giveFieldRef = ref(null);
 const getFieldRef = ref(null);
 
 const dropdownStyle = ref({ top: "0px", left: "0px", width: "280px" });
+const { direction, exchangeRate, rateText, limitsInGive, limitsInGet, hasRates, recalcGetFromGive, recalcGiveFromGet } = useExchange(giveCurrency, getCurrency, giveAmountStr, getAmountStr, lastEdited);
 
 /**
  * Helpers
@@ -496,139 +499,6 @@ const isGetRUB = computed(() => getCurrency.value?.type === "fiat" && getCurrenc
 /**
  * Цены
  */
-const givePriceUsd = computed(() => pricesUsd.value[giveCurrency.value.id] ?? 0);
-// Для обычного случая (крипта справа) — цена getCoin в USD.
-// Для RUB справа — используем рублёвую цену ВНОСИМОЙ монеты как "курс получения".
-const getPrice = computed(() => {
-  if (isGetRUB.value) return pricesRub.value[giveCurrency.value.id] ?? 0;
-  return pricesUsd.value[getCurrency.value.id] ?? 0;
-});
-
-/**
- * Лимиты
- */
-const limitsInGive = computed(() => {
-  const p = givePriceUsd.value;
-  if (!p) return { giveMin: "0", giveMax: "0" };
-
-  const min = limitsUsd.value.giveMin / p;
-  const maxByUsd = limitsUsd.value.giveMax / p;
-
-  const reserveGive = reserves.value[giveCurrency.value.id];
-  const max = typeof reserveGive === "number" ? Math.min(maxByUsd, reserveGive * 1e9) : maxByUsd;
-
-  return {
-    giveMin: formatNum(min),
-    giveMax: formatNum(max),
-  };
-});
-
-const limitsInGet = computed(() => {
-  // если получаем RUB — лимиты в RUB (приблизительно через usd->rub)
-  if (isGetRUB.value) {
-    const giveUsd = givePriceUsd.value;
-    const giveRub = pricesRub.value[giveCurrency.value.id] ?? 0;
-    if (!giveUsd || !giveRub) return { getMin: "0", getMax: "0" };
-
-    const usdToRub = giveRub / giveUsd;
-    const minRub = limitsUsd.value.getMin * usdToRub;
-    const maxRub = limitsUsd.value.getMax * usdToRub;
-
-    return {
-      getMin: formatNum(minRub, 2),
-      getMax: formatNum(maxRub, 2),
-    };
-  }
-
-  const p = getPrice.value;
-  if (!p) return { getMin: "0", getMax: "0" };
-
-  const minByUsd = limitsUsd.value.getMin / p;
-  const maxByUsd = limitsUsd.value.getMax / p;
-
-  const reserveGet = reserves.value[getCurrency.value.id];
-  const max = typeof reserveGet === "number" ? Math.min(maxByUsd, reserveGet) : maxByUsd;
-
-  return {
-    getMin: formatNum(Number.isFinite(minByUsd) ? minByUsd : 0),
-    getMax: formatNum(max),
-  };
-});
-
-/**
- * Пересчёт сумм
- */
-const recalcGetFromGive = () => {
-  const give = toNumber(giveAmountStr.value);
-  if (!give) {
-    getAmountStr.value = "";
-    return;
-  }
-
-  // Получаем RUB
-  if (isGetRUB.value) {
-    const giveRub = pricesRub.value[giveCurrency.value.id];
-    if (!giveRub) {
-      getAmountStr.value = "";
-      return;
-    }
-    const rubGross = give * giveRub;
-    const rubNet = rubGross * feeMul.value;
-    getAmountStr.value = formatNum(rubNet, 2);
-    return;
-  }
-
-  // Получаем крипту
-  const giveUsd = givePriceUsd.value;
-  const getUsd = getPrice.value;
-  if (!giveUsd || !getUsd) {
-    getAmountStr.value = "";
-    return;
-  }
-
-  const usd = give * giveUsd;
-  const rawGet = usd / getUsd;
-  const getNet = rawGet * feeMul.value;
-  getAmountStr.value = formatNum(getNet);
-};
-
-const recalcGiveFromGet = () => {
-  const get = toNumber(getAmountStr.value);
-  if (!get) {
-    giveAmountStr.value = "";
-    return;
-  }
-
-  // Справа RUB: введено "к получению" (net)
-  if (isGetRUB.value) {
-    const giveRub = pricesRub.value[giveCurrency.value.id];
-    if (!giveRub) {
-      giveAmountStr.value = "";
-      return;
-    }
-    const rubGross = get / feeMul.value;
-    const give = rubGross / giveRub;
-    giveAmountStr.value = formatNum(give);
-    return;
-  }
-
-  // Справа крипта
-  const giveUsd = givePriceUsd.value;
-  const getUsd = getPrice.value;
-  if (!giveUsd || !getUsd) {
-    giveAmountStr.value = "";
-    return;
-  }
-
-  const rawGet = get / feeMul.value;
-  const usd = rawGet * getUsd;
-  const give = usd / giveUsd;
-  giveAmountStr.value = formatNum(give);
-};
-
-/**
- * Валидация
- */
 const giveAmountN = computed(() => toNumber(giveAmountStr.value));
 const getAmountN = computed(() => toNumber(getAmountStr.value));
 
@@ -638,38 +508,20 @@ const getMinN = computed(() => toNumber(limitsInGet.value.getMin));
 const getMaxN = computed(() => toNumber(limitsInGet.value.getMax));
 
 // курс готов?
-const hasRates = computed(() => {
-  const giveOk = !!pricesUsd.value[giveCurrency.value.id];
-  const getOk = isGetRUB.value ? !!pricesRub.value[giveCurrency.value.id] : !!pricesUsd.value[getCurrency.value.id];
-  return giveOk && getOk;
-});
 
 const amountError = computed(() => {
-  if (!hasRates.value) return "Курс обновляется…";
+  if (!hasRates.value) return tr("Курс временно недоступен. Попробуйте позже.");
   if (!giveAmountStr.value && !getAmountStr.value) return "";
-
-  // минималки/максималки проверяем по активной стороне ввода
-  if (lastEdited.value === "give") {
-    if (!giveAmountN.value) return "";
-    if (giveAmountN.value < giveMinN.value)
-      return `Минимум для внесения: ${limitsInGive.value.giveMin} ${giveCurrency.value.symbol}`;
-    if (giveAmountN.value > giveMaxN.value)
-      return `Максимум для внесения: ${limitsInGive.value.giveMax} ${giveCurrency.value.symbol}`;
-
-    // дополнительная проверка max по получению (для крипты — резерв, для RUB — только лимит)
-    if (!isGetRUB.value && getAmountN.value && getAmountN.value > getMaxN.value) {
-      return `Недостаточно резерва. Максимум к получению: ${limitsInGet.value.getMax} ${getCurrency.value.symbol}`;
-    }
-  } else {
-    if (!getAmountN.value) return "";
-    if (getAmountN.value < getMinN.value) return `Минимум к получению: ${limitsInGet.value.getMin} ${getCurrency.value.symbol}`;
-    if (getAmountN.value > getMaxN.value) return `Максимум к получению: ${limitsInGet.value.getMax} ${getCurrency.value.symbol}`;
-  }
-
+  const n = Number(giveAmountStr.value);
+  if (direction.value?.funding_ranges?.length && n > 0 && !direction.value.funding_ranges.some(t => n >= t.from && n <= t.to)) return tr("Сумма не попадает в доступный диапазон приёма рублей");
+  if (n < Number(limitsInGive.value.giveMin)) return tr("Минимум для внесения: {p0} {p1}", { p0: (limitsInGive.value.giveMin), p1: (giveCurrency.value.symbol) });
+  if (n > Number(limitsInGive.value.giveMax)) return tr("Максимум для внесения: {p0} {p1}", { p0: (limitsInGive.value.giveMax), p1: (giveCurrency.value.symbol) });
+  if (direction.value?.tiers?.length && !direction.value.tiers.some(t => n >= t.from && n <= t.to)) return tr("Сумма не попадает в доступный диапазон");
+  if (Number(getAmountStr.value) < Number(limitsInGet.value.getMin) || Number(getAmountStr.value) > Number(limitsInGet.value.getMax)) return tr("Сумма получения вне лимитов направления");
   return "";
 });
 
-const topError = computed(() => (amountError.value ? amountError.value : ""));
+const topError = computed(() => submitError.value || amountError.value || "");
 
 const canExchange = computed(() => {
   const hasRequired = !!telegram.value.trim() && !!wallet.value.trim();
@@ -683,19 +535,19 @@ const canExchange = computed(() => {
  * Wallet label (если RUB — другой текст)
  */
 const getWalletLabel = computed(() => {
-  if (!isGetRUB.value) return `${getCurrency.value.name} адрес`;
+  if (!isGetRUB.value) return tr("{p0} адрес", { p0: (getCurrency.value.name) });
 
   switch (getCurrency.value.rubKind) {
     case "sbp":
-      return "Номер телефона и банк";
+      return tr("Номер телефона и банк");
     case "card":
-      return "Номер карты";
+      return tr("Номер карты");
     case "cash":
-      return "Укажите Ваш город";
+      return tr("Укажите Ваш город");
     case "qr":
-      return "Укажите город снятия";
+      return tr("Укажите город снятия");
     default:
-      return "Реквизиты";
+      return tr("Реквизиты");
   }
 });
 
@@ -716,7 +568,7 @@ const validateTelegramUsername = (s) => {
 
   // Telegram username: 5–32, только латиница/цифры/_, начинается с буквы
   const ok = /^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v);
-  return ok ? "" : "Некорректный формат Telegram";
+  return ok ? "" : tr("Некорректный формат Telegram");
 };
 
 const validateCardNumber = (s) => {
@@ -724,7 +576,7 @@ const validateCardNumber = (s) => {
   if (!v) return "";
   // 13–19 цифр (подходит под большинство карт; пробелы разрешаем, мы их удаляем)
   const ok = /^\d{13,19}$/.test(v);
-  return ok ? "" : "Некорректный формат карты";
+  return ok ? "" : tr("Некорректный формат карты");
 };
 
 const isEthLike = (id) => ["ethereum", "dai", "usd-coin"].includes(id) || id === "tether"; // tether ERC20 тоже сюда, но он отличается backendId — см. ниже
@@ -743,36 +595,36 @@ const validateCryptoAddress = (addr, currency) => {
     bid === 4 || // USDT ERC20
     bid === 5    // USDT BEP20
   ) {
-    return /^0x[a-fA-F0-9]{40}$/.test(v) ? "" : "Некорректный формат кошелька";
+    return /^0x[a-fA-F0-9]{40}$/.test(v) ? "" : tr("Некорректный формат кошелька");
   }
 
   // BTC
   if (cid === "bitcoin") {
     const legacy = /^[13][1-9A-HJ-NP-Za-km-z]{25,34}$/.test(v);
     const bech32 = /^bc1[0-9a-z]{25,90}$/.test(v);
-    return (legacy || bech32) ? "" : "Некорректный формат кошелька";
+    return (legacy || bech32) ? "" : tr("Некорректный формат кошелька");
   }
 
   // TRON / USDT TRC20 / TRX
   if (cid === "tron" || bid === 3 /* USDT TRC20 */) {
-    return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v) ? "" : "Некорректный формат кошелька";
+    return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v) ? "" : tr("Некорректный формат кошелька");
   }
 
   // SOL
   if (cid === "solana" || bid === 6) {
-  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(v) ? "" : "Некорректный формат кошелька";
+  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(v) ? "" : tr("Некорректный формат кошелька");
   }
 
   // LTC
   if (cid === "litecoin") {
     const legacy = /^[LM3][1-9A-HJ-NP-Za-km-z]{25,34}$/.test(v);
     const bech32 = /^ltc1[0-9a-z]{25,90}$/.test(v);
-    return (legacy || bech32) ? "" : "Некорректный формат кошелька";
+    return (legacy || bech32) ? "" : tr("Некорректный формат кошелька");
   }
 
   // DOGE
   if (cid === "dogecoin") {
-    return /^D[1-9A-HJ-NP-Za-km-z]{25,34}$/.test(v) ? "" : "Некорректный формат кошелька";
+    return /^D[1-9A-HJ-NP-Za-km-z]{25,34}$/.test(v) ? "" : tr("Некорректный формат кошелька");
   }
 
   // По умолчанию (если появятся новые монеты) — не валидируем строго
@@ -842,28 +694,21 @@ const closeDropdown = () => {
   openDropdown.value = null;
 };
 
+useCurrencyDropdown(openDropdown, closeDropdown, giveFieldRef, getFieldRef);
+
 const positionDropdown = () => {
-  const el = openDropdown.value === "give" ? giveFieldRef.value : getFieldRef.value;
-  if (!el) return;
-
-  const rect = el.getBoundingClientRect();
-  const width = rect.width;
-  const top = rect.bottom + 8;
-  let left = rect.left;
-
-  const padding = 12;
-  if (left < padding) left = padding;
-  if (left + width > window.innerWidth - padding) left = window.innerWidth - width - padding;
-
-  dropdownStyle.value = { top: `${top}px`, left: `${left}px`, width: `${width}px` };
+  const el = dropdownSide.value === "give" ? giveFieldRef.value : getFieldRef.value;
+  if (el) dropdownStyle.value = currencyDropdownPlacement(el);
 };
 
-const toggleDropdown = async (side) => {
-  openDropdown.value = openDropdown.value === side ? null : side;
-  if (openDropdown.value) {
-    await nextTick();
-    positionDropdown();
+const toggleDropdown = (side) => {
+  if (openDropdown.value === side) {
+    closeDropdown();
+    return;
   }
+  dropdownSide.value = side;
+  positionDropdown();
+  openDropdown.value = side;
 };
 
 const onReposition = () => {
@@ -883,22 +728,19 @@ const setGetAmount = (vStr) => {
   getAmountStr.value = vStr;
 };
 
-const publicSettings = ref({ percent: 4, deposit_wallets: {}, banner: "" });
+const publicSettings = ref(siteSettings.value || { percent: 4, deposit_wallets: {}, banner: "" });
 
 const bannerText = computed(() => String(publicSettings.value?.banner || "").trim());
 const hasBanner = computed(() => !!bannerText.value);
 
 async function loadPublicSettings() {
   try {
-    const res = await fetch("/api/settings/public", { method: "GET" });
-    if (!res.ok) return;
-
-    const data = await res.json();
+    const data = await getPublicSettings();
     publicSettings.value = data || {};
 
     // ✅ забираем percent из settings.json
     if (typeof data?.percent !== "undefined") {
-      feePercent.value = Number(data.percent) || 4;
+      feePercent.value = Number(data.percent) || 0;
       if (lastEdited.value === "give") recalcGetFromGive();
       else recalcGiveFromGet();
     }
@@ -909,100 +751,12 @@ async function loadPublicSettings() {
 /**
  * Rates fetch with cache + backoff
  */
-let timer = null;
-let backoffMs = 30000;
-
-const CACHE_KEY = "pricesUsdCache:v2"; // v2 потому что теперь храним и rub
-const CACHE_TTL_MS = 5 * 60 * 1000;
-
-const loadCache = () => {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed?.ts || !parsed?.data) return null;
-    if (Date.now() - parsed.ts > CACHE_TTL_MS) return null;
-    return parsed.data;
-  } catch {
-    return null;
-  }
-};
-
-const saveCache = (data) => {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-  } catch {}
-};
-
-const scheduleNextFetch = () => {
-  if (timer) clearTimeout(timer);
-  timer = setTimeout(fetchPrices, backoffMs);
-};
-
-const fetchPrices = async () => {
-  try {
-    const ids = currencies.value.map((c) => c.id).join(",");
-    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(ids)}&vs_currencies=usd,rub`;
-
-    const res = await fetch(url);
-
-    if (res.status === 429) {
-      const cached = loadCache();
-      if (cached?.usd) pricesUsd.value = cached.usd;
-      if (cached?.rub) pricesRub.value = cached.rub;
-
-      backoffMs = Math.min(backoffMs * 2, 10 * 60 * 1000);
-      scheduleNextFetch();
-      return;
-    }
-
-    if (!res.ok) {
-      const cached = loadCache();
-      if (cached?.usd) pricesUsd.value = cached.usd;
-      if (cached?.rub) pricesRub.value = cached.rub;
-
-      backoffMs = Math.min(backoffMs * 2, 5 * 60 * 1000);
-      scheduleNextFetch();
-      return;
-    }
-
-    const data = await res.json();
-
-    const nextUsd = {};
-    const nextRub = {};
-
-    for (const c of currencies.value) {
-      const usd = data?.[c.id]?.usd;
-      const rub = data?.[c.id]?.rub;
-      if (typeof usd === "number") nextUsd[c.id] = usd;
-      if (typeof rub === "number") nextRub[c.id] = rub;
-    }
-
-    pricesUsd.value = nextUsd;
-    pricesRub.value = nextRub;
-    saveCache({ usd: nextUsd, rub: nextRub });
-
-    backoffMs = 30000;
-    scheduleNextFetch();
-
-    if (lastEdited.value === "give") recalcGetFromGive();
-    else recalcGiveFromGet();
-  } catch {
-    const cached = loadCache();
-    if (cached?.usd) pricesUsd.value = cached.usd;
-    if (cached?.rub) pricesRub.value = cached.rub;
-
-    backoffMs = Math.min(backoffMs * 2, 5 * 60 * 1000);
-    scheduleNextFetch();
-  }
-};
+const fetchPrices = async () => {};
+const scheduleNextFetch = () => {};
 
 const fetchPublicSettings = async () => {
   try {
-    const res = await fetch("/api/settings/public", { method: "GET" });
-    if (!res.ok) return;
-
-    const data = await res.json();
+    const data = await getPublicSettings();
 
     // percent
     const p = Number(data?.percent);
@@ -1066,16 +820,13 @@ const onSubmit = async () => {
       payout_details: wallet.value.trim(),
     },
 
-    rates_snapshot: {
-      give_usd: pricesUsd.value[giveCurrency.value.id] ?? null,
-      give_rub: pricesRub.value[giveCurrency.value.id] ?? null,
-      get_usd: !isGetRUB.value ? (pricesUsd.value[getCurrency.value.id] ?? null) : null,
-    },
+    rates_snapshot: {},
 
     created_at: new Date().toISOString(),
   };
 
   try {
+    await lockQuote(payload);
     const token = localStorage.getItem("token") || "";
 
     const res = await fetch("/api/tickets", {
@@ -1093,9 +844,9 @@ const onSubmit = async () => {
         // попробуем вытащить detail с бэка
         try {
           const j = await res.json();
-          submitError.value = j?.detail || "Не удалось создать обмен. Попробуйте ещё раз.";
+          submitError.value = j?.detail || tr("Не удалось создать обмен. Попробуйте ещё раз.");
         } catch {
-          submitError.value = "Не удалось создать обмен. Попробуйте ещё раз.";
+          submitError.value = tr("Не удалось создать обмен. Попробуйте ещё раз.");
         }
       }
       return;
@@ -1106,7 +857,7 @@ const onSubmit = async () => {
 
     if (!ticketId) {
       if (typeof submitError !== "undefined") {
-        submitError.value = "Сервер не вернул ticket_id. Попробуйте ещё раз.";
+        submitError.value = tr("Сервер не вернул ticket_id. Попробуйте ещё раз.");
       }
       return;
     }
@@ -1115,7 +866,7 @@ const onSubmit = async () => {
     window.location.href = `/tickets/${ticketId}`;
   } catch (e) {
     if (typeof submitError !== "undefined") {
-      submitError.value = "Ошибка сети. Попробуйте ещё раз.";
+      submitError.value = e?.message || tr("Ошибка сети. Попробуйте ещё раз.");
     }
   } finally {
     // если редирект случился — код ниже не выполнится, это ок
@@ -1157,7 +908,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  if (timer) clearTimeout(timer);
+
 
   window.removeEventListener("resize", updateIsMobile);
   window.removeEventListener("resize", onReposition);

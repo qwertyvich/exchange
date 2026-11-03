@@ -1,31 +1,31 @@
 <template>
   <div class="flex flex-col md:gap-12 gap-9 md:py-24 py-8 max-w-225 w-full self-center grow basis-full container text-white">
     <div class="flex flex-col gap-3 items-center text-center">
-      <h2 class="md:text-5xl text-[28px] font-medium leading-[120%]">Отзывы о сервисе</h2>
+      <h2 class="md:text-5xl text-[28px] font-medium leading-[120%]">{{ tr("Отзывы о сервисе") }}</h2>
     </div>
 
-    <div class="flex max-lg:flex-col md:gap-6 gap-4.5 w-full items-start">
+    <div class="reviewsLayout">
       <!-- LEFT: REVIEWS -->
-      <div class="flex flex-col gap-4.5 basis-full min-w-0">
+      <div class="reviewsColumn">
         <div
           v-if="loadingReviews"
           class="text-text-secondary md:text-base text-sm font-light leading-[150%]"
         >
-          Загрузка отзывов...
+          {{ tr("Загрузка отзывов...") }}
         </div>
 
         <div
           v-else-if="reviews.length === 0"
           class="text-text-secondary md:text-base text-sm font-light leading-[150%]"
         >
-          Пока отзывов нет.
+          {{ tr("Пока отзывов нет.") }}
         </div>
 
         <template v-else>
           <div
             v-for="(review, index) in paginatedReviews"
             :key="`${currentPage}-${index}-${review.name}`"
-            class="border border-border-secondary bg-bg-tertiary rounded-[28px] md:px-7 px-5 md:py-6 py-5"
+            class="reviewCard border border-border-secondary bg-bg-tertiary rounded-[28px] md:px-7 px-5 md:py-6 py-5"
           >
             <div class="flex items-start justify-between gap-4">
               <div class="flex flex-col gap-3 min-w-0 basis-full">
@@ -60,86 +60,39 @@
             </div>
           </div>
 
-          <!-- PAGINATION -->
-          <div class="min-h-[56px] md:min-h-[64px] flex items-center justify-center">
-            <div
-              class="flex justify-center items-center md:gap-3 gap-2 md:pt-4 pt-2 flex-wrap"
-              :class="totalPages > 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'"
-            >
-              <button
-                type="button"
-                class="inline-flex items-center justify-center md:size-14 size-11 rounded-full border border-brand text-text-primary transition-all duration-150 hover:bg-bg-secondary disabled:opacity-30 disabled:pointer-events-none"
-                :disabled="currentPage === 1 || totalPages <= 1"
-                @click="goToPage(currentPage - 1)"
-                aria-label="Предыдущая страница"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="md:size-6 size-5"
-                  aria-hidden="true"
-                >
-                  <path d="m15 18-6-6 6-6"></path>
-                </svg>
-              </button>
-
-              <button
-              v-for="page in visiblePages"
-              :key="`page-${page}`"
-                type="button"
-                class="inline-flex items-center justify-center md:size-14 size-11 rounded-full border text-base md:text-lg font-medium transition-all duration-150"
-                :class="page === currentPage
-                  ? 'border-brand bg-brand text-text-primary shadow-[0_0_26px_rgba(139,123,255,0.45)]'
-                  : 'border-brand text-text-primary hover:bg-bg-secondary'"
-                @click="goToPage(page)"
-              >
-                {{ page }}
-              </button>
-
-              <button
-                type="button"
-                class="inline-flex items-center justify-center md:size-14 size-11 rounded-full border border-brand text-text-primary transition-all duration-150 hover:bg-bg-secondary disabled:opacity-30 disabled:pointer-events-none"
-                :disabled="currentPage === totalPages || totalPages <= 1"
-                @click="goToPage(currentPage + 1)"
-                aria-label="Следующая страница"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="md:size-6 size-5"
-                  aria-hidden="true"
-                >
-                  <path d="m9 18 6-6-6-6"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
+          <nav
+            v-if="totalPages > 1"
+            class="reviewsPagination"
+            :style="{ '--page-buttons': visiblePages.length + 2 }"
+            :aria-label="tr('Навигация по отзывам')"
+          >
+            <button type="button" class="paginationButton" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)" :aria-label="tr('Предыдущая страница')">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+            </button>
+            <button
+              v-for="page in visiblePages" :key="page" type="button"
+              class="paginationButton" :class="{ 'paginationCurrent': page === currentPage }"
+              :aria-current="page === currentPage ? 'page' : undefined"
+              :aria-label="tr('Перейти на страницу {p0}', { p0: page })"
+              @click="goToPage(page)"
+            >{{ page }}</button>
+            <button type="button" class="paginationButton" :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)" :aria-label="tr('Следующая страница')">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+            </button>
+            <span class="paginationStatus" role="status" aria-live="polite">{{ tr('Страница {p0} из {p1}', { p0: currentPage, p1: totalPages }) }}</span>
+          </nav>
         </template>
       </div>
 
       <!-- RIGHT: LINKS -->
-      <div class="flex flex-col md:gap-6 gap-4.5 basis-full lg:max-w-[410px] w-full">
+      <div class="reviewsSidebar flex flex-col md:gap-6 gap-4.5">
         <div class="px-8 py-7 flex flex-col gap-3 bg-bg-tertiary rounded-[28px] border border-border-secondary">
           <h3 class="md:text-2xl text-xl font-medium leading-[130%]">
-            Отзывы на авторитетных площадках
+            {{ tr("Отзывы на авторитетных площадках") }}
           </h3>
 
           <p class="md:text-base text-sm font-light leading-[150%] text-text-secondary">
-            Вы можете ознакомиться с репутацией сервиса на внешних источниках.
+            {{ tr("Вы можете ознакомиться с репутацией сервиса на внешних источниках.") }}
           </p>
         </div>
 
@@ -180,7 +133,7 @@
               class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap rounded-[28px] text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 shrink-0 outline-none bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary border border-border-primary data-[state=active]:bg-bg-secondary-active md:py-6 py-4.5"
               type="button"
             >
-              <p class="md:text-lg text-base font-medium leading-[140%]">Telegram отзывы</p>
+              <p class="md:text-lg text-base font-medium leading-[140%]">{{ tr("Telegram отзывы") }}</p>
             </button>
           </a>
 
@@ -194,7 +147,7 @@
       <div class="grid lg:grid-cols-2 grid-cols-1 md:gap-6 gap-4.5">
         <div class="flex flex-col gap-4">
           <h3 class="md:text-2xl text-xl font-medium leading-[130%]">
-            Оставить свой отзыв
+            {{ tr("Оставить свой отзыв") }}
           </h3>
 
           <div class="flex items-center gap-1">
@@ -204,7 +157,7 @@
               type="button"
               class="transition duration-150 hover:scale-105"
               @click="selectedMark = star"
-              aria-label="Выбрать оценку"
+              :aria-label="tr(&quot;Выбрать оценку&quot;)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +178,7 @@
           </div>
 
           <p class="md:text-base text-sm font-light leading-[150%] text-text-secondary">
-            Помогите нам стать лучше!
+            {{ tr("Помогите нам стать лучше!") }}
           </p>
         </div>
 
@@ -243,7 +196,7 @@
                 for="review_name"
                 class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
               >
-                Ваше имя
+                {{ tr("Ваше имя") }}
               </label>
             </div>
 
@@ -277,7 +230,7 @@
                   for="review_text"
                   class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 bg-bg-primary peer-hover:bg-bg-hover md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-12 md:peer-placeholder-shown:-translate-y-4.5 peer-placeholder-shown:-translate-y-6.5 peer-placeholder-shown:scale-125"
                 >
-                  Текст отзыва
+                  {{ tr("Текст отзыва") }}
                 </label>
               </div>
             </div>
@@ -291,7 +244,7 @@
             @click="sendAsk"
           >
             <p class="md:text-xl text-base font-medium leading-[140%]">
-              {{ isSending ? 'Отправка...' : 'Оставить отзыв' }}
+              {{ isSending ? tr("Отправка...") : tr("Оставить отзыв") }}
             </p>
           </button>
         </div>
@@ -311,7 +264,7 @@
           class="px-9 py-2.4 rounded-[22px] text-white text-lg md:text-xl font-semibold shadow-lg"
           style="background:#3b82f6;"
         >
-          ㅤ{{ toastText }}ㅤ
+          ㅤ{{ tr(toastText) }}ㅤ
         </div>
       </div>
     </Transition>
@@ -319,6 +272,8 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
+import { getPublicSettings, getReviews, publicReviews } from "../lib/siteState";
 import { computed, onMounted, ref, watch } from "vue";
 
 const REVIEWS_PER_PAGE = 5;
@@ -330,7 +285,7 @@ const isSending = ref(false);
 const selectedMark = ref(0);
 
 const publicSettings = ref({});
-const reviews = ref([]);
+const reviews = ref(publicReviews.value || []);
 const loadingReviews = ref(false);
 const currentPage = ref(1);
 
@@ -350,7 +305,7 @@ const reviewLinks = ref({
 });
 
 const toastVisible = ref(false);
-const toastText = ref("Скопировано");
+const toastText = ref(tr("Скопировано"));
 let timer = null;
 
 function showToast(text) {
@@ -365,10 +320,7 @@ function showToast(text) {
 
 async function loadPublicSettings() {
   try {
-    const res = await fetch("/api/settings/public", { method: "GET" });
-    if (!res.ok) return;
-
-    const data = await res.json();
+    const data = await getPublicSettings();
     publicSettings.value = data || {};
   } catch {
     // молча
@@ -379,13 +331,7 @@ async function loadReviews() {
   loadingReviews.value = true;
 
   try {
-    const res = await fetch("/api/reviews/public", { method: "GET" });
-    if (!res.ok) {
-      reviews.value = [];
-      return;
-    }
-
-    const data = await res.json();
+    const data = await getReviews();
 
     reviews.value = Array.isArray(data)
       ? data.map((item) => ({
@@ -451,10 +397,10 @@ async function sendAsk() {
 
   try {
     const composedMessage =
-      `Новый отзыв с сайта\n` +
-      `Имя: ${authorName.value.trim()}\n` +
-      `Оценка: ${selectedMark.value || 0}/5\n` +
-      `Отзыв: ${message.value.trim()}`;
+      tr("Новый отзыв с сайта") +
+      tr("Имя: {p0}", { p0: (authorName.value.trim()) }) +
+      tr("Оценка: {p0}/5", { p0: (selectedMark.value || 0) }) +
+      tr("Отзыв: {p0}", { p0: (message.value.trim()) });
 
     const res = await fetch("/api/ask", {
       method: "POST",
@@ -475,10 +421,10 @@ async function sendAsk() {
     message.value = "";
     selectedMark.value = 0;
 
-    showToast("Отправлено");
+    showToast(tr("Отправлено"));
   } catch (e) {
     console.error("sendAsk error:", e);
-    showToast("Ошибка");
+    showToast(tr("Ошибка"));
   } finally {
     isSending.value = false;
   }
@@ -491,6 +437,20 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.reviewsLayout { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 24px; width: 100%; min-width: 0; }
+.reviewsColumn { display: flex; flex-direction: column; gap: 18px; width: 100%; min-width: 0; }
+.reviewsSidebar { width: 100%; min-width: 0; }
+.reviewCard { width: 100%; min-width: 0; box-sizing: border-box; overflow-wrap: anywhere; }
+.reviewsPagination { display: grid; grid-template-columns: repeat(var(--page-buttons), minmax(0, 48px)); justify-content: center; align-items: center; gap: 8px; width: min(100%, 384px); margin: 16px auto 0; box-sizing: border-box; }
+.paginationButton { display: grid; place-items: center; width: 100%; aspect-ratio: 1; min-width: 0; padding: 0; border: 1px solid var(--color-brand, #3b82f6); border-radius: 50%; color: #fff; background: transparent; font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease; }
+.paginationButton:hover:not(:disabled) { background: rgba(255, 255, 255, .08); }
+.paginationButton:focus-visible { outline: 2px solid #a494f6; outline-offset: 3px; }
+.paginationButton:disabled { opacity: .3; cursor: default; }
+.paginationButton.paginationCurrent { background: var(--color-brand, #3b82f6); border-color: var(--color-brand, #3b82f6); }
+.paginationStatus { grid-column: 1 / -1; text-align: center; color: #9da7ba; font-size: 13px; line-height: 20px; }
+@media (min-width: 1024px) { .reviewsLayout { grid-template-columns: minmax(0, 1fr) 320px; } }
+@media (max-width: 480px) { .reviewsPagination { gap: 6px; width: min(100%, 344px); } }
+
 .toastSmooth-enter-active,
 .toastSmooth-leave-active {
   transition: opacity 420ms ease, transform 420ms ease;

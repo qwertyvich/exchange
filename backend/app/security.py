@@ -3,7 +3,7 @@ import hashlib
 import os
 
 # хранить в env, НЕ в коде
-TICKET_ACTION_SECRET = "098r698060852374908723hdsuafsdtfasty82lkfhs0532"
+TICKET_ACTION_SECRET = os.environ["TICKET_ACTION_SECRET"]
 
 def make_ticket_key(ticket_id: str) -> str:
     

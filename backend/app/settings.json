@@ -13,10 +13,10 @@
     "Tox": "87503269702"
   },
   "bot": {
-    "API_TOKEN": "8231371926:AAG0lIEFcfxB6GsnXllgzi2hdTVjyfZ3wDQ",
-    "CHAT_ID": "-1002609251206",
-    "MESS_CHAT": "-1003705693992",
-    "domain": "https://github.com"
+    "API_TOKEN": "",
+    "CHAT_ID": "",
+    "MESS_CHAT": "",
+    "domain": ""
   },
   "deposit_wallets": {
     "1": {

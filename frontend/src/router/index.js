@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../pages/HomePage.vue";
-import CatalogPage from "../pages/CatalogPage.vue";
-import FAQPage from "../pages/FAQPage.vue";
-import ContactsPage from "../pages/ContactsPage.vue";
-import RulesPage from "../pages/RulesPage.vue";
-import LoginPage from "../pages/LoginPage.vue";
-import RegPage from "../pages/RegPage.vue"; 
-import TicketPage from "../pages/TicketPage.vue";  
-import ProfilePage from "../pages/ProfilePage.vue"; 
-import GuidePage from "../pages/GuidePage.vue";
-import ReviewPage from "../pages/ReviewPage.vue";
-import NotFoundPage from "../pages/NotFoundPage.vue";
+const HomePage = () => import("../pages/HomePage.vue");
+const CatalogPage = () => import("../pages/CatalogPage.vue");
+const FAQPage = () => import("../pages/FAQPage.vue");
+const ContactsPage = () => import("../pages/ContactsPage.vue");
+const RulesPage = () => import("../pages/RulesPage.vue");
+const LoginPage = () => import("../pages/LoginPage.vue");
+const RegPage = () => import("../pages/RegPage.vue");
+const TicketPage = () => import("../pages/TicketPage.vue");
+const ProfilePage = () => import("../pages/ProfilePage.vue");
+const GuidePage = () => import("../pages/GuidePage.vue");
+const ReviewPage = () => import("../pages/ReviewPage.vue");
+const NotFoundPage = () => import("../pages/NotFoundPage.vue");
 
 export default createRouter({
   history: createWebHistory(),

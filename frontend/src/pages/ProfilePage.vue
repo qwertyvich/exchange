@@ -3,7 +3,7 @@
   <div class="flex flex-col lg:gap-12 gap-6 lg:py-24 py-8 max-w-[1362px] container basis-full text-white">
     <div class="flex flex-col gap-2">
       <h2 class="md:text-5xl text-[28px] font-medium leading-[120%] max-md:text-center">
-        Личный кабинет
+        {{ tr("Личный кабинет") }}
       </h2>
     </div>
 
@@ -28,7 +28,7 @@
               <circle cx="12" cy="12" r="10"></circle>
             </svg>
             <p class="md:text-xl text-base font-medium leading-[140%] lg:px-2 px-1.5 line-clamp-1 break-all">
-              Данные
+              {{ tr("Данные") }}
             </p>
           </button>
 
@@ -46,7 +46,7 @@
               <circle cx="12" cy="12" r="10"></circle>
             </svg>
             <p class="md:text-xl text-base font-medium leading-[140%] lg:px-2 px-1.5 line-clamp-1 break-all">
-              История обменов
+              {{ tr("История обменов") }}
             </p>
           </button>
           
@@ -67,7 +67,7 @@
             </svg>
 
             <p class="md:text-xl text-base font-medium leading-[140%] lg:px-2 px-1.5 line-clamp-1 break-all">
-              Админ
+              {{ tr("Админ") }}
             </p>
           </button>
 
@@ -79,7 +79,7 @@
           @click="logout"
         >
           <p class="md:text-base text-sm font-medium leading-[150%] px-1 text-text-tertiary">
-            Выйти
+            {{ tr("Выйти") }}
           </p>
         </button>
       </aside>
@@ -108,7 +108,7 @@
                   for="pf_name"
                   class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
                 >
-                  Имя профиля
+                  {{ tr("Имя профиля") }}
                 </label>
               </div>
             </div>
@@ -146,14 +146,14 @@
       for="pf_current_password"
       class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
     >
-      Текущий пароль
+      {{ tr("Текущий пароль") }}
     </label>
 
     <button
       type="button"
       class="absolute md:right-8 right-6 top-1/2 -translate-y-1/2 cursor-pointer text-icon-hover transition"
       @click="showCurrentPass = !showCurrentPass"
-      aria-label="Показать/скрыть пароль"
+      :aria-label="tr(&quot;Показать/скрыть пароль&quot;)"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -181,7 +181,7 @@
                   for="pf_new_password"
                   class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
                 >
-                  Новый пароль
+                  {{ tr("Новый пароль") }}
                 </label>
 
                 <button
@@ -213,7 +213,7 @@
                   for="pf_confirm_password"
                   class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
                 >
-                  Подтвердите пароль
+                  {{ tr("Подтвердите пароль") }}
                 </label>
 
                 <button
@@ -232,7 +232,7 @@
             </div>
           </div>
 
-          <p v-if="saveError" class="text-danger md:text-base text-sm font-medium">{{ saveError }}</p>
+          <p v-if="saveError" class="text-danger md:text-base text-sm font-medium">{{ tr(saveError) }}</p>
 
           <div class="flex gap-3 flex-wrap">
             <button
@@ -243,7 +243,7 @@
               @click="saveName"
             >
               <p class="md:text-xl text-base font-medium leading-[140%] px-1">
-                {{ savingName ? "Сохранение..." : "Сохранить имя" }}
+                {{ savingName ? tr("Сохранение...") : tr("Сохранить имя") }}
               </p>
             </button>
 
@@ -255,7 +255,7 @@
               @click="savePassword"
             >
               <p class="md:text-xl text-base font-medium leading-[140%] px-1">
-                {{ savingPass ? "Сохранение..." : "Сохранить пароль" }}
+                {{ savingPass ? tr("Сохранение...") : tr("Сохранить пароль") }}
               </p>
             </button>
           </div>
@@ -274,7 +274,7 @@
               @click="adminTab = 'users'"
               class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[18px] py-4 px-5 border border-border-primary bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary data-[state=active]:bg-bg-secondary-active"
             >
-              Пользователи
+              {{ tr("Пользователи") }}
             </button>
 
             <button
@@ -283,23 +283,16 @@
               @click="adminTab = 'wallets'"
               class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[18px] py-4 px-5 border border-border-primary bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary data-[state=active]:bg-bg-secondary-active"
             >
-              Кошельки
+              {{ tr("Настройки обмена") }}
             </button>
 
-            <button
-            type="button"
-            :data-state="adminTab === 'mode' ? 'active' : 'inactive'"
-            @click="adminTab = 'mode'"
-            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[18px] py-4 px-5 border border-border-primary bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary data-[state=active]:bg-bg-secondary-active"
-          >
-            Режим
-          </button>
+
           </div>
 
           <!-- Контент под вкладки -->
           <div v-if="adminTab === 'users'" class="flex flex-col gap-4">
           <div class="flex items-center justify-between gap-3 flex-wrap">
-            <h3 class="md:text-2xl text-xl font-medium leading-[130%]">Пользователи</h3>
+            <h3 class="md:text-2xl text-xl font-medium leading-[130%]">{{ tr("Пользователи") }}</h3>
 
             <button
               type="button"
@@ -307,16 +300,16 @@
               :disabled="loadingAdminUsers"
               @click="loadAdminUsers"
             >
-              Обновить
+              {{ tr("Обновить") }}
             </button>
           </div>
 
           <div v-if="loadingAdminUsers" class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-            Загрузка пользователей...
+            {{ tr("Загрузка пользователей...") }}
           </div>
 
           <div v-else-if="adminUsers.length === 0" class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-            Пользователей нет.
+            {{ tr("Пользователей нет.") }}
           </div>
 
           <div v-else class="w-full overflow-x-auto">
@@ -325,12 +318,12 @@
           <table class="w-full border-collapse">
             <thead class="text-text-tertiary">
               <tr class="text-left border-b border-border-secondary">
-                <th class="px-4 py-3 font-light whitespace-nowrap">Имя</th>
+                <th class="px-4 py-3 font-light whitespace-nowrap">{{ tr("Имя") }}</th>
                 <th class="px-4 py-3 font-light whitespace-nowrap">E-mail</th>
-                <th class="px-4 py-3 font-light whitespace-nowrap">Роль</th>
+                <th class="px-4 py-3 font-light whitespace-nowrap">{{ tr("Роль") }}</th>
                 <th class="px-4 py-3 font-light whitespace-nowrap">Super</th>
-                <th class="px-4 py-3 font-light whitespace-nowrap">Регистрация</th>
-                <th class="px-4 py-3 font-light whitespace-nowrap">Последний вход</th>
+                <th class="px-4 py-3 font-light whitespace-nowrap">{{ tr("Регистрация") }}</th>
+                <th class="px-4 py-3 font-light whitespace-nowrap">{{ tr("Последний вход") }}</th>
                 <th class="px-4 py-3 font-light whitespace-nowrap text-right"> </th>
               </tr>
             </thead>
@@ -360,7 +353,7 @@
 
                   <td class="px-4 py-4 align-top whitespace-nowrap"  style="border-bottom: 1px solid grey;">
                     <span class="font-light" :class="u.is_superuser ? 'text-white' : 'text-text-secondary'">
-                      {{ u.is_superuser ? "Да" : "Нет" }}
+                      {{ u.is_superuser ? tr("Да") : tr("Нет") }}
                     </span>
                   </td>
 
@@ -382,7 +375,7 @@
                       class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[14px] py-2 px-3 border border-border-primary bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary"
                       @click="toggleUserTickets(u.id)"
                     >
-                      {{ expandedUserId === u.id ? "Скрыть обмены" : "Показать обмены" }}
+                      {{ expandedUserId === u.id ? tr("Скрыть обмены") : tr("Показать обмены") }}
                     </button>
                   </td>
                 </tr>
@@ -395,14 +388,14 @@
                         v-if="loadingUserTickets"
                         class="text-text-secondary md:text-base text-sm font-light leading-[150%]"
                       >
-                        Загрузка обменов...
+                        {{ tr("Загрузка обменов...") }}
                       </div>
 
                       <div
                         v-else-if="userTickets.length === 0"
                         class="text-text-secondary md:text-base text-sm font-light leading-[150%]"
                       >
-                        У пользователя нет обменов.
+                        {{ tr("У пользователя нет обменов.") }}
                       </div>
 
                       <div v-else class="max-w-full overflow-hidden">
@@ -414,10 +407,10 @@
                             <thead class="text-text-tertiary">
                               <tr class="text-left border-b border-border-secondary">
                                 <th class="px-3 py-3 font-light whitespace-nowrap">ID</th>
-                                <th class="px-3 py-3 font-light whitespace-nowrap">Статус</th>
-                                <th class="px-3 py-3 font-light whitespace-nowrap">Дата</th>
-                                <th class="px-3 py-3 font-light whitespace-nowrap">Вносит</th>
-                                <th class="px-3 py-3 font-light whitespace-nowrap">Получает</th>
+                                <th class="px-3 py-3 font-light whitespace-nowrap">{{ tr("Статус") }}</th>
+                                <th class="px-3 py-3 font-light whitespace-nowrap">{{ tr("Дата") }}</th>
+                                <th class="px-3 py-3 font-light whitespace-nowrap">{{ tr("Вносит") }}</th>
+                                <th class="px-3 py-3 font-light whitespace-nowrap">{{ tr("Получает") }}</th>
                               </tr>
                             </thead>
 
@@ -435,7 +428,7 @@
 
                                 <td class="px-3 py-3 whitespace-nowrap">
                                   <span class="font-light text-text-secondary">
-                                    {{ statusLabel(t.status) }}
+                                    {{ tr(statusLabel(t.status)) }}
                                   </span>
                                 </td>
 
@@ -472,459 +465,8 @@
         </div>
       </div>
         </div>
-        <div v-else-if="adminTab === 'mode'" class="flex flex-col gap-6">
-  <div class="flex items-center justify-between gap-3 flex-wrap">
-    <h3 class="md:text-2xl text-xl font-medium leading-[130%]">Режим работы</h3>
-
-    <button
-      type="button"
-      class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[18px] py-3 px-4 bg-brand hover:bg-brand-hover text-text-primary"
-      :disabled="settingsSaving || settingsLoading"
-      @click="saveAdminSettings"
-    >
-      {{ settingsSaving ? "Сохранение..." : "Сохранить" }}
-    </button>
-  </div>
-
-  <div v-if="settingsLoading" class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-    Загрузка settings.json...
-  </div>
-
-  <p v-else-if="settingsError" class="text-danger md:text-base text-sm font-medium">
-    {{ settingsError }}
-  </p>
-
-  <div v-else class="bg-bg-primary border border-border-secondary rounded-[22px] p-5 flex flex-col gap-5">
-    <div>
-      <h4 class="md:text-xl text-base font-medium leading-[140%]">Выберите режим</h4>
-      <p class="text-text-secondary md:text-base text-sm font-light leading-[150%] mt-1">
-        Значение сохраняется в settings.json в поле mode.
-      </p>
-    </div>
-
-    <label class="flex items-start gap-3 cursor-pointer">
-      <input
-        v-model="settingsForm.mode"
-        type="radio"
-        value="0"
-        class="mt-1 size-4 shrink-0"
-      >
-      <div class="flex flex-col gap-1">
-        <span class="md:text-lg text-base font-medium leading-[140%]">Крипта -> Фиат, крипта</span>
-        <span class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-          mode = "0"
-        </span>
-      </div>
-    </label>
-
-    <label class="flex items-start gap-3 cursor-pointer">
-      <input
-        v-model="settingsForm.mode"
-        type="radio"
-        value="1"
-        class="mt-1 size-4 shrink-0"
-      >
-      <div class="flex flex-col gap-1">
-        <span class="md:text-lg text-base font-medium leading-[140%]">Фиат, крипта -> Фиат, крипта</span>
-        <span class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-          mode = "1"
-        </span>
-      </div>
-    </label>
-
-    <label class="flex items-start gap-3 cursor-pointer">
-      <input
-        v-model="settingsForm.mode"
-        type="radio"
-        value="2"
-        class="mt-1 size-4 shrink-0"
-      >
-      <div class="flex flex-col gap-1">
-        <span class="md:text-lg text-base font-medium leading-[140%]">Фиат,usdt -> Фиат</span>
-        <span class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-          mode = "2"
-        </span>
-      </div>
-    </label>
-  </div>
-</div>
-          <div v-else-if="adminTab === 'wallets'" class="flex flex-col gap-6">
-  <div class="flex items-center justify-between gap-3 flex-wrap">
-    <h3 class="md:text-2xl text-xl font-medium leading-[130%]">Настройки</h3>
-
-    <div class="flex gap-2">
-      <button
-        type="button"
-        class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[18px] py-3 px-4 border border-border-primary bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary"
-        :disabled="settingsLoading"
-        @click="loadAdminSettings"
-      >
-        Обновить
-      </button>
-
-      <button
-        type="button"
-        class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[18px] py-3 px-4 bg-brand hover:bg-brand-hover text-text-primary"
-        :disabled="settingsSaving || settingsLoading"
-        @click="saveAdminSettings"
-      >
-        {{ settingsSaving ? "Сохранение..." : "Сохранить" }}
-      </button>
-    </div>
-  </div>
-
-  <div v-if="settingsLoading" class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-    Загрузка settings.json...
-  </div>
-
-  <p v-else-if="settingsError" class="text-danger md:text-base text-sm font-medium">
-    {{ settingsError }}
-  </p>
-
-  <div v-else class="flex flex-col gap-6">
-    <!-- percent -->
-     
-    <!-- percent + limits -->
-<div class="bg-bg-primary border border-border-secondary rounded-[22px] p-5">
-  <h4 class="md:text-xl text-base font-medium leading-[140%]">Комиссия и лимиты ещё и баннер тут</h4>
-  <p class="text-text-secondary md:text-base text-sm font-light leading-[150%] mt-1">
-    percent — комиссия сервиса (%). Лимиты — в USD.
-  </p>
-
-  <div class="mt-4 grid md:grid-cols-2 grid-cols-1 gap-3">
-    <!-- percent -->
-     <div class="relative w-full md:col-span-2">
-      <input
-        v-model="settingsForm.banner"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        banner
-      </label>
-    </div>
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.percent"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        percent
-      </label>
-    </div>
-
-    <!-- giveMin -->
-    <div class="relative w-full">
-      <input v-model="settingsForm.giveMin" placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-      <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-        giveMin (USD)
-      </label>
-    </div>
-
-    <!-- giveMax -->
-    <div class="relative w-full">
-      <input v-model="settingsForm.giveMax" placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-      <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-        giveMax (USD)
-      </label>
-    </div>
-
-    <!-- getMin -->
-    <div class="relative w-full">
-      <input v-model="settingsForm.getMin" placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-      <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-        getMin (USD)
-      </label>
-    </div>
-
-    <!-- getMax -->
-    <div class="relative w-full">
-      <input v-model="settingsForm.getMax" placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-      <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-        getMax (USD)
-      </label>
-    </div>
-  </div>
-</div>
-
-    <!-- info -->
-    <div class="bg-bg-primary border border-border-secondary rounded-[22px] p-5">
-      <h4 class="md:text-xl text-base font-medium leading-[140%]">Контакты (info)</h4>
-      <p class="text-text-secondary md:text-base text-sm font-light leading-[150%] mt-1">
-        Эти значения будут использоваться на странице контактов.
-      </p>
-
-      <div class="mt-4 grid md:grid-cols-2 grid-cols-1 gap-3">
-        <div class="relative w-full">
-          <input v-model="settingsForm.info.Telegram_oper" placeholder=" "
-                 class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-          <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-            Telegram_oper
-          </label>
+          <AdminSettings v-else />
         </div>
-
-        <div class="relative w-full">
-          <input v-model="settingsForm.info.Telegram_chanel" placeholder=" "
-                 class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-          <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-            Telegram_chanel
-          </label>
-        </div>
-
-        <div class="relative w-full">
-          <input v-model="settingsForm.info.Session_id" placeholder=" "
-                 class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-          <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-            Session_id
-          </label>
-        </div>
-
-        <div class="relative w-full">
-          <input v-model="settingsForm.info.Tox" placeholder=" "
-                 class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-          <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-            Tox
-          </label>
-        </div>
-      </div>
-    </div>
-    <!-- bot -->
-<div class="bg-bg-primary border border-border-secondary rounded-[22px] p-5">
-  <h4 class="md:text-xl text-base font-medium leading-[140%]">Бот (bot)</h4>
-  <p class="text-text-secondary md:text-base text-sm font-light leading-[150%] mt-1">
-    Настройки Telegram-бота. Осторожно: токен — чувствительные данные.
-  </p>
-
-  <div class="mt-4 grid md:grid-cols-2 grid-cols-1 gap-3">
-    <!-- API_TOKEN -->
-    <div class="relative w-full md:col-span-2">
-      <input
-        v-model="settingsForm.bot.API_TOKEN"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        API_TOKEN
-      </label>
-    </div>
-
-    <!-- CHAT_ID -->
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.bot.CHAT_ID"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-        CHAT_ID
-      </label>
-    </div>
-
-    <!-- MESS_CHAT -->
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.bot.MESS_CHAT"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-        MESS_CHAT
-      </label>
-    </div>
-
-    <!-- domain -->
-    <div class="relative w-full md:col-span-2">
-      <input
-        v-model="settingsForm.bot.domain"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-tertiary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">
-        domain
-      </label>
-    </div>
-  </div>
-</div>
-    <!-- deposit_wallets -->
-    <div class="bg-bg-primary border border-border-secondary rounded-[22px] p-5">
-      <h4 class="md:text-xl text-base font-medium leading-[140%]">Кошельки (deposit_wallets)</h4>
-      <p class="text-text-secondary md:text-base text-sm font-light leading-[150%] mt-1">
-        Адреса для приёма средств по currency_backend_id.
-      </p>
-
-      <div class="mt-4 grid gap-3">
-        <div
-  v-for="(obj, key) in settingsForm.deposit_wallets"
-  :key="key"
-  class="bg-bg-tertiary border border-border-secondary rounded-[22px] p-4"
->
-  <div class="flex items-center justify-between gap-3 mb-3">
-    <div class="md:text-xl text-base font-medium leading-[140%]">
-      {{ obj?.name || `ID: ${key}` }}
-    </div>
-    <div class="text-text-tertiary text-sm font-light">#{{ key }}</div>
-  </div>
-
-  <!-- обычные кошельки / методы -->
-  <div v-if="Number(key) < 2102" class="grid gap-3">
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.deposit_wallets[key].address"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        address
-      </label>
-    </div>
-  </div>
-
-  <!-- ин. валюты 2102+ -->
-  <div v-else class="grid md:grid-cols-2 grid-cols-1 gap-3">
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.deposit_wallets[key].symbol"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        symbol
-      </label>
-    </div>
-
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.deposit_wallets[key].name"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        name
-      </label>
-    </div>
-
-    <div class="relative w-full md:col-span-2">
-      <input
-        v-model="settingsForm.deposit_wallets[key].address"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        address
-      </label>
-    </div>
-
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.deposit_wallets[key].course_rub"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        course_rub
-      </label>
-    </div>
-
-    <div class="relative w-full">
-      <input
-        v-model="settingsForm.deposit_wallets[key].course_usdt"
-        placeholder=" "
-        class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none"
-      >
-      <label
-        class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
-      >
-        course_usdt
-      </label>
-    </div>
-  </div>
-</div>
-      </div>
-    </div>
-
-    <!-- fiat_in -->
-    <div class="bg-bg-primary border border-border-secondary rounded-[22px] p-5">
-      <h4 class="md:text-xl text-base font-medium leading-[140%]">Карты (fiat_in)</h4>
-      <p class="text-text-secondary md:text-base text-sm font-light leading-[150%] mt-1">
-        Реквизиты для приёма RUB + лимиты и курс.
-      </p>
-
-      <div class="mt-4 grid gap-3">
-        <div
-          v-for="(obj, key) in settingsForm.fiat_in"
-          :key="key"
-          class="bg-bg-tertiary border border-border-secondary rounded-[22px] p-4"
-        >
-          <div class="text-text-tertiary text-sm font-light mb-3">ID: {{ key }}</div>
-
-          <div class="grid md:grid-cols-2 grid-cols-1 gap-3">
-            <div class="relative w-full">
-              <input v-model="settingsForm.fiat_in[key].card_id" placeholder=" "
-                     class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-              <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">card_id</label>
-            </div>
-
-            <div class="relative w-full">
-              <input v-model="settingsForm.fiat_in[key].bank_name" placeholder=" "
-                     class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-              <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">bank_name</label>
-            </div>
-
-            <div class="relative w-full">
-              <input v-model="settingsForm.fiat_in[key].FIO" placeholder=" "
-                     class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-              <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">FIO</label>
-            </div>
-
-            <div class="relative w-full">
-              <input v-model="settingsForm.fiat_in[key].rate" placeholder=" "
-                     class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-              <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">rate</label>
-            </div>
-
-            <div class="relative w-full">
-              <input v-model="settingsForm.fiat_in[key].from" placeholder=" "
-                     class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-              <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">from</label>
-            </div>
-
-            <div class="relative w-full">
-              <input v-model="settingsForm.fiat_in[key].to" placeholder=" "
-                     class="md:text-xl text-base font-light leading-[140%] peer bg-bg-primary hover:bg-bg-hover border-border-secondary focus:border-border-active flex w-full md:rounded-[28px] rounded-[22px] border md:px-6 md:pt-10 md:pb-4 px-5 pt-7 pb-3 transition-all duration-150 outline-none">
-              <label class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-6 left-5 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125">to</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- fiat_out -->
-    
-  </div>
-</div>
-        </div>
-
 
         <!-- TAB: HISTORY -->
         <div v-else class="flex flex-col gap-2 basis-full h-fit">
@@ -933,7 +475,7 @@
           </div>
 
           <div v-else-if="tickets.length === 0" class="text-text-secondary md:text-base text-sm font-light leading-[150%]">
-            Пока нет обменов.
+            {{ tr("Пока нет обменов.") }}
           </div>
 
           <div v-else class="flex flex-col gap-2">
@@ -963,17 +505,17 @@
                   <p
                     v-if="showTimer(t.status)"
                     class="md:text-xl text-base font-medium leading-[140%] text-danger"
-                    :class="ticketTimer(t) === 'Истекло время на отправку средств' ? '' : 'tabular-nums'"
+                    :class="ticketTimer(t) === tr(&quot;Истекло время на отправку средств&quot;) ? '' : 'tabular-nums'"
                   >
                     {{ ticketTimer(t) }}
                   </p>
 
                   <!-- status -->
                   <p
-                      v-if="!(t.status === 'new' && ticketTimer(t) === EXPIRED_TEXT)"
+                      v-if="!(t.status === 'new' && isExpired(t))"
                       class="md:text-xl text-base font-medium leading-[140%] text-text-secondary"
                     >
-                      {{ statusLabel(t.status) }}
+                      {{ tr(statusLabel(t.status)) }}
                     </p>
                 </div>
               </div>
@@ -1045,6 +587,9 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
+import AdminSettings from "../components/AdminSettings.vue";
+import { getPublicSettings } from "../lib/siteState";
 import { computed, onMounted, onBeforeUnmount, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
@@ -1078,7 +623,7 @@ function getTicketLifetimeSeconds(ticket) {
   return 3 * 60 * 60; // 3 часа
 }
 
-const EXPIRED_TEXT = "Истекло время на отправку средств";
+const EXPIRED_TEXT = tr("Истекло время на отправку средств");
 const showNewPass = ref(false);
 const showConfirmPass = ref(false);
 const showCurrentPass = ref(false);
@@ -1088,49 +633,13 @@ const savingPass = ref(false);
 const saveError = ref("");
 
 
-const settingsLoading = ref(false);
-const settingsError = ref("");
-const settingsSaving = ref(false);
-
-// сюда грузим то, что пришло с бэка
-const settings = ref(null);
-
-// это то, что редактируем в инпутах (копия)
-const settingsForm = ref({
-  mode: "0",
-  banner: "",
-  percent: "",
-  giveMin: "",
-  giveMax: "",
-  getMin: "",
-  getMax: "",
-  info: {
-    Telegram_oper: "",
-    Telegram_chanel: "",
-    Session_id: "",
-    Tox: "",
-  },
-  bot: {
-    API_TOKEN: "",
-    CHAT_ID: "",
-    MESS_CHAT: "",
-    domain: "",
-  },
-  deposit_wallets: {},
-  fiat_in: {},
-  
-});
-
 const publicSettings = ref({
   deposit_wallets: {},
 });
 
 async function loadPublicSettings() {
   try {
-    const res = await fetch("/api/settings/public", { method: "GET" });
-    if (!res.ok) return;
-
-    const data = await res.json();
+    const data = await getPublicSettings();
     publicSettings.value = data || { deposit_wallets: {} };
   } catch (_) {
     publicSettings.value = { deposit_wallets: {} };
@@ -1154,7 +663,7 @@ const ICON_BY_BACKEND_ID = {
 
   2001: "/img/sbp.svg?v=032",
   2011: "/img/qr_sber.svg?v=032",
-  2002: "/img/sber.svg?v=032.svg",
+  2002: "/img/sber.svg?v=032",
   2003: "/img/alpha.svg?v=032",
   2010: "/img/rub_nal.svg?v=032",
   2101: "/img/sbp.svg?v=032",
@@ -1201,7 +710,7 @@ function ticketTimer(ticket) {
   const elapsed = (nowMs.value - t0) / 1000;
   const left = lifetime - elapsed;
 
-  if (left <= 0) return "Истекло время на отправку средств";
+  if (left <= 0) return tr("Истекло время на отправку средств");
   return formatHMS(left);
 }
 
@@ -1298,95 +807,6 @@ async function loadAdminUsers() {
   }
 }
 
-async function loadAdminSettings() {
-  settingsLoading.value = true;
-  settingsError.value = "";
-  try {
-    const res = await api("/api/admin/settings", { method: "GET" });
-    if (!res.ok) {
-      let d = "";
-      try { d = (await res.json())?.detail || ""; } catch {}
-      settingsError.value = d || "Не удалось загрузить settings.json";
-      return;
-    }
-
-    const data = await res.json();
-    settings.value = data;
-
-    // ✅ важно: делаем “редактируемую копию”
-    settingsForm.value = {
-    mode: String(data?.mode ?? "0"),
-    banner: data?.banner ?? "",
-    percent: data?.percent ?? "",
-    giveMin: data?.giveMin ?? "",
-    giveMax: data?.giveMax ?? "",
-    getMin: data?.getMin ?? "",
-    getMax: data?.getMax ?? "",
-    info: {
-      Telegram_oper: data?.info?.Telegram_oper ?? "",
-      Telegram_chanel: data?.info?.Telegram_chanel ?? "",
-      Session_id: data?.info?.Session_id ?? "",
-      Tox: data?.info?.Tox ?? "",
-    },
-
-    bot: {
-      API_TOKEN: data?.bot?.API_TOKEN ?? "",
-      CHAT_ID: data?.bot?.CHAT_ID ?? "",
-      MESS_CHAT: data?.bot?.MESS_CHAT ?? "",
-      domain: data?.bot?.domain ?? "",
-    },
-
-    deposit_wallets: data?.deposit_wallets ?? {},
-    fiat_in: data?.fiat_in ?? {},
-  
-};
-  } catch (e) {
-    settingsError.value = "Ошибка сети при загрузке settings.json";
-  } finally {
-    settingsLoading.value = false;
-  }
-}
-
-async function saveAdminSettings() {
-  settingsSaving.value = true;
-  settingsError.value = "";
-  try {
-    const payload = {
-    mode: String(settingsForm.value.mode ?? "0"),
-    banner: settingsForm.value.banner,
-    percent: settingsForm.value.percent,
-    giveMin: settingsForm.value.giveMin,
-    giveMax: settingsForm.value.giveMax,
-    getMin: settingsForm.value.getMin,
-    getMax: settingsForm.value.getMax,
-    info: settingsForm.value.info,
-    bot: settingsForm.value.bot,
-    deposit_wallets: settingsForm.value.deposit_wallets,
-    fiat_in: settingsForm.value.fiat_in,
-    
-  };
-
-    const res = await api("/api/admin/settings", {
-      method: "PUT",
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      let d = "";
-      try { d = (await res.json())?.detail || ""; } catch {}
-      settingsError.value = d || "Не удалось сохранить settings.json";
-      return;
-    }
-
-    // перезагрузим, чтобы увидеть что реально записалось
-    await loadAdminSettings();
-  } catch (e) {
-    settingsError.value = "Ошибка сети при сохранении settings.json";
-  } finally {
-    settingsSaving.value = false;
-  }
-}
-
 async function toggleUserTickets(userId) {
   // закрыть если уже открыт
   if (expandedUserId.value === userId) {
@@ -1430,7 +850,7 @@ watch(adminTab, (v) => {
   if (!isSuperuser.value) return;
 
   if (v === "users") loadAdminUsers();
-  if (v === "wallets" || v === "mode") loadAdminSettings();
+
 });
 
 // ===== profile save rules =====
@@ -1459,14 +879,14 @@ async function saveName() {
     });
 
     if (!res.ok) {
-      saveError.value = "Не удалось сохранить имя";
+      saveError.value = tr("Не удалось сохранить имя");
       return;
     }
 
     await loadMe();
     window.dispatchEvent(new Event("auth-changed"));
   } catch {
-    saveError.value = "Не удалось сохранить имя";
+    saveError.value = tr("Не удалось сохранить имя");
   } finally {
     savingName.value = false;
   }
@@ -1498,15 +918,15 @@ async function savePassword() {
 
       // человеко-понятные сообщения
       if (detail === "wrong current password") {
-        saveError.value = "Неверный текущий пароль";
+        saveError.value = tr("Неверный текущий пароль");
       } else if (detail === "password too short") {
-        saveError.value = "Пароль должен быть от 8 символов";
+        saveError.value = tr("Пароль должен быть от 8 символов");
       } else if (detail === "passwords do not match") {
-        saveError.value = "Пароли не совпадают";
+        saveError.value = tr("Пароли не совпадают");
       } else if (detail === "not authenticated") {
-        saveError.value = "Нужно войти заново";
+        saveError.value = tr("Нужно войти заново");
       } else {
-        saveError.value = "Не удалось сохранить пароль";
+        saveError.value = tr("Не удалось сохранить пароль");
       }
 
       // на всякий случай лог в консоль
@@ -1520,7 +940,7 @@ async function savePassword() {
     confirmPassword.value = "";
   } catch (e) {
     console.error("change password error:", e);
-    saveError.value = "Не удалось сохранить пароль";
+    saveError.value = tr("Не удалось сохранить пароль");
   } finally {
     savingPass.value = false;
   }
@@ -1538,7 +958,7 @@ function logout() {
 function formatDate(iso) {
   if (!iso) return "";
   const d = new Date(iso);
-  return d.toLocaleString("ru-RU", {
+  return d.toLocaleString(localeTag.value, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -1556,10 +976,10 @@ function shortTicketId(id) {
 
 function statusLabel(s) {
   const map = {
-    new: "Ожидаем получение средств",
-    not_confirmed: "Ожидайте подтверждение",
-    cancelled: "Отменён",
-    completed: "Подтверждён",
+    new: tr("Ожидаем получение средств"),
+    not_confirmed: tr("Ожидайте подтверждение"),
+    cancelled: tr("Отменён"),
+    completed: tr("Подтверждён"),
   };
   return map[s] || s;
 }

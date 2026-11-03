@@ -14,7 +14,7 @@ def generate_ticket_id() -> str:
 
 def create_ticket(db: Session, payload: TicketCreate, guest_id: str | None = None, user_id: str | None = None) -> Ticket:
     ticket_id = generate_ticket_id()
-    raw_json = json.dumps(payload.model_dump(), ensure_ascii=False)
+    raw_json = json.dumps(payload.model_dump(mode="json"), ensure_ascii=False)
 
     t = Ticket(
         id=ticket_id,
@@ -22,12 +22,12 @@ def create_ticket(db: Session, payload: TicketCreate, guest_id: str | None = Non
 
         give_currency_backend_id=payload.give.currency_backend_id,
         give_symbol=payload.give.symbol,
-        give_amount=float(payload.give.amount),
+        give_amount=payload.give.amount,
         give_coingecko_id=payload.give.coingecko_id or "",
 
         get_currency_backend_id=payload.get.currency_backend_id,
         get_symbol=payload.get.symbol,
-        get_amount=float(payload.get.amount),
+        get_amount=payload.get.amount,
         get_coingecko_id=payload.get.coingecko_id,
 
         get_is_fiat=bool(payload.get_is_fiat),
@@ -47,6 +47,7 @@ def create_ticket(db: Session, payload: TicketCreate, guest_id: str | None = Non
         status="new",
         guest_id=guest_id,
         user_id=user_id,
+        quote_id=payload.quote_id or None,
     )
     
     db.add(t)

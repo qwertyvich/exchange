@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from passlib.context import CryptContext
+import os
 
-JWT_SECRET = "86429756"  # потом в env
+JWT_SECRET = os.environ["JWT_SECRET"]
 JWT_ALG = "HS256"
 ACCESS_MINUTES = 60 * 24 * 7  # 7 дней, можешь меньше
 

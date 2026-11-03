@@ -4,7 +4,7 @@
     <!-- HEADER -->
     <div class="flex flex-col md:gap-4 gap-3">
       <div class="flex flex-col items-center gap-2">
-        <h2 class="md:text-5xl text-[28px] font-medium leading-[120%] text-center">Заявка</h2>
+        <h2 class="md:text-5xl text-[28px] font-medium leading-[120%] text-center">{{ tr("Заявка") }}</h2>
         <p class="md:text-2xl text-base font-medium leading-[130%] text-white/80 text-center break-all">
           #{{ ticketId }}
         </p>
@@ -12,14 +12,14 @@
 
       <div class="flex flex-col items-center gap-2">
         <h4 class="md:text-2xl text-xl font-medium leading-[130%] text-text-secondary text-center">
-          {{ statusLine }}
+          {{ tr(statusLine) }}
         </h4>
 
         <p
           class="md:text-xl text-base font-medium leading-[140%] tabular-nums"
           :class="timeLineClass"
         >
-          {{ timeLineText }}
+          {{ tr(timeLineText) }}
         </p>
       </div>
     </div>
@@ -103,7 +103,7 @@
 >
   <div class="flex flex-col gap-2 basis-full min-w-0">
     <span class="md:text-xl text-base font-light leading-[140%] text-text-secondary">
-      {{ hasMatchedFiatCard ? "Номер карты для перевода" : "Для получения реквизитов свяжитесь с поддержкой" }}
+      {{ hasMatchedFiatCard ? tr("Номер карты для перевода") : tr("Для получения реквизитов свяжитесь с поддержкой") }}
     </span>
 
     <h4
@@ -127,7 +127,7 @@
       v-else
       class="md:text-2xl text-xl font-medium leading-[130%] break-all"
     >
-      Контакт не указан
+      {{ tr("Контакт не указан") }}
     </h4>
   </div>
 
@@ -157,7 +157,7 @@
                   v-show="copiedToast"
                   class="absolute top-full mt-3 bg-white text-[#0F172A] px-6 py-3 rounded-[18px] shadow-lg text-sm md:text-base font-medium pointer-events-none text-center left-1/2 -translate-x-1/2 max-md:max-w-[calc(100vw-24px)] max-md:whitespace-normal md:whitespace-nowrap"
                 >
-                  {{ copyToastText }}
+                  {{ tr(copyToastText) }}
                 </div>
               </Transition>
             </div>
@@ -171,23 +171,23 @@
         >
           <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-1">
-              <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">Банк</span>
+              <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">{{ tr("Банк") }}</span>
               <p class="md:text-xl text-base font-medium leading-[140%] break-all">
                 {{ matchedFiatInRow.bank_name || "—" }}
               </p>
             </div>
 
             <div class="flex flex-col gap-1">
-              <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">ФИО получателя</span>
+              <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">{{ tr("ФИО получателя") }}</span>
               <p class="md:text-xl text-base font-medium leading-[140%] break-all">
                 {{ matchedFiatInRow.fio || "—" }}
               </p>
             </div>
 
             <div class="flex flex-col gap-1">
-              <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">Важно</span>
+              <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">{{ tr("Важно") }}</span>
               <p class="md:text-xl text-base font-medium leading-[140%]">
-                После оплаты прикрепите фото развёрнутого чека о переводе
+                {{ tr("После оплаты прикрепите фото развёрнутого чека о переводе") }}
               </p>
             </div>
           </div>
@@ -213,7 +213,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip md:size-6 size-5" aria-hidden="true">
                   <path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"></path>
                 </svg>
-                <p class="md:text-xl text-base font-medium leading-[140%]">Прикрепить файл</p>
+                <p class="md:text-xl text-base font-medium leading-[140%]">{{ tr("Прикрепить файл") }}</p>
               </div>
             </label>
 
@@ -242,7 +242,7 @@
                       :disabled="isFileLocked"
                       @change="onFileChange"
                     />
-                    Заменить файл
+                    {{ tr("Заменить файл") }}
                   </label>
                 </div>
               </div>
@@ -257,7 +257,7 @@
           class="flex items-center md:gap-5 gap-2 bg-bg-inv-tertiary border border-border-secondary backdrop-blur-xl md:p-8 p-6 md:rounded-[28px] rounded-[22px]"
         >
           <div class="flex flex-col gap-2 basis-full">
-            <span class="md:text-xl text-base font-light leading-[140%] text-text-secondary">Адрес отправки</span>
+            <span class="md:text-xl text-base font-light leading-[140%] text-text-secondary">{{ tr("Адрес отправки") }}</span>
             <h4 class="md:text-2xl text-xl font-medium leading-[130%] line-clamp-1 break-all">
               {{ sendAddress || "—" }}
             </h4>
@@ -289,7 +289,7 @@
                   v-show="copiedToast"
                   class="absolute top-full mt-3 bg-white text-[#0F172A] px-6 py-3 rounded-[18px] shadow-lg text-sm md:text-base font-medium pointer-events-none text-center left-1/2 -translate-x-1/2 max-md:max-w-[calc(100vw-24px)] max-md:whitespace-normal md:whitespace-nowrap"
                 >
-                  Адрес скопирован
+                  {{ tr("Адрес скопирован") }}
                 </div>
               </Transition>
             </div>
@@ -308,7 +308,7 @@
 
         <div class="flex flex-col gap-2 basis-full md:p-8 p-6 bg-bg-secondary border border-border-secondary md:rounded-[28px] rounded-[22px]">
           <span class="md:text-xl text-base font-light leading-[140%] text-text-tertiary">
-            {{ payoutLabel }}
+            {{ tr(payoutLabel) }}
           </span>
           <p class="md:text-xl text-base font-medium leading-[140%] break-all">
             {{ ticket?.client?.payout_details || "—" }}
@@ -326,7 +326,7 @@
         @click="cancelTicket"
       >
         <p class="md:text-xl text-base font-medium leading-[140%] px-1">
-          {{ loadingCancel ? "Отмена..." : "Отменить сделку" }}
+          {{ loadingCancel ? tr("Отмена...") : tr("Отменить сделку") }}
         </p>
       </button>
 
@@ -337,7 +337,7 @@
         @click="confirmTicket"
       >
         <p class="md:text-xl text-base font-medium leading-[140%] px-1">
-          {{ loadingConfirm ? "Ожидайте..." : "Подтвердить перевод" }}
+          {{ loadingConfirm ? tr("Ожидайте...") : tr("Подтвердить перевод") }}
         </p>
       </button>
     </div>
@@ -347,17 +347,19 @@
         class="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[28px] text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-red-500/20 aria-invalid:border-red-500 text-text-primary hover:text-text-hover data-[state=active]:text-text-active md:p-0 p-0"
       >
         <p class="md:text-xl text-base font-medium leading-[140%] px-1 text-brand hover:text-brand-hover transition duration-150">
-          Связаться с поддержкой
+          {{ tr("Связаться с поддержкой") }}
         </p>
       </button>
     </a>
 
-    <div v-if="loading" class="text-center text-text-secondary">Загрузка…</div>
-    <div v-if="error" class="text-center text-danger">{{ error }}</div>
+    <div v-if="loading" class="text-center text-text-secondary">{{ tr("Загрузка…") }}</div>
+    <div v-if="error" class="text-center text-danger">{{ tr(error) }}</div>
   </div>
 </template>
 
 <script setup>
+import { apiFetch } from '../lib/api';
+import { tr, localeTag } from '../lib/i18n';
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
@@ -382,20 +384,20 @@ const currencies = [
 ];
 
 const RUB_METHODS = [
-  { id: "rub-sbp", backendId: 2001, symbol: "RUB", name: "СБП", icon: "/img/sbp.svg?v=032", type: "fiat", fiat: "rub", rubKind: "sbp" },
-  { id: "rub-qr", backendId: 2011, symbol: "RUB", name: "Сбер QR наличные", icon: "/img/qr_sber.svg?v=032", type: "fiat", fiat: "rub", rubKind: "qr" },
-  { id: "rub-sber", backendId: 2002, symbol: "RUB", name: "Сбер", icon: "/img/sber.svg?v=032.svg", type: "fiat", fiat: "rub", rubKind: "card" },
-  { id: "rub-alfa", backendId: 2003, symbol: "RUB", name: "Альфа-банк", icon: "/img/alpha.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card" },
-  { id: "rub-cash", backendId: 2010, symbol: "RUB", name: "Наличные", icon: "/img/rub_nal.svg?v=032", type: "fiat", fiat: "rub", rubKind: "cash" },
-  { id: "rub-card-in", backendId: 2101, symbol: "RUB", name: "Перевод на карту", icon: "/img/sbp.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card_transfer" },
+  { id: "rub-sbp", backendId: 2001, symbol: "RUB", name: tr("СБП"), icon: "/img/sbp.svg?v=032", type: "fiat", fiat: "rub", rubKind: "sbp" },
+  { id: "rub-qr", backendId: 2011, symbol: "RUB", name: tr("Сбер QR наличные"), icon: "/img/qr_sber.svg?v=032", type: "fiat", fiat: "rub", rubKind: "qr" },
+  { id: "rub-sber", backendId: 2002, symbol: "RUB", name: tr("Сбер"), icon: "/img/sber.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card" },
+  { id: "rub-alfa", backendId: 2003, symbol: "RUB", name: tr("Альфа-банк"), icon: "/img/alpha.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card" },
+  { id: "rub-cash", backendId: 2010, symbol: "RUB", name: tr("Наличные"), icon: "/img/rub_nal.svg?v=032", type: "fiat", fiat: "rub", rubKind: "cash" },
+  { id: "rub-card-in", backendId: 2101, symbol: "RUB", name: tr("Перевод на карту"), icon: "/img/sbp.svg?v=032", type: "fiat", fiat: "rub", rubKind: "card_transfer" },
 ];
 
 const RUB_PLACEHOLDERS = {
-  sbp: "Номер телефона и банк",
-  card: "Номер карты",
-  cash: "Город",
-  qr: "Город снятия",
-  card_transfer: "Адрес кошелька",
+  sbp: tr("Номер телефона и банк"),
+  card: tr("Номер карты"),
+  cash: tr("Город"),
+  qr: tr("Город снятия"),
+  card_transfer: tr("Адрес кошелька"),
 };
 
 const byBackendId = new Map([...currencies, ...RUB_METHODS].map((x) => [x.backendId, x]));
@@ -424,7 +426,7 @@ const publicSettings = ref({
 });
 
 const copiedToast = ref(false);
-const copyToastText = ref("Адрес скопирован");
+const copyToastText = ref(tr("Адрес скопирован"));
 let toastTimer = null;
 
 /**
@@ -564,13 +566,13 @@ const managerTelegramHref = computed(() => {
 });
 
 const fiatTargetTitle = computed(() => {
-  if (!matchedFiatInRow.value) return "Свяжитесь с менеджером";
-  return "Номер карты для перевода";
+  if (!matchedFiatInRow.value) return tr("Свяжитесь с менеджером");
+  return tr("Номер карты для перевода");
 });
 
 const fiatTargetValue = computed(() => {
   if (matchedFiatInRow.value?.card_id) return matchedFiatInRow.value.card_id;
-  return managerTelegram.value || "Контакт менеджера не указан";
+  return managerTelegram.value || tr("Контакт менеджера не указан");
 });
 
 const canCopyFiatTarget = computed(() => {
@@ -590,19 +592,19 @@ const countdownText = computed(() => {
 
 const statusLine = computed(() => {
   const st = ticket.value?.status || "new";
-  if (st === "not_confirmed") return "Ожидайте подтверждения";
-  if (st === "new") return "Ожидаем получение средств";
-  if (st === "cancelled") return "Сделка отменена";
-  if (st === "completed") return "Сделка подтверждена";
-  return "В обработке";
+  if (st === "not_confirmed") return tr("Ожидайте подтверждения");
+  if (st === "new") return tr("Ожидаем получение средств");
+  if (st === "cancelled") return tr("Сделка отменена");
+  if (st === "completed") return tr("Сделка подтверждена");
+  return tr("В обработке");
 });
 
 const timeLineText = computed(() => {
   if (ticket.value?.status === "not_confirmed") return "";
   if (ticket.value?.status === "completed") return "";
   if (timeState.value === "running") return countdownText.value;
-  if (timeState.value === "expired") return "Время истекло";
-  if (timeState.value === "cancelled") return "Отменена";
+  if (timeState.value === "expired") return tr("Время истекло");
+  if (timeState.value === "cancelled") return tr("Отменена");
   return "";
 });
 
@@ -628,7 +630,7 @@ const getIcon = computed(() => {
   const settingsItem = wallets[String(id)];
 
   if (settingsItem?.symbol) {
-    return `/img/${String(settingsItem.symbol).toUpperCase()}.svg?v=032.svg`;
+    return `/img/${String(settingsItem.symbol).toUpperCase()}.svg?v=032`;
   }
 
   return "/img/ether.svg?v=032";
@@ -636,13 +638,13 @@ const getIcon = computed(() => {
 
 const payoutLabel = computed(() => {
   const getId = ticket.value?.get?.currency_backend_id;
-  if (!getId) return "Реквизиты";
+  if (!getId) return tr("Реквизиты");
 
   const item = byBackendId.get(getId);
-  if (!item) return "Реквизиты";
+  if (!item) return tr("Реквизиты");
 
-  if (item.fiat === "rub") return RUB_PLACEHOLDERS[item.rubKind] || "Реквизиты";
-  return `${ticket.value?.get?.symbol || ""} адрес`;
+  if (item.fiat === "rub") return RUB_PLACEHOLDERS[item.rubKind] || tr("Реквизиты");
+  return tr("{p0} адрес", { p0: (ticket.value?.get?.symbol || "") });
 });
 
 const isFileLocked = computed(() => {
@@ -660,10 +662,10 @@ const fetchTicket = async () => {
   loading.value = true;
   error.value = "";
   try {
-    const res = await fetch(`/api/tickets/${encodeURIComponent(ticketId.value)}`);
+    const res = await apiFetch(`/api/tickets/${encodeURIComponent(ticketId.value)}`);
     if (!res.ok) {
       const txt = await res.text().catch(() => "");
-      error.value = `Ошибка: ${res.status} ${txt}`.slice(0, 250);
+      error.value = tr("Ошибка: {p0} {p1}", { p0: (res.status), p1: (txt) }).slice(0, 250);
       ticket.value = null;
       stopTimer();
       return;
@@ -700,7 +702,7 @@ const fetchTicket = async () => {
       stopTimer();
     }
   } catch (e) {
-    error.value = `Ошибка загрузки: ${String(e)}`.slice(0, 250);
+    error.value = tr("Ошибка загрузки: {p0}", { p0: (String(e)) }).slice(0, 250);
     ticket.value = null;
     stopTimer();
   } finally {
@@ -736,7 +738,7 @@ const cancelTicket = async () => {
 
   loadingCancel.value = true;
   try {
-    const res = await fetch(`/api/tickets/${encodeURIComponent(ticket.value.id)}/cancel`, { method: "PATCH" });
+    const res = await apiFetch(`/api/tickets/${encodeURIComponent(ticket.value.id)}/cancel`, { method: "PATCH" });
     if (res.ok) {
       ticket.value.status = "cancelled";
       timeState.value = "cancelled";
@@ -762,13 +764,13 @@ const confirmTicket = async () => {
       const formData = new FormData();
       formData.append("receipt", uploadedFile.value);
 
-      res = await fetch(`/api/tickets/${encodeURIComponent(ticket.value.id)}/confirm`, {
+      res = await apiFetch(`/api/tickets/${encodeURIComponent(ticket.value.id)}/confirm`, {
         method: "PATCH",
         body: formData,
       });
     } else {
       // Для обычных сделок и для 2101 без файла — обычный PATCH без body
-      res = await fetch(`/api/tickets/${encodeURIComponent(ticket.value.id)}/confirm`, {
+      res = await apiFetch(`/api/tickets/${encodeURIComponent(ticket.value.id)}/confirm`, {
         method: "PATCH",
       });
     }
@@ -790,10 +792,10 @@ const copyAddress = async () => {
 
     if (isFiatCardTransferGive.value) {
       valueToCopy = fiatTargetValue.value;
-      copyToastText.value = matchedFiatInRow.value ? "Номер карты скопирован" : "Контакт скопирован";
+      copyToastText.value = matchedFiatInRow.value ? tr("Номер карты скопирован") : tr("Контакт скопирован");
     } else {
       valueToCopy = sendAddress.value;
-      copyToastText.value = "Адрес скопирован";
+      copyToastText.value = tr("Адрес скопирован");
     }
 
     if (!valueToCopy) return;

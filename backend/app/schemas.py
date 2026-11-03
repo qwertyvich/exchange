@@ -1,11 +1,12 @@
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
+from decimal import Decimal
 
 class Side(BaseModel):
     currency_backend_id: int
     coingecko_id: Optional[str] = None
     symbol: str
-    amount: float
+    amount: Decimal = Field(gt=0, allow_inf_nan=False)
 
 class Client(BaseModel):
     telegram: str
@@ -17,6 +18,8 @@ class RatesSnapshot(BaseModel):
     get_usd: Optional[float] = None
 
 class TicketCreate(BaseModel):
+    quote_token: str = ""
+    quote_id: str = ""
     give: Side
     get: Side
     fee_percent: float = Field(ge=0, le=100)

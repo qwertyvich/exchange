@@ -12,7 +12,7 @@
         <form @submit.prevent="onSubmit">
           <div class="flex flex-col md:gap-8 gap-4 md:px-7 md:py-10 px-6 pb-6 pt-5">
             <h3 class="md:text-[32px] text-2xl font-medium leading-[120%] text-center">
-              Регистрация
+              {{ tr("Регистрация") }}
             </h3>
 
             <!-- Fields -->
@@ -37,12 +37,12 @@
                     for="reg_name"
                     class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
                   >
-                    Имя профиля
+                    {{ tr("Имя профиля") }}
                   </label>
                 </div>
 
                 <p v-if="showNameError" class="text-danger md:text-sm text-xs font-medium">
-                  {{ nameError }}
+                  {{ tr(nameError) }}
                 </p>
               </div>
 
@@ -71,7 +71,7 @@
                 </div>
 
                 <p v-if="showEmailError" class="text-danger md:text-sm text-xs font-medium">
-                  {{ emailError }}
+                  {{ tr(emailError) }}
                 </p>
               </div>
 
@@ -96,14 +96,14 @@
                       for="reg_password"
                       class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
                     >
-                      Пароль
+                      {{ tr("Пароль") }}
                     </label>
 
                     <button
                       type="button"
                       class="absolute md:right-8 right-6 top-1/2 -translate-y-1/2 cursor-pointer text-icon-hover transition"
                       :disabled="isSubmitting"
-                      aria-label="Показать/скрыть пароль"
+                      :aria-label="tr(&quot;Показать/скрыть пароль&quot;)"
                       @click="showPassword = !showPassword"
                     >
                       <svg
@@ -137,7 +137,7 @@
                   </div>
 
                   <p v-if="showPasswordError" class="text-danger md:text-sm text-xs font-medium">
-                    {{ passwordError }}
+                    {{ tr(passwordError) }}
                   </p>
                 </div>
 
@@ -161,14 +161,14 @@
                       for="reg_confirm"
                       class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
                     >
-                      Подтвердите пароль
+                      {{ tr("Подтвердите пароль") }}
                     </label>
 
                     <button
                       type="button"
                       class="absolute md:right-8 right-6 top-1/2 -translate-y-1/2 cursor-pointer text-icon-hover transition"
                       :disabled="isSubmitting"
-                      aria-label="Показать/скрыть пароль"
+                      :aria-label="tr(&quot;Показать/скрыть пароль&quot;)"
                       @click="showConfirm = !showConfirm"
                     >
                       <svg
@@ -202,7 +202,7 @@
                   </div>
 
                   <p v-if="showConfirmError" class="text-danger md:text-sm text-xs font-medium">
-                    {{ confirmError }}
+                    {{ tr(confirmError) }}
                   </p>
                 </div>
               </div>
@@ -216,7 +216,7 @@
               :disabled="!canSubmit"
             >
               <p class="md:text-xl text-base font-medium leading-[140%]">
-                {{ isSubmitting ? "Регистрация..." : "Зарегистрироваться" }}
+                {{ isSubmitting ? tr("Регистрация...") : tr("Зарегистрироваться") }}
               </p>
             </button>
 
@@ -228,7 +228,7 @@
                 type="button"
               >
                 <span class="md:text-xl text-base font-light leading-[140%] text-text-secondary py-4 md:py-5">
-                  Вход
+                  {{ tr("Вход") }}
                 </span>
               </button>
             </RouterLink>
@@ -240,6 +240,7 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
 import { computed, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -268,30 +269,30 @@ const emailFormatOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 // errors (строки)
 const nameError = computed(() => {
   const v = profileName.value.trim();
-  if (!v) return "Обязательное поле";
-  if (v.length < 4) return "От 4 символов";
-  if (v.length > 10) return "До 10 символов";
+  if (!v) return tr("Обязательное поле");
+  if (v.length < 4) return tr("От 4 символов");
+  if (v.length > 10) return tr("До 10 символов");
   return "";
 });
 
 const emailError = computed(() => {
   const v = email.value.trim();
-  if (!v) return "Обязательное поле";
-  if (!emailFormatOk(v)) return "Некорректный формат E-mail";
+  if (!v) return tr("Обязательное поле");
+  if (!emailFormatOk(v)) return tr("Некорректный формат E-mail");
   return "";
 });
 
 const passwordError = computed(() => {
   const v = password.value;
-  if (!v) return "Обязательное поле";
-  if (v.length < 8) return "От 8 символов";
+  if (!v) return tr("Обязательное поле");
+  if (v.length < 8) return tr("От 8 символов");
   return "";
 });
 
 const confirmError = computed(() => {
   const v = confirmPassword.value;
-  if (!v) return "Обязательное поле";
-  if (v !== password.value) return "Пароли не совпадают";
+  if (!v) return tr("Обязательное поле");
+  if (v !== password.value) return tr("Пароли не совпадают");
   return "";
 });
 

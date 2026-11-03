@@ -15,7 +15,7 @@
     <div class="flex flex-col md:gap-8 gap-4 md:px-7 md:py-10 px-6 pb-6 pt-5">
             <!-- Title (как в модалке, но по центру) -->
             <h3 class="md:text-[32px] text-2xl font-medium leading-[120%] text-center">
-              Вход
+              {{ tr("Вход") }}
             </h3>
             
 
@@ -61,7 +61,7 @@
                       for="login_password"
                       class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-125"
                     >
-                      Пароль
+                      {{ tr("Пароль") }}
                     </label>
 
                     <!-- Иконка глаза как в модалке (размер/позиция) -->
@@ -69,7 +69,7 @@
                       type="button"
                       class="absolute md:right-8 right-6 top-1/2 -translate-y-1/2 cursor-pointer text-icon-hover transition"
                       :disabled="isSubmitting"
-                      aria-label="Показать/скрыть пароль"
+                      :aria-label="tr(&quot;Показать/скрыть пароль&quot;)"
                       @click="showPassword = !showPassword"
                     >
                       <svg
@@ -110,7 +110,7 @@
 
             <!-- Submit (точно как в модалке) -->
             <p v-if="authError" class="text-danger md:text-base text-sm font-medium text-center">
-              {{ authError }}
+              {{ tr(authError) }}
             </p>
             <button
               data-slot="button"
@@ -119,7 +119,7 @@
               :disabled="!canSubmit"
             >
               <p class="md:text-xl text-base font-medium leading-[140%]">
-                {{ isSubmitting ? "Вход..." : "Войти" }}
+                {{ isSubmitting ? tr("Вход...") : tr("Войти") }}
               </p>
             </button>
 
@@ -136,7 +136,7 @@
                 @click="navigate"
               >
                 <span class="md:text-xl text-base font-light leading-[140%] text-text-secondary py-4 md:py-5">
-                  Регистрация
+                  {{ tr("Регистрация") }}
                 </span>
               </button>
             </RouterLink>
@@ -148,6 +148,7 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -187,7 +188,7 @@ async function onSubmit() {
     });
 
     if (!res.ok) {
-      authError.value = "Введены неверные данные";
+      authError.value = tr("Введены неверные данные");
       return;
     }
     const data = await res.json();

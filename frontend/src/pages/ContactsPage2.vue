@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center md:gap-12 gap-9 md:py-24 py-8 max-w-225 w-full self-center grow basis-full container text-white">
-    <h2 class="md:text-5xl text-[28px] font-medium leading-[120%]">Связаться с нами</h2>
+    <h2 class="md:text-5xl text-[28px] font-medium leading-[120%]">{{ tr("Связаться с нами") }}</h2>
 
     <div class="flex max-md:flex-col md:gap-6 gap-4.5 w-full">
       <div class="flex flex-col md:gap-6 gap-4.5 basis-full">
@@ -23,7 +23,7 @@
               type="button"
             >
             <img :src="telegaIcon" alt="Telegram" class="size-5 md:size-6 object-contain shrink-0" />
-              <p class="md:text-xl text-base font-medium leading-[140%]">Telegram-канал</p>
+              <p class="md:text-xl text-base font-medium leading-[140%]">{{ tr("Telegram-канал") }}</p>
             </button>
           </a>
 
@@ -45,7 +45,7 @@
 
         <div class="px-8 py-7 flex items-center gap-4 text-text-secondary bg-bg-tertiary rounded-[28px] border border-border-secondary">
           <h4 class="md:text-2xl text-xl font-medium leading-[130%] basis-full">24/7</h4>
-          <span class="md:text-base text-sm font-light leading-[150%] shrink-0">Режим работы</span>
+          <span class="md:text-base text-sm font-light leading-[150%] shrink-0">{{ tr("Режим работы") }}</span>
         </div>
       </div>
 
@@ -81,7 +81,7 @@
                 for="_r_67_"
                 class="md:text-base text-xs font-light leading-[150%] absolute pointer-events-none text-text-tertiary duration-200 transform md:-translate-y-1 -translate-y-0.5 md:top-5 top-3 z-10 origin-[0] md:left-8 left-6 bg-bg-primary peer-hover:bg-bg-hover md:peer-focus:-translate-y-1 peer-focus:-translate-y-0.5 peer-focus:scale-100 peer-placeholder-shown:not-peer-focus:top-12 md:peer-placeholder-shown:-translate-y-4.5 peer-placeholder-shown:-translate-y-6.5 peer-placeholder-shown:scale-125"
               >
-                Что вас интересует?
+                {{ tr("Что вас интересует?") }}
               </label>
             </div>
           </div>
@@ -95,7 +95,7 @@
           @click="sendAsk"
         >
           <p class="md:text-xl text-base font-medium leading-[140%]">
-            {{ isSending ? 'Отправка...' : 'Отправить' }}
+            {{ isSending ? tr("Отправка...") : tr("Отправить") }}
           </p>
         </button>
       </div>
@@ -115,7 +115,7 @@
           class="px-9 py-2.4 rounded-[22px] text-white text-lg md:text-xl font-semibold shadow-lg"
           style="background:#3b82f6;"
         >
-          ㅤ{{ toastText }}ㅤ
+          ㅤ{{ tr(toastText) }}ㅤ
         </div>
       </div>
     </Transition>
@@ -123,6 +123,8 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
+import { getPublicSettings } from "../lib/siteState";
 import { computed, onMounted, ref } from "vue";
 import telegaIcon from "/img/telega.svg";
 import whatsIcon from "/img/whats.svg";
@@ -157,7 +159,7 @@ const COPY_DATA = ref({
 
 // ===== Toast =====
 const toastVisible = ref(false);
-const toastText = ref("Скопировано");
+const toastText = ref(tr("Скопировано"));
 let timer = null;
 
 function showToast(text) {
@@ -174,14 +176,14 @@ function showToast(text) {
 async function copy(key) {
   const text = COPY_DATA.value[key];
   if (!text) {
-    showToast("Нет данных");
+    showToast(tr("Нет данных"));
     return;
   }
 
   try {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text);
-      showToast("Скопировано");
+      showToast(tr("Скопировано"));
       return;
     }
   } catch (e) {
@@ -199,9 +201,9 @@ async function copy(key) {
     const ok = document.execCommand("copy");
     document.body.removeChild(ta);
 
-    showToast(ok ? "Скопировано" : "Не удалось");
+    showToast(ok ? tr("Скопировано") : tr("Не удалось"));
   } catch (_) {
-    showToast("Не удалось");
+    showToast(tr("Не удалось"));
   }
 }
 
@@ -229,10 +231,10 @@ async function sendAsk() {
     username.value = "";
     message.value = "";
 
-    showToast("Отправлено");
+    showToast(tr("Отправлено"));
   } catch (e) {
     console.error("sendAsk error:", e);
-    showToast("Ошибка");
+    showToast(tr("Ошибка"));
   } finally {
     isSending.value = false;
   }
@@ -240,10 +242,7 @@ async function sendAsk() {
 
 async function loadPublicSettings() {
   try {
-    const res = await fetch("/api/settings/public", { method: "GET" });
-    if (!res.ok) return;
-
-    const data = await res.json();
+    const data = await getPublicSettings();
     publicSettings.value = data || {};
 
     // прокидываем значения для копирования

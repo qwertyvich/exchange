@@ -1,6 +1,9 @@
 <template>
   <section>
-    <h1>Каталог</h1>
-    <p>Тут будет поиск и список товаров.</p>
+    <h1>{{ tr("Каталог") }}</h1>
+    <p>{{ tr("Тут будет поиск и список товаров.") }}</p>
   </section>
 </template>
+<script setup>
+import { tr } from '../lib/i18n';
+</script>

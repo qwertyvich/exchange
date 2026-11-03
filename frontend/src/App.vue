@@ -1,77 +1,38 @@
 <template>
   <div class="appShell">
-    <Header />
+    <img v-if="route.path === '/'" class="appBackground" src="/_next/static/media/bg.png" alt="" aria-hidden="true" fetchpriority="high" />
+    <Header v-if="siteReady" />
 
     <main class="appScroll">
-      <RouterView />
+      <RouterView v-if="siteReady" />
     </main>
 
     <!-- GLOBAL LOADER -->
     <Transition name="loaderFade">
       <div
-        v-if="showLoader"
+        v-if="!siteReady"
         class="loaderOverlay"
         aria-label="Loading"
         role="status"
       >
-        <img
-          class="loaderGif"
-          :src="loaderSrc"
-          alt="Loading..."
-          loading="eager"
-          decoding="async"
-        />
+        <div class="bootStatus">
+          <img class="loaderGif" src="/img/loading.gif" alt="" width="160" height="160" />
+          <p role="status">{{ tr(siteError) || tr("Загружаем обменник…") }}</p>
+          <button v-if="siteError" type="button" @click="bootstrapSite">{{ tr("Повторить") }}</button>
+        </div>
       </div>
     </Transition>
   </div>
 </template>
 
 <script setup>
-import Header from "./components/Header.vue";
-import { RouterView, useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
-
-/**
- * Путь к твоей гифке:
- * положи её в /public/img/loading.gif -> "/img/loading.gif"
- */
-const loaderSrc = "/img/loading.gif";
-
-const showLoader = ref(true);
-const router = useRouter();
-
-// минимальное время показа (чтобы не мигало)
-const MIN_MS = 1000;
-
-const hideWithMinDelay = (startedAt) => {
-  const elapsed = Date.now() - startedAt;
-  const wait = Math.max(0, MIN_MS - elapsed);
-  setTimeout(() => (showLoader.value = false), wait);
-};
-
-onMounted(() => {
-  // Первый вход: показываем загрузку коротко и плавно скрываем
-  const t0 = Date.now();
-  // даём DOM/стилям и первой странице отрендериться
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => hideWithMinDelay(t0));
-  });
-
-  // (опционально) показывать лоадер при смене страниц
-  router.beforeEach((to, from, next) => {
-    // если хочешь только на главной — раскомментируй if
-    if (to.path !== "/") return next();
-
-    showLoader.value = true;
-    next();
-  });
-
-  router.afterEach(() => {
-    const t = Date.now();
-    // чуть позже скрываем, чтобы не было "дёргания"
-    setTimeout(() => hideWithMinDelay(t), 0);
-  });
-});
+import { tr, localeTag } from './lib/i18n';
+import Header from './components/Header.vue';
+import { RouterView, useRoute } from 'vue-router';
+const route = useRoute();
+import { onMounted } from 'vue';
+import { siteReady, siteError, bootstrapSite } from './lib/siteState';
+onMounted(bootstrapSite);
 </script>
 
 <style>
@@ -94,7 +55,9 @@ html, body {
   overflow-x: hidden;
 }
 
+.appBackground { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .appShell {
+  position: relative;
   width: 100%;
   height: 100dvh;
   display: flex;
@@ -118,6 +81,12 @@ html, body {
   height: 0;
 }
 
+.bootStatus { text-align: center; color: #fff; }
+.bootStatus button { cursor: pointer; padding: 12px 24px; border-radius: 14px; margin-top: 16px; }
+@media (min-width: 1280px) and (max-width: 1399px) {
+  .siteHeader { column-gap: 12px; }
+  .siteHeader > .siteNavigation { position: static; left: auto; translate: none; transform: none; }
+}
 /* Loader overlay */
 .loaderOverlay {
   position: fixed;

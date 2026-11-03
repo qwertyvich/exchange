@@ -1,20 +1,15 @@
-import json
-from pathlib import Path
-from typing import Any, Dict
+from copy import deepcopy
+from .documents import read_document, write_document
 
-_SETTINGS: Dict[str, Any] | None = None
 
-def load_settings(force: bool = False) -> Dict[str, Any]:
-    global _SETTINGS
-    if _SETTINGS is not None and not force:
-        return _SETTINGS
+def load_settings(force=False):
+    return deepcopy(read_document("settings", {}))
 
-    path = Path(__file__).resolve().parent / "settings.json"
-    data = json.loads(path.read_text(encoding="utf-8"))
-    _SETTINGS = data
-    return data
-    
-    
-def reset_settings_cache() -> None:
-    global _SETTINGS
-    _SETTINGS = None
+
+def save_settings(data):
+    write_document("settings", data)
+
+
+def reset_settings_cache():
+    # Database reads work across all API workers.
+    pass

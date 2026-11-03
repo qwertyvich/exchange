@@ -1,6 +1,6 @@
 <!-- Header.vue -->
 <template>
-  <header class="relative flex justify-between xl:px-12 xl:pt-12 p-4 z-50">
+  <header class="siteHeader relative flex justify-between xl:px-12 xl:pt-12 p-4 z-50">
     <!-- LEFT: logo + controls -->
     <div
       class="flex xl:gap-4 max-xl:justify-between gap-7.5 p-3 xl:rounded-[26px] rounded-[22px] bg-bg-tertiary border border-border-secondary max-xl:w-full"
@@ -8,7 +8,7 @@
       <RouterLink to="/" class="min-w-0 shrink">
         <img
           alt="logo"
-          loading="lazy"
+          loading="eager"
           width="2024"
           height="561"
           decoding="async"
@@ -20,45 +20,7 @@
 
       <div class="ml-auto flex items-center gap-2 shrink-0">
         <!-- Language (desktop) -->
-        <details ref="langDetails" class="relative group" @click.stop>
-          <summary
-            class="list-none cursor-pointer inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-all duration-150 bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary border border-border-primary outline-none xl:p-4 p-3 xl:rounded-[18px] rounded-[14px]"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-chevron-down text-text-tertiary size-4.5 transition-transform duration-150 group-open:rotate-180"
-              aria-hidden="true"
-            >
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-            <p class="md:text-base text-sm font-medium leading-[150%] px-1.5">{{ currentLang }}</p>
-          </summary>
-
-          <div class="absolute right-0 mt-2 w-[120px] rounded-[18px] bg-bg-tertiary border border-border-secondary p-2 z-50">
-            <button
-              type="button"
-              class="w-full text-left px-4 py-2 rounded-[14px] hover:bg-bg-secondary-hover text-text-primary"
-              @click="setLang('RU')"
-            >
-              RU
-            </button>
-            <button
-              type="button"
-              class="w-full text-left px-4 py-2 rounded-[14px] hover:bg-bg-secondary-hover text-text-primary"
-              @click="setLang('EN')"
-            >
-              EN
-            </button>
-          </div>
-        </details>
+        <LanguageMenu ref="langDetails" />
 
         <!-- Burger / X (mobile) -->
         <button
@@ -113,19 +75,19 @@
 
     <!-- CENTER NAV (desktop) -->
     <div
-      class="absolute left-1/2 -translate-x-1/2 flex gap-2 p-3 rounded-[26px] bg-bg-tertiary border border-border-secondary max-xl:hidden"
+      class="siteNavigation absolute left-1/2 -translate-x-1/2 flex gap-2 p-3 rounded-[26px] bg-bg-tertiary border border-border-secondary max-xl:hidden"
     >
       <RouterLink to="/" :class="navBase" exact-active-class="bg-bg-secondary-active border-border-active">
-        <p class="md:text-base text-sm font-medium leading-[150%]">Обмен</p>
+        <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Обмен") }}</p>
       </RouterLink>
       <RouterLink to="/faq" :class="navBase" active-class="bg-bg-secondary-active border-border-active">
         <p class="md:text-base text-sm font-medium leading-[150%]">FAQ</p>
       </RouterLink>
       <RouterLink to="/contacts" :class="navBase" active-class="bg-bg-secondary-active border-border-active">
-        <p class="md:text-base text-sm font-medium leading-[150%]">Контакты</p>
+        <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Контакты") }}</p>
       </RouterLink>
       <RouterLink to="/rules" :class="navBase" active-class="bg-bg-secondary-active border-border-active">
-        <p class="md:text-base text-sm font-medium leading-[150%]">Правила</p>
+        <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Правила") }}</p>
       </RouterLink>
     </div>
 
@@ -137,14 +99,14 @@
       to="/login"
       class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary rounded-[18px] py-4 px-5"
     >
-      <p class="md:text-base text-sm font-medium leading-[150%]">Вход</p>
+      <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Вход") }}</p>
     </RouterLink>
 
     <RouterLink
       to="/registration"
       class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none text-text-primary border border-border-primary hover:border-border-secondary rounded-[18px] py-4 px-5"
     >
-      <p class="md:text-base text-sm font-medium leading-[150%]">Регистрация</p>
+      <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Регистрация") }}</p>
     </RouterLink>
   </template>
 
@@ -164,26 +126,25 @@
       @click="logout"
       class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none text-text-primary border border-border-primary hover:border-border-secondary rounded-[18px] py-4 px-5"
     >
-      <p class="md:text-base text-sm font-medium leading-[150%]">Выйти</p>
+      <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Выйти") }}</p>
     </button>
   </template>
 </div>
 
     <!-- ✅ MOBILE MENU (как в оригинале: шапка отдельным блоком, потом отступ, потом кнопки) -->
     <Teleport to="body">
-      <Transition name="overlayFade">
-        <div v-if="isMobileMenuOpen" class="fixed inset-0 z-[9000]" @click.self="closeMobileMenu">
-          <div class="absolute inset-0 bg-black/25"></div>
+      <Transition name="glass-menu">
+        <div v-if="isMobileMenuOpen" data-mobile-navigation class="fixed inset-0 z-[9000]" @click.self="closeMobileMenu">
+          <div class="absolute inset-0 bg-black/25" @click="closeMobileMenu"></div>
 
-          <Transition name="slideDown">
-            <div class="relative mx-4 mt-4">
+            <div class="glassNavigationPanel relative mx-4 mt-4">
               <!-- BLOCK 1: header bar -->
-              <div class="rounded-[26px] bg-bg-tertiary border border-border-secondary p-3">
+              <div class="glassNavigationSurface rounded-[26px] bg-bg-tertiary border border-border-secondary p-3">
                 <div class="flex items-center justify-between">
                   <RouterLink to="/" class="flex items-center gap-3 min-w-0" @click="closeMobileMenu">
                     <img
                       alt="logo"
-                      loading="lazy"
+                      loading="eager"
                       width="2024"
                       height="561"
                       decoding="async"
@@ -195,51 +156,13 @@
 
                   <div class="flex items-center gap-2 shrink-0">
                     <!-- language (mobile) same style -->
-                    <details ref="langDetailsMobile" class="relative group" @click.stop>
-                      <summary
-                        class="list-none cursor-pointer inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-all duration-150 bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary border border-border-primary outline-none p-3 rounded-[14px]"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-chevron-down text-text-tertiary size-4.5 transition-transform duration-150 group-open:rotate-180"
-                          aria-hidden="true"
-                        >
-                          <path d="m6 9 6 6 6-6"></path>
-                        </svg>
-                        <p class="text-sm font-medium leading-[150%] px-1.5">{{ currentLang }}</p>
-                      </summary>
-
-                      <div class="absolute right-0 mt-2 w-[120px] rounded-[18px] bg-bg-tertiary border border-border-secondary p-2 z-50">
-                        <button
-                          type="button"
-                          class="w-full text-left px-4 py-2 rounded-[14px] hover:bg-bg-secondary-hover text-text-primary"
-                          @click="setLang('RU')"
-                        >
-                          RU
-                        </button>
-                        <button
-                          type="button"
-                          class="w-full text-left px-4 py-2 rounded-[14px] hover:bg-bg-secondary-hover text-text-primary"
-                          @click="setLang('EN')"
-                        >
-                          EN
-                        </button>
-                      </div>
-                    </details>
+                    <LanguageMenu ref="langDetailsMobile" />
 
                     <!-- close -->
                     <button
                       class="inline-flex items-center justify-center size-11 rounded-[14px] bg-bg-secondary/40 hover:bg-bg-secondary/55 border border-white/25 text-white shrink-0"
                       type="button"
-                      aria-label="Закрыть меню"
+                      :aria-label="tr(&quot;Закрыть меню&quot;)"
                       @click="closeMobileMenu"
                     >
                       <svg
@@ -267,19 +190,19 @@
               <div class="h-4"></div>
 
               <!-- BLOCK 2: nav + auth -->
-              <div class="rounded-[26px] bg-bg-tertiary border border-border-secondary p-3">
+              <div class="glassNavigationSurface rounded-[26px] bg-bg-tertiary border border-border-secondary p-3">
                 <div class="grid gap-2">
                   <RouterLink to="/" :class="mobileNavBase" exact-active-class="bg-bg-secondary-active border-border-active" @click="closeMobileMenu">
-                    Обмен
+                    {{ tr("Обмен") }}
                   </RouterLink>
                   <RouterLink to="/faq" :class="mobileNavBase" active-class="bg-bg-secondary-active border-border-active" @click="closeMobileMenu">
                     FAQ
                   </RouterLink>
                   <RouterLink to="/contacts" :class="mobileNavBase" active-class="bg-bg-secondary-active border-border-active" @click="closeMobileMenu">
-                    Контакты
+                    {{ tr("Контакты") }}
                   </RouterLink>
                   <RouterLink to="/rules" :class="mobileNavBase" active-class="bg-bg-secondary-active border-border-active" @click="closeMobileMenu">
-                    Правила
+                    {{ tr("Правила") }}
                   </RouterLink>
                 </div>
 
@@ -292,7 +215,7 @@
                     class="w-full rounded-[18px] py-4 px-5 bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary font-medium text-center"
                     @click="closeMobileMenu"
                   >
-                    Вход
+                    {{ tr("Вход") }}
                   </RouterLink>
 
                   <RouterLink
@@ -300,7 +223,7 @@
                     class="w-full rounded-[18px] py-4 px-5 border border-border-primary hover:border-border-secondary text-text-primary font-medium text-center"
                     @click="closeMobileMenu"
                   >
-                    Регистрация
+                    {{ tr("Регистрация") }}
                   </RouterLink>
                 </template>
 
@@ -319,7 +242,7 @@
                     class="w-full rounded-[18px] py-4 px-5 border border-border-primary hover:border-border-secondary text-text-primary font-medium text-center"
                     @click="logout"
                   >
-                    Выйти
+                    {{ tr("Выйти") }}
                   </button>
                 </template>
               </div>
@@ -327,7 +250,6 @@
               </div>
 
             </div>
-          </Transition>
         </div>
       </Transition>
     </Teleport>
@@ -335,6 +257,8 @@
 </template>
 
 <script setup>
+import { tr, localeTag } from '../lib/i18n';
+import LanguageMenu from "./LanguageMenu.vue";
 import { RouterLink, useRouter } from "vue-router";
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
@@ -379,22 +303,16 @@ function logout() {
 }
 
 // language
-const currentLang = ref("RU");
 const langDetails = ref(null);
 const langDetailsMobile = ref(null);
 
 function closeLangAll() {
-  if (langDetails.value) langDetails.value.open = false;
-  if (langDetailsMobile.value) langDetailsMobile.value.open = false;
+  langDetails.value?.close();
+  langDetailsMobile.value?.close();
 }
 
-function setLang(lang) {
-  currentLang.value = lang;
-  closeLangAll();
-}
 
-onMounted(() => document.addEventListener("click", closeLangAll));
-onBeforeUnmount(() => document.removeEventListener("click", closeLangAll));
+
 
 onMounted(loadMe);
 
@@ -449,26 +367,6 @@ details > summary {
   list-style: none;
 }
 
-/* overlay fade */
-.overlayFade-enter-active,
-.overlayFade-leave-active {
-  transition: opacity 150ms ease;
-}
-.overlayFade-enter-from,
-.overlayFade-leave-to {
-  opacity: 0;
-}
-
-/* menu slide down */
-.slideDown-enter-active,
-.slideDown-leave-active {
-  transition: transform 180ms ease, opacity 180ms ease;
-}
-.slideDown-enter-from,
-.slideDown-leave-to {
-  transform: translateY(-14px);
-  opacity: 0;
-}
 </style>
 
 <style>

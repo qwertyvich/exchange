@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI, Depends, HTTPException, Query
 from pydantic import BaseModel
-from aiogram import Bot
+from .notifications import QueuedBot, notification_worker, enabled as telegram_enabled
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import Optional, List
@@ -27,24 +27,38 @@ import os
 from .db import Base, engine, SessionLocal
 from .schemas import TicketCreate, TicketOut, Side, Client, RatesSnapshot, ProfileNameIn, ProfilePasswordIn
 from .crud import create_ticket, get_ticket
-from .settings_loader import load_settings, reset_settings_cache
+from .settings_loader import load_settings, reset_settings_cache, save_settings
+from .settings_validation import validated_settings
+from .documents import read_document
+from .rates import rate_table, rates_worker, make_quote, decode_quote, CRYPTO
+from contextlib import asynccontextmanager
+from html import escape
+import asyncio
+from decimal import Decimal
+from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
+from .models import Ticket
 
 
 
 
 
-settings = load_settings()
-SETTINGS_PATH = Path(__file__).resolve().parent / "settings.json"
-deposit_wallets = settings["deposit_wallets"] 
+# Telegram credentials are resolved by the delivery worker, after each admin update.
+CHAT_ID = "tickets"
+MESS_CHAT = "messages"
+bot = QueuedBot()
 
-with SETTINGS_PATH.open("r", encoding="utf-8") as f:
-    data = json.load(f)
+def public_domain():
+    return (os.getenv("PUBLIC_URL") or load_settings().get("bot", {}).get("domain", "http://localhost:5173")).rstrip("/")
 
-API_TOKEN = data.get("bot", {}).get("API_TOKEN")#"8231371926:AAG0lIEFcfxB6GsnXllgzi2hdTVjyfZ3wDQ"
-CHAT_ID = int(data.get("bot", {}).get("CHAT_ID"))     #чат тикетов
-MESS_CHAT = int(data.get("bot", {}).get("MESS_CHAT"))        #чат отстуков
-bot = Bot(token=API_TOKEN)
-domain = data.get("bot", {}).get("domain") 
+@asynccontextmanager
+async def lifespan(app):
+    tasks = [asyncio.create_task(rates_worker()), asyncio.create_task(notification_worker())]
+    yield
+    for task in tasks:
+        task.cancel()
+    await asyncio.gather(*tasks, return_exceptions=True)
+
 
 moneta = {
     1: "Bitcoin",
@@ -88,14 +102,15 @@ moneta = {
     
 }
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 class ContactPayload(BaseModel):
     username: str
     message: str
 
 @app.get("/api/settings/public")
-def public_settings():
+def public_settings(response: Response):
+    response.headers["Cache-Control"] = "public, max-age=10"
     s = load_settings()
     # отдаём только то, что можно публично
     return {
@@ -111,10 +126,35 @@ def public_settings():
         "fiat_in": s.get("fiat_in", {}),
         "fiat_out": s.get("fiat_out", {}),
         "fiat_in_methods": s.get("fiat_in_methods", {}),
+        "direction_rates": s.get("direction_rates", {}),
         }
 
 
-Base.metadata.create_all(bind=engine)
+@app.get("/health")
+def health():
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+    return {"status": "ok", "database": engine.dialect.name}
+
+@app.get("/api/rates")
+def public_rates(response: Response):
+    response.headers["Cache-Control"] = "public, max-age=10"
+    return rate_table(load_settings())
+
+class QuoteIn(BaseModel):
+    give_id: int
+    get_id: int
+    amount: str
+
+@app.post("/api/quote")
+def quote(payload: QuoteIn, request: Request, response: Response):
+    try:
+        result = make_quote(load_settings(), payload.give_id, payload.get_id, payload.amount)
+        ensure_guest_id(request, response)
+        return result
+    except (ValueError, ArithmeticError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
 
 
 class ContactPayload(BaseModel):
@@ -143,22 +183,17 @@ def get_current_user(
     return get_user_by_id(db, user_id)
 
 
-@app.on_event("shutdown")
-async def shutdown():
-    await bot.session.close()
-
-
 @app.post("/api/ask")
 async def ask(payload: ContactPayload):
     try:
         await bot.send_message(
             MESS_CHAT,
-            f"<b>✉️Сообщение</b>\n\n<b>От: {payload.username}</b>\n{payload.message}",
+            f"<b>✉️Сообщение</b>\n\n<b>От: {escape(payload.username)}</b>\n{escape(payload.message)}",
             parse_mode="HTML",
         )
     except Exception:
         pass
-    return {"status": "sent"}
+    return {"status": "queued" if telegram_enabled() else "disabled"}
 
 
 @app.post("/api/tickets", response_model=dict)
@@ -180,13 +215,41 @@ async def create_ticket_endpoint(
     if payload.get_is_fiat and not payload.fiat_code:
         raise HTTPException(status_code=400, detail="fiat_code is required for fiat payout")
 
-    if user:
-        # пользователь залогинен — тикет сразу его
-        t = create_ticket(db, payload, guest_id=None, user_id=user.id)
-    else:
-        # без логина — по guest_id
-        gid = ensure_guest_id(request, response)
-        t = create_ticket(db, payload, guest_id=gid, user_id=None)
+    try:
+        locked = decode_quote(payload.quote_token)
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if locked["give_id"] != payload.give.currency_backend_id or locked["get_id"] != payload.get.currency_backend_id:
+        raise HTTPException(status_code=400, detail="Направление не совпадает с расчётом")
+    payload.give.amount = Decimal(locked["give_amount"])
+    payload.get.amount = Decimal(locked["get_amount"])
+    payload.give.symbol = locked["give_symbol"]
+    payload.get.symbol = locked["get_symbol"]
+    payload.give.coingecko_id = CRYPTO.get(locked["give_id"], (None,))[0]
+    payload.get.coingecko_id = CRYPTO.get(locked["get_id"], (None,))[0]
+    payload.fee_percent = locked["fee_percent"]
+    payload.get_is_fiat = locked["get_id"] not in CRYPTO
+    payload.fiat_code = payload.get.symbol.lower() if payload.get_is_fiat else None
+    payload.rates_snapshot = RatesSnapshot()
+    payload.quote_id = locked["jti"]
+    existing = db.query(Ticket).filter_by(quote_id=payload.quote_id).first()
+    if existing:
+        require_ticket_access(existing, request, user)
+        return {"ok": True, "ticket_id": existing.id, "url": f"/tickets/{existing.id}", "status": existing.status}
+
+    try:
+        if user:
+            t = create_ticket(db, payload, guest_id=None, user_id=user.id)
+        else:
+            gid = ensure_guest_id(request, response)
+            t = create_ticket(db, payload, guest_id=gid, user_id=None)
+    except IntegrityError:
+        db.rollback()
+        existing = db.query(Ticket).filter_by(quote_id=payload.quote_id).first()
+        if not existing:
+            raise
+        require_ticket_access(existing, request, user)
+        return {"ok": True, "ticket_id": existing.id, "url": f"/tickets/{existing.id}", "status": existing.status}
     if t.give_usd is not None and t.give_rub is not None:
         price_line = f"<b>┣ Цена за 1 {t.give_symbol}: {round(t.give_usd)} $ | {t.give_rub} ₽\n</b>"
     elif t.give_rub is not None:
@@ -197,26 +260,26 @@ async def create_ticket_endpoint(
         await bot.send_message(
             CHAT_ID,
             f"<b>📄 Тикет #{t.id} </b>\n"+
-            f"<b> <blockquote>{moneta[t.give_currency_backend_id]} -> {moneta[t.get_currency_backend_id]}</blockquote></b>\n\n"+
-            f"<b>┏ К обмену: {moneta[t.give_currency_backend_id]}</b>\n"+
+            f"<b> <blockquote>{escape(moneta.get(t.give_currency_backend_id, t.give_symbol))} -> {escape(moneta.get(t.get_currency_backend_id, t.get_symbol))}</blockquote></b>\n\n"+
+            f"<b>┏ К обмену: {escape(moneta.get(t.give_currency_backend_id, t.give_symbol))}</b>\n"+
             f"{price_line}"+
             f"<b>┗ Сумма: {t.give_amount} {t.give_symbol}\n</b>\n"+
-            f"<b>┏ К получению: {moneta[t.get_currency_backend_id]}</b>\n"+
+            f"<b>┏ К получению: {escape(moneta.get(t.get_currency_backend_id, t.get_symbol))}</b>\n"+
             f"<b>┗ Сумма: {t.get_amount} {t.get_symbol}\n</b>\n"+
             f"<b>👤Клиент:</b>\n"+
-            f"<b>┏Telegram: {t.telegram}</b>\n"+
-            f"<b>┗Счёт: {t.payout_details}</b>\n\n"+
-            f"<b>Адрес отправки: {deposit_wallets[str(t.give_currency_backend_id)]['address']}</b>\n"+
+            f"<b>┏Telegram: {escape(t.telegram)}</b>\n"+
+            f"<b>┗Счёт: {escape(t.payout_details)}</b>\n\n"+
+            f"<b>Адрес отправки: {escape(str(load_settings().get('deposit_wallets', {}).get(str(t.give_currency_backend_id), {}).get('address', 'См. реквизиты заявки')))}</b>\n"+
             f"<b>Комиссия: {t.fee_percent}%</b>\n\n",
             parse_mode="HTML",
         )
         await bot.send_message(
             CHAT_ID,
-            f"<b>👆🏻{moneta[t.get_currency_backend_id]} </b>\n"+ 
-            f"<b><pre>{t.payout_details}</pre></b>\n"+
+            f"<b>👆🏻{escape(moneta.get(t.get_currency_backend_id, t.get_symbol))} </b>\n"+
+            f"<b><pre>{escape(t.payout_details)}</pre></b>\n"+
             f"<b><pre>{t.get_amount}</pre></b>\n"+
-            f"<a href=\"{domain}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=cancel\"><b>❌Отменить сделку</b></a>\n"+
-            f"<a href=\"{domain}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=complete\"><b>✅Подтвердить перевод</b></a>",
+            f"<a href=\"{public_domain()}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=cancel\"><b>❌Отменить сделку</b></a>\n"+
+            f"<a href=\"{public_domain()}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=complete\"><b>✅Подтвердить перевод</b></a>",
             parse_mode="HTML",
         )
         
@@ -228,7 +291,9 @@ async def create_ticket_endpoint(
 @app.get("/api/tickets/{ticket_id}")
 async def api_get_ticket(
     ticket_id: str,
+    request: Request,
     db: Session = Depends(get_db),
+    user=Depends(get_current_user),
     key: str | None = Query(default=None),
     action: str | None = Query(default=None, pattern="^(cancel|complete)$"),
 ):
@@ -236,6 +301,8 @@ async def api_get_ticket(
     if not t:
         raise HTTPException(status_code=404, detail="ticket not found")
     
+    if not action:
+        require_ticket_access(t, request, user)
     if action:
         if not key:
             raise HTTPException(status_code=403, detail="key is required")
@@ -290,11 +357,12 @@ async def api_get_ticket(
     }
 
 @app.patch("/api/tickets/{ticket_id}/cancel")
-async def cancel_ticket(ticket_id: str, db: Session = Depends(get_db)):
+async def cancel_ticket(ticket_id: str, request: Request, db: Session = Depends(get_db), user=Depends(get_current_user)):
     t = get_ticket(db, ticket_id)
     if not t:
         raise HTTPException(status_code=404, detail="ticket not found")
 
+    require_ticket_access(t, request, user)
     # если уже завершён — можно запретить (по желанию)
     if t.status == "completed":
         raise HTTPException(status_code=400, detail="cannot cancel completed ticket")
@@ -314,6 +382,8 @@ async def cancel_ticket(ticket_id: str, db: Session = Depends(get_db)):
 @app.patch("/api/tickets/{ticket_id}/confirm")
 async def confirm_ticket(
     ticket_id: str,
+    request: Request,
+    user=Depends(get_current_user),
     receipt: UploadFile | None = File(default=None),
     db: Session = Depends(get_db),
 ):
@@ -321,6 +391,7 @@ async def confirm_ticket(
     if not t:
         raise HTTPException(status_code=404, detail="ticket not found")
 
+    require_ticket_access(t, request, user)
     if t.status in ("cancelled", "completed"):
         raise HTTPException(status_code=400, detail="cannot confirm this ticket")
 
@@ -330,14 +401,16 @@ async def confirm_ticket(
             f"<b>📄 Тикет #{t.id} </b>\n"
             f"<b>✅Перевод подтвержден клиентом</b>\n"
             "----------------------\n"
-            f"<a href=\"{domain}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=cancel\"><b>❌Отменить сделку\n</b></a>"
-            f"<a href=\"{domain}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=complete\"><b>✅Подтвердить перевод</b></a>",
+            f"<a href=\"{public_domain()}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=cancel\"><b>❌Отменить сделку\n</b></a>"
+            f"<a href=\"{public_domain()}/api/tickets/{t.id}?key={make_ticket_key(t.id)}&action=complete\"><b>✅Подтвердить перевод</b></a>",
             parse_mode="HTML",
         )
 
         # если прикрепили чек — шлём его отдельным сообщением
         if receipt is not None:
-            content = await receipt.read()
+            content = await receipt.read(10 * 1024 * 1024 + 1)
+            if len(content) > 10 * 1024 * 1024:
+                raise HTTPException(status_code=413, detail="Чек не должен превышать 10 МБ")
 
             if content:
                 suffix = os.path.splitext(receipt.filename or "")[1] or ".jpg"
@@ -359,8 +432,10 @@ async def confirm_ticket(
                     if os.path.exists(tmp_path):
                         os.remove(tmp_path)
 
+    except HTTPException:
+        raise
     except Exception as e:
-        print("confirm tg error:", e)
+        print("confirm notification queue error:", type(e).__name__)
 
     t.status = "not_confirmed"
     db.add(t)
@@ -380,7 +455,7 @@ def ensure_guest_id(request: Request, response: Response) -> str:
             gid,
             httponly=True,
             samesite="lax",
-            secure=False,  # на https поставишь True
+            secure=os.getenv("PUBLIC_URL", "").startswith("https://"),
             max_age=60 * 60 * 24 * 30,
         )
     return gid
@@ -570,55 +645,23 @@ async def admin_put_settings(request: Request, user=Depends(get_current_user)):
     if not isinstance(data, dict):
         raise HTTPException(status_code=400, detail="settings must be a JSON object")
 
-    SETTINGS_PATH.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-
-    reset_settings_cache()
-    return {"ok": True, "settings": load_settings()}
+    try:
+        merged = validated_settings(load_settings(), data)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    save_settings(merged)
+    return {"ok": True, "settings": merged}
 
 
 @app.get("/api/reviews/public", response_model=List[ReviewOut])
-def public_reviews():
-    path = Path(__file__).resolve().parent / "reviews.json"
+def public_reviews(response: Response):
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
+    return read_document("reviews", [])
 
-    if not path.exists():
-        return []
 
-    try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        raise HTTPException(status_code=500, detail="failed to read reviews")
-
-    if not isinstance(raw, list):
-        raise HTTPException(status_code=500, detail="reviews must be a JSON array")
-
-    result = []
-    for item in raw:
-        if not isinstance(item, dict):
-            continue
-
-        name = str(item.get("name", "")).strip()
-        text = str(item.get("text", "")).strip()
-
-        try:
-            mark = int(item.get("mark", 0))
-        except Exception:
-            mark = 0
-
-        if not name or not text:
-            continue
-
-        if mark < 1:
-            mark = 1
-        if mark > 5:
-            mark = 5
-
-        result.append({
-            "name": name,
-            "text": text,
-            "mark": mark,
-        })
-
-    return result    
+def require_ticket_access(ticket, request, user):
+    if user and (user.is_superuser or ticket.user_id == user.id):
+        return
+    if ticket.guest_id and secrets.compare_digest(ticket.guest_id, request.cookies.get("guest_id", "")):
+        return
+    raise HTTPException(status_code=404, detail="ticket not found")
