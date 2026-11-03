@@ -384,5 +384,6 @@
   "Неверный диапазон ввода рублей": "Invalid RUB deposit range",
   "Навигация по отзывам": "Review pagination",
   "Перейти на страницу {p0}": "Go to page {p0}",
-  "Страница {p0} из {p1}": "Page {p0} of {p1}"
+  "Страница {p0} из {p1}": "Page {p0} of {p1}",
+  "Все права защищены": "All rights reserved"
 }

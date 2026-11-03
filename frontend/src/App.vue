@@ -3,9 +3,14 @@
     <img v-if="route.path === '/'" class="appBackground" src="/_next/static/media/bg.png" alt="" aria-hidden="true" fetchpriority="high" />
     <Header v-if="siteReady" />
 
-    <main class="appScroll">
-      <RouterView v-if="siteReady" />
-    </main>
+    <div class="appScroll">
+      <main class="appContent" :class="{ appContentWithFooter: route.path !== '/' }">
+        <RouterView v-if="siteReady" />
+      </main>
+      <footer v-if="siteReady && route.path !== '/'" class="siteFooter">
+        <p>{{ tr("Все права защищены") }}</p>
+      </footer>
+    </div>
 
     <!-- GLOBAL LOADER -->
     <Transition name="loaderFade">
@@ -80,6 +85,23 @@ html, body {
   width: 0;
   height: 0;
 }
+
+.appContentWithFooter {
+  min-height: 100%;
+}
+
+.siteFooter {
+  position: relative;
+  margin-top: clamp(220px, 30dvh, 400px);
+  padding: 8px 24px calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(173, 195, 231, .1);
+  background: linear-gradient(135deg, #111e35, #0b1425);
+  color: #a3afc4;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.siteFooter p { margin: 0; }
 
 .bootStatus { text-align: center; color: #fff; }
 .bootStatus button { cursor: pointer; padding: 12px 24px; border-radius: 14px; margin-top: 16px; }

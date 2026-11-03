@@ -16,3 +16,10 @@ const currentHeader = computed(() => {
   return Header0;
 });
 </script>
+
+<style>
+.siteNavLink[aria-current="page"] {
+  border-color: #83b1ff;
+  box-shadow: inset 0 0 0 1px rgba(131, 177, 255, .28);
+}
+</style>

@@ -97,14 +97,14 @@
   <template v-if="!user">
     <RouterLink
       to="/login"
-      class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary rounded-[18px] py-4 px-5"
+      class="siteNavLink inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary rounded-[18px] py-4 px-5"
     >
       <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Вход") }}</p>
     </RouterLink>
 
     <RouterLink
       to="/registration"
-      class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none text-text-primary border border-border-primary hover:border-border-secondary rounded-[18px] py-4 px-5"
+      class="siteNavLink inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none text-text-primary border border-border-primary hover:border-border-secondary rounded-[18px] py-4 px-5"
     >
       <p class="md:text-base text-sm font-medium leading-[150%]">{{ tr("Регистрация") }}</p>
     </RouterLink>
@@ -115,7 +115,7 @@
     <!-- имя (в стиле кнопки "Вход") -->
     <RouterLink
       to="/profile"
-      class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary rounded-[18px] py-4 px-5"
+      class="siteNavLink inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary rounded-[18px] py-4 px-5"
     >
       <p class="md:text-base text-sm font-medium leading-[150%]">{{ user.name }}</p>
     </RouterLink>
@@ -212,7 +212,7 @@
                 <template v-if="!user">
                   <RouterLink
                     to="/login"
-                    class="w-full rounded-[18px] py-4 px-5 bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary font-medium text-center"
+                    class="siteNavLink w-full rounded-[18px] py-4 px-5 bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary font-medium text-center"
                     @click="closeMobileMenu"
                   >
                     {{ tr("Вход") }}
@@ -220,7 +220,7 @@
 
                   <RouterLink
                     to="/registration"
-                    class="w-full rounded-[18px] py-4 px-5 border border-border-primary hover:border-border-secondary text-text-primary font-medium text-center"
+                    class="siteNavLink w-full rounded-[18px] py-4 px-5 border border-border-primary hover:border-border-secondary text-text-primary font-medium text-center"
                     @click="closeMobileMenu"
                   >
                     {{ tr("Регистрация") }}
@@ -231,7 +231,7 @@
                 <template v-else>
                   <RouterLink
                     to="/profile"
-                    class="w-full rounded-[18px] py-4 px-5 bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary font-medium text-center"
+                    class="siteNavLink w-full rounded-[18px] py-4 px-5 bg-bg-inv-primary hover:bg-bg-inv-hover text-text-inv-primary font-medium text-center"
                     @click="closeMobileMenu"
                   >
                     {{ user.name }}
@@ -351,10 +351,10 @@ onBeforeUnmount(() => {
 watch(isMobileMenuOpen, syncOverlayClass);
 
 const navBase =
-  "inline-flex items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none rounded-[18px] py-4 px-5 border border-border-primary bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary";
+  "siteNavLink inline-flex items-center justify-center gap-1.5 p-4 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none rounded-[18px] py-4 px-5 border border-border-primary bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary";
 
 const mobileNavBase =
-  "w-full rounded-[18px] py-4 px-5 border border-border-primary font-medium transition-all duration-150 bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary text-center";
+  "siteNavLink w-full rounded-[18px] py-4 px-5 border border-border-primary font-medium transition-all duration-150 bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary text-center";
 
   
 </script>
