@@ -1,0 +1,64 @@
+/* Only the decorative background moves continuously; form geometry stays stable. */
+.appBackground {
+  animation: home-ambient-drift 18s ease-in-out -5s infinite alternate;
+  transform-origin: 50% 55%;
+  will-change: transform;
+}
+
+@keyframes home-ambient-drift {
+  from { transform: translate3d(-2.5%, -1.5%, 0) scale(1.12); }
+  to { transform: translate3d(2.5%, 2.5%, 0) scale(1.16); }
+}
+
+.homeMotionReady [data-home-intro="heading"] {
+  animation: home-heading-in 700ms cubic-bezier(.22, 1, .36, 1) backwards;
+}
+.homeMotionReady [data-home-intro="form"] {
+  /* Fading without moving the form keeps an immediately opened currency list anchored. */
+  animation: home-form-in 720ms ease-out 120ms backwards;
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Reveal only after the global loader has finished leaving. */
+  .appShell:not(.homeMotionReady) [data-home-intro] { opacity: 0; }
+}
+@keyframes home-heading-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes home-form-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.homePressable {
+  transition:
+    scale 280ms cubic-bezier(.34, 1.56, .64, 1),
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .homePressable:not(:disabled):hover { scale: 1.025; }
+}
+.homePressable:not(:disabled):active {
+  scale: .95;
+  transition-duration: 90ms;
+  transition-timing-function: ease-out;
+}
+.homeSwapIcon {
+  transition: rotate 420ms cubic-bezier(.16, 1, .3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appBackground,
+  [data-home-intro],
+  [data-exchange-mode] .hero-marquee-track {
+    animation: none !important;
+    transform: none;
+    will-change: auto;
+  }
+  .homePressable, .homeSwapIcon { transition: none; }
+  .homePressable:not(:disabled):hover,
+  .homePressable:not(:disabled):active { scale: none; }
+}

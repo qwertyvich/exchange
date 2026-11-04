@@ -18,6 +18,16 @@ const currentHeader = computed(() => {
 </script>
 
 <style>
+.siteBrandBar { border-radius: 26px; }
+.siteMenuToggle {
+  background: rgba(28, 38, 57, .4);
+  border: 1px solid rgba(255, 255, 255, .25);
+  color: #fff;
+}
+.siteMenuToggle:hover { background: rgba(45, 59, 83, .55); }
+@media (max-width: 1279px) {
+  .siteBrandBar, .siteBrandRow { column-gap: 12px; }
+}
 .siteNavLink[aria-current="page"] {
   border-color: #83b1ff;
   box-shadow: inset 0 0 0 1px rgba(131, 177, 255, .28);

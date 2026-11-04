@@ -3,19 +3,10 @@
   <header class="siteHeader relative flex justify-between xl:px-12 xl:pt-12 p-4 z-50">
     <!-- LEFT: logo + controls -->
     <div
-      class="flex xl:gap-4 max-xl:justify-between gap-7.5 p-3 xl:rounded-[26px] rounded-[22px] bg-bg-tertiary border border-border-secondary max-xl:w-full"
+      class="siteBrandBar glassNavigationSurface flex xl:gap-4 max-xl:justify-between gap-7.5 p-3 xl:rounded-[26px] rounded-[26px] bg-bg-tertiary border border-border-secondary max-xl:w-full"
     >
-      <RouterLink to="/" class="min-w-0 shrink">
-        <img
-          alt="logo"
-          loading="eager"
-          width="2024"
-          height="561"
-          decoding="async"
-          class="max-h-14 w-auto max-w-full max-xl:max-w-[150px]"
-          style="color:transparent"
-          src="/_next/static/media/logo-name.webp"
-        />
+      <RouterLink to="/" class="min-w-0 shrink" aria-label="Casper Exchange">
+        <BrandLogo />
       </RouterLink>
 
       <div class="ml-auto flex items-center gap-2 shrink-0">
@@ -25,7 +16,7 @@
         <!-- Burger / X (mobile) -->
         <button
           :class="[
-            'inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none bg-bg-secondary hover:bg-bg-secondary-hover border border-border-primary size-11 p-2 xl:hidden rounded-[14px]',
+            'siteMenuToggle inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none bg-bg-secondary hover:bg-bg-secondary-hover border border-border-primary size-11 p-2 xl:hidden rounded-[14px]',
             isMobileMenuOpen ? 'text-white' : 'text-text-primary',
           ]"
           type="button"
@@ -34,7 +25,6 @@
           @click="toggleMobileMenu"
         >
           <svg
-            v-if="!isMobileMenuOpen"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -50,24 +40,6 @@
             <path d="M4 12h16"></path>
             <path d="M4 18h16"></path>
             <path d="M4 6h16"></path>
-          </svg>
-
-          <svg
-            v-else
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-x size-7"
-            aria-hidden="true"
-          >
-            <path d="M18 6 6 18"></path>
-            <path d="M6 6l12 12"></path>
           </svg>
         </button>
       </div>
@@ -146,19 +118,10 @@
 
             <div class="glassNavigationPanel relative mx-4 mt-4">
               <!-- BLOCK 1: header bar -->
-              <div class="glassNavigationSurface rounded-[26px] bg-bg-tertiary border border-border-secondary p-3">
-                <div class="flex items-center justify-between">
-                  <RouterLink to="/" class="flex items-center gap-3 min-w-0" @click="closeMobileMenu">
-                    <img
-                      alt="logo"
-                      loading="eager"
-                      width="2024"
-                      height="561"
-                      decoding="async"
-                      class="max-h-14 w-auto max-w-full max-xl:max-w-[150px]"
-                      style="color:transparent"
-                      src="/_next/static/media/logo-name.webp"
-                    />
+              <div class="siteBrandBar glassNavigationSurface rounded-[26px] bg-bg-tertiary border border-border-secondary p-3">
+                <div class="siteBrandRow flex items-center justify-between">
+                  <RouterLink to="/" class="flex items-center gap-3 min-w-0" aria-label="Casper Exchange" @click="closeMobileMenu">
+                    <BrandLogo menu />
                   </RouterLink>
 
                   <div class="flex items-center gap-2 shrink-0">
@@ -167,7 +130,7 @@
 
                     <!-- close -->
                     <button
-                      class="inline-flex items-center justify-center size-11 rounded-[14px] bg-bg-secondary/40 hover:bg-bg-secondary/55 border border-white/25 text-white shrink-0"
+                      class="siteMenuToggle inline-flex items-center justify-center size-11 rounded-[14px] bg-bg-secondary/40 hover:bg-bg-secondary/55 border border-white/25 text-white shrink-0"
                       type="button"
                       :aria-label="tr(&quot;Закрыть меню&quot;)"
                       @click="closeMobileMenu"
@@ -273,6 +236,7 @@
 <script setup>
 import { tr, localeTag } from '../lib/i18n';
 import LanguageMenu from "./LanguageMenu.vue";
+import BrandLogo from "./BrandLogo.vue";
 import { RouterLink, useRouter } from "vue-router";
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 

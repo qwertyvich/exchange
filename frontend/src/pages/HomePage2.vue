@@ -46,7 +46,7 @@
     </div>
   </div>
 </div>
-      <div class="flex flex-col md:gap-6 gap-3 text-white">
+      <div data-home-intro="heading" class="flex flex-col md:gap-6 gap-3 text-white">
         <h1 class="md:text-7xl text-[32px] font-medium leading-[110%] text-center"><br>
           {{ tr("Скоростной обмен") }} <br />
           {{ tr("иностранных валют") }}
@@ -56,7 +56,7 @@
         </span>
       </div>
 
-      <form
+      <form data-home-intro="form"
         class="flex flex-col md:gap-6 gap-2 md:p-12 p-6 md:rounded-[64px] rounded-[40px] bg-bg-tertiary border border-border-secondary"
         @submit.prevent="onSubmit"
       >
@@ -103,7 +103,7 @@
                 </p>
               </div>
 
-              <button
+              <button class="homePressable"
                 ref="giveBtnRef"
                 type="button"
                 @click="toggleDropdown('give')"
@@ -154,7 +154,7 @@
                 </p>
               </div>
 
-              <button
+              <button class="homePressable"
   ref="getBtnRef"
   type="button"
   @click="toggleDropdown('get')"
@@ -183,7 +183,7 @@
           <!-- SWAP -->
           <button
             type="button"
-            class="absolute md:size-14 size-9 bg-bg-secondary md:rounded-[16px] rounded-[12px] flex justify-center items-center border border-border-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-md:rotate-90"
+            class="homePressable absolute md:size-14 size-9 bg-bg-secondary md:rounded-[16px] rounded-[12px] flex justify-center items-center border border-border-primary top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-md:rotate-90"
             :aria-label="tr(&quot;Поменять местами&quot;)"
             disabled
           >
@@ -197,7 +197,7 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-arrow-right-left md:size-8 size-5 text-white opacity-40"
+              class="homeSwapIcon lucide lucide-arrow-right-left md:size-8 size-5 text-white opacity-40"
               aria-hidden="true"
             >
               <path d="m16 3 4 4-4 4"></path>
@@ -263,7 +263,7 @@
 
           <button
             data-slot="button"
-            class="inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap rounded-[28px] text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-red-500/20 aria-invalid:border-red-500 bg-brand hover:bg-brand-hover text-text-primary data-[state=active]:bg-brand-active data-[state=active]:text-text-inv-primary md:py-6 py-4.5 max-md:rounded-[22px]"
+            class="homePressable inline-flex w-full items-center justify-center gap-1.5 p-4 whitespace-nowrap rounded-[28px] text-sm font-medium transition-all duration-150 disabled:pointer-events-none disabled:opacity-20 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-red-500/20 aria-invalid:border-red-500 bg-brand hover:bg-brand-hover text-text-primary data-[state=active]:bg-brand-active data-[state=active]:text-text-inv-primary md:py-6 py-4.5 max-md:rounded-[22px]"
             type="submit"
             :disabled="!canExchange || isSubmitting"
           >

@@ -388,3 +388,134 @@ test('glass samples the page backdrop throughout its opening transition',async({
   for(const sample of samples){expect(sample.opacity).toBe('1');expect(sample.willChange).not.toContain('opacity');expect(sample.blur).toContain('blur(26px)');}
   await expect(anchor).not.toHaveClass(/glass-dropdown-enter-active/);
 });
+
+test('home introduction is still visible after the loader exits and motion can be reduced',async({page})=>{
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.addInitScript(()=>{
+    let sawLoader=false, sampled=false;
+    const observer=new MutationObserver(()=>{
+      const loader=document.querySelector('.loaderOverlay');
+      if(loader)sawLoader=true;
+      const heading=document.querySelector('[data-home-intro="heading"]');
+      const form=document.querySelector('[data-home-intro="form"]');
+      if(sawLoader&&!loader&&heading&&form&&!sampled){
+        sampled=true;observer.disconnect();
+        requestAnimationFrame(()=>{
+          window.introAfterLoader={
+            headingOpacity:Number(getComputedStyle(heading).opacity),
+            formOpacity:Number(getComputedStyle(form).opacity),
+            formTransform:getComputedStyle(form).transform,
+            running:form.getAnimations().some(animation=>animation.playState==='running'),
+          };
+        });
+      }
+    });
+    observer.observe(document,{childList:true,subtree:true});
+  });
+  await page.goto('/');
+  await expect.poll(()=>page.evaluate(()=>window.introAfterLoader)).toBeTruthy();
+  const intro=await page.evaluate(()=>window.introAfterLoader);
+  expect(intro.headingOpacity).toBeLessThan(1);
+  expect(intro.formOpacity).toBeLessThan(1);
+  expect(intro.running).toBe(true);
+  expect(intro.formTransform).toBe('none');
+  await expect(page.locator('[data-home-intro="form"]')).toHaveCSS('opacity','1');
+  const trigger=page.getByRole('button',{name:'Выбрать валюту (вносите)',exact:true});
+  await trigger.hover();
+  await expect.poll(()=>trigger.evaluate(el=>parseFloat(getComputedStyle(el).scale))).toBeGreaterThan(1);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  expect(await page.locator('.appBackground').evaluate(el=>el.getAnimations().length)).toBe(0);
+  await expect(page.locator('[data-home-intro="form"]')).toHaveCSS('animation-name','none');
+  await expect(trigger).toHaveCSS('scale','none');
+});
+
+async function seekCasper(page,time){
+  await expect(page.locator('body')).toHaveClass(/casper-live/);
+  return page.locator('[data-casper-mascot]').evaluate((layer,time)=>{
+    const [body,props]=layer.children;
+    for(const element of [body,props]){const animation=element.getAnimations()[0];animation.pause();animation.currentTime=time;}
+    const rect=element=>element.getBoundingClientRect().toJSON();
+    return {body:rect(body),props:rect(props),opacity:Number(getComputedStyle(body).opacity),propsOpacity:Number(getComputedStyle(props).opacity),transform:getComputedStyle(body).transform};
+  },time);
+}
+
+test('Casper mobile brand bars match in every mode without horizontal overflow',async({page})=>{
+  const response=await page.request.get('/api/settings/public');const settings=await response.json();
+  let mode='0';
+  await page.route('**/api/settings/public',route=>route.fulfill({json:{...settings,mode}}));
+  for(mode of ['0','1','2']){
+    for(const width of [320,390]){
+      await page.setViewportSize({width,height:844});await page.goto('/');
+      await expect(page.locator('.loaderOverlay')).toHaveCount(0);
+      const normal=page.locator('header .siteBrandBar');
+      await expect(normal).toContainText('Casper');await expect(normal).toContainText('Exchange');
+      const surface=locator=>locator.evaluate(el=>{
+        const s=getComputedStyle(el),r=el.getBoundingClientRect();
+        return {background:s.backgroundImage,border:s.borderTopColor,radius:s.borderTopLeftRadius,blur:s.backdropFilter||s.webkitBackdropFilter,width:r.width,height:r.height};
+      });
+      const before=await surface(normal);
+      expect(await page.locator('.appScroll').evaluate(el=>el.scrollWidth-el.clientWidth)).toBe(0);
+      const wordmark=await normal.locator('.casperBrand').boundingBox();
+      const language=await normal.locator('[data-language-menu]').boundingBox();
+      expect(wordmark.x+wordmark.width).toBeLessThanOrEqual(language.x);
+      await page.locator('header button[aria-expanded]').click();
+      const overlay=page.locator('[data-mobile-navigation]');
+      await expect(overlay).not.toHaveClass(/glass-menu-enter-active/);
+      const expanded=overlay.locator('.siteBrandBar');
+      expect(await surface(expanded)).toEqual(before);
+      await expect(page.locator('header .lucide-menu')).toHaveCount(1);
+      await expect(page.locator('header .lucide-x')).toHaveCount(0);
+      await page.getByRole('button',{name:'Закрыть меню',exact:true}).click();await expect(overlay).toHaveCount(0);
+    }
+  }
+});
+
+test('Casper follows both peek positions and leaves accessories at the logo across its cycle',async({page})=>{
+  await page.setViewportSize({width:390,height:844});await page.goto('/');
+  await expect(page.locator('.loaderOverlay')).toHaveCount(0);
+  const home=await seekCasper(page,3000);
+  expect(home.body.x).toBeCloseTo(home.props.x,1);expect(home.body.y).toBeCloseTo(home.props.y,1);
+  const propsAtRest=(await seekCasper(page,10000)).props;
+  for(const time of [12000,19500,31000]){
+    const frame=await seekCasper(page,time);expect(frame.opacity).toBe(0);expect(frame.propsOpacity).toBe(1);
+    expect(frame.props.x).toBeCloseTo(propsAtRest.x,1);expect(frame.props.y).toBeCloseTo(propsAtRest.y,1);
+  }
+  const entering=await seekCasper(page,13850);expect(entering.opacity).toBeGreaterThan(0);expect(entering.opacity).toBeLessThan(1);
+  const left=await seekCasper(page,15500);expect(left.opacity).toBe(1);expect(left.body.x).toBeLessThan(0);expect(left.body.right).toBeGreaterThan(10);
+  expect(await page.locator('[data-casper-flight]').evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).b)).toBeGreaterThan(0);
+  const leftEnd=await seekCasper(page,18000);expect(leftEnd.body.x).toBeCloseTo(left.body.x,1);expect(leftEnd.body.y).toBeCloseTo(left.body.y,1);
+  const right=await seekCasper(page,24000);expect(right.opacity).toBe(1);expect(right.body.x).toBeLessThan(390);expect(right.body.right).toBeGreaterThan(390);
+  expect(await page.locator('[data-casper-flight]').evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).b)).toBeLessThan(0);
+  expect(await page.evaluate(y=>!!document.elementFromPoint(380,y)?.closest('[data-casper-mascot]'),right.body.y+right.body.height/2)).toBe(false);
+  const receiving=page.getByRole('button',{name:'Выбрать валюту (получаете)',exact:true});await receiving.click();
+  await page.locator('[data-currency-menu] button').nth(1).click();await expect(page.locator('[data-currency-menu]')).toHaveCount(0);
+  const returned=await seekCasper(page,34900+3000);
+  expect(returned.opacity).toBe(1);expect(returned.body.x).toBeCloseTo(returned.props.x,1);expect(returned.body.y).toBeCloseTo(returned.props.y,1);
+  await page.screenshot({path:'test-results/casper-home-mobile.png'});
+});
+
+test('Casper pauses for the mobile menu and becomes a static logo for reduced motion and other pages',async({page})=>{
+  await page.setViewportSize({width:390,height:844});await page.goto('/');
+  await expect(page.locator('body')).toHaveClass(/casper-live/);
+  await page.locator('header button[aria-expanded]').click();
+  const flight=page.locator('[data-casper-flight]');
+  await expect.poll(()=>flight.evaluate(el=>el.getAnimations()[0].playState)).toBe('paused');
+  const paused=await flight.evaluate(el=>el.getAnimations()[0].currentTime);await page.waitForTimeout(150);
+  expect(await flight.evaluate(el=>el.getAnimations()[0].currentTime)).toBeCloseTo(paused,0);
+  await expect(page.locator('[data-casper-mascot]')).toHaveCSS('visibility','hidden');
+  await expect(page.locator('[data-mobile-navigation] .casperFigure__body')).toBeVisible();
+  await page.getByRole('button',{name:'Закрыть меню',exact:true}).click();
+  await expect.poll(()=>flight.evaluate(el=>el.getAnimations()[0].playState)).toBe('running');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await expect(page.locator('body')).not.toHaveClass(/casper-live/);
+  expect(await flight.evaluate(el=>el.getAnimations().length)).toBe(0);
+  await expect(page.locator('header .casperFigure__body')).toBeVisible();
+  await page.emulateMedia({reducedMotion:'no-preference'});await expect(page.locator('body')).toHaveClass(/casper-live/);
+  await page.locator('header button[aria-expanded]').click();
+  await page.locator('[data-mobile-navigation]').getByRole('link',{name:'FAQ',exact:true}).click();
+  await expect(page).toHaveURL(/\/faq$/);await expect(page.locator('body')).not.toHaveClass(/casper-live/);
+  await expect(page.locator('[data-mobile-navigation]')).toHaveCount(0);
+  await expect(page.locator('header .casperFigure__body')).toBeVisible();
+  await page.locator('header').getByRole('link',{name:'Casper Exchange',exact:true}).click();
+  await expect(page.locator('body')).toHaveClass(/casper-live/);
+});

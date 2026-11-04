@@ -1,7 +1,8 @@
 <template>
-  <div class="appShell">
+  <div class="appShell" :class="{ homeMotionReady: siteRevealed }">
     <img v-if="route.path === '/'" class="appBackground" src="/_next/static/media/bg.png" alt="" aria-hidden="true" fetchpriority="high" />
     <Header v-if="siteReady" />
+    <CasperMascot :active="route.path === '/' && siteRevealed" />
 
     <div class="appScroll">
       <main class="appContent" :class="{ appContentWithFooter: route.path !== '/' }">
@@ -13,7 +14,7 @@
     </div>
 
     <!-- GLOBAL LOADER -->
-    <Transition name="loaderFade">
+    <Transition name="loaderFade" @after-leave="siteRevealed = true">
       <div
         v-if="!siteReady"
         class="loaderOverlay"
@@ -21,7 +22,7 @@
         role="status"
       >
         <div class="bootStatus">
-          <img class="loaderGif" src="/img/loading.gif" alt="" width="160" height="160" />
+          <span class="casperLoader"><CasperFigure /></span>
           <p role="status">{{ tr(siteError) || tr("Загружаем обменник…") }}</p>
           <button v-if="siteError" type="button" @click="bootstrapSite">{{ tr("Повторить") }}</button>
         </div>
@@ -33,10 +34,13 @@
 <script setup>
 import { tr, localeTag } from './lib/i18n';
 import Header from './components/Header.vue';
+import CasperFigure from './components/CasperFigure.vue';
+import CasperMascot from './components/CasperMascot.vue';
 import { RouterView, useRoute } from 'vue-router';
 const route = useRoute();
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { siteReady, siteError, bootstrapSite } from './lib/siteState';
+const siteRevealed = ref(siteReady.value);
 onMounted(bootstrapSite);
 </script>
 
@@ -120,11 +124,9 @@ html, body {
   background: #0f172a;
 }
 
-.loaderGif {
-  width: 160px;
-  height: 160px;
-  object-fit: contain;
-}
+.casperLoader { display: block; width: 104px; height: 104px; margin: 0 auto 20px; animation: casper-loading 2.5s ease-in-out infinite; }
+@keyframes casper-loading { 0%, 100% { transform: translateY(3px); } 50% { transform: translateY(-5px); } }
+@media (prefers-reduced-motion: reduce) { .casperLoader { animation: none; } }
 
 /* smooth fade */
 .loaderFade-enter-active,
